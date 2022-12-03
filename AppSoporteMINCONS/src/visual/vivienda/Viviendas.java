@@ -21,13 +21,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import clases.FichaTecnica;
-import clases.Sistema;
 import clases.Vivienda;
 import enums.Doc;
 import enums.TipoConst;
 import enums.TipoHab;
 import util.PreviousValue;
+import util.Ruta;
 import util.Validaciones;
+import visual.fichasTecnicas.FichasTecnicas;
 import visual.frame.Frame;
 import visual.util.PrincipalPanel;
 
@@ -40,7 +41,6 @@ public class Viviendas extends PrincipalPanel {
 	private JLabel lblName;
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
-	private Sistema sistema = Sistema.getInstance();
 	private Frame padre;
 	private JPanel panelProp;
 	private JLabel lblDireccion;
@@ -89,7 +89,8 @@ public class Viviendas extends PrincipalPanel {
 	private ActionListener getActionBtnAtras() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				padre.setContentPane(padre.fichaTecnica);
+				Ruta.removerRuta(Ruta.getPosicionActual());
+				Frame.setContentPanes((FichasTecnicas)Ruta.getPosicionActual()[0]);
 			}
 		};
 	}
@@ -141,7 +142,7 @@ public class Viviendas extends PrincipalPanel {
 			btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					padre.setContentPane(padre.principal);
+					//TODO implementar
 				}
 			});
 			btnCancelar.setBounds(563, 437, 89, 23);

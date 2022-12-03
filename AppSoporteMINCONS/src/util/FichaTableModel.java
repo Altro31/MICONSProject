@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import clases.Evento;
 import clases.FichaTecnica;
 
 public class FichaTableModel extends DefaultTableModel {
@@ -45,14 +46,24 @@ public class FichaTableModel extends DefaultTableModel {
 		Auxiliary.limpiar(this);
 	}
 	
-	public void filtrar(JTextField txtField, int column, ArrayList<FichaTecnica> listaFicha) {
-		actualizar(listaFicha);
-		Auxiliary.filtro(txtField, this, column, listaFicha.size());
+	public void filtrar(JTextField txtField, int column) {
+		ArrayList<FichaTecnica> lista = ((Evento)Ruta.getPosicionActual()[1]).getListaFichasTecnicas();
+		actualizar(lista);
+		Auxiliary.filtro(txtField, this, column, lista.size());
 		
 	}
 	
-	public void borrarSeleccion(ArrayList<FichaTecnica> lista) {
+	public void borrarSeleccion() {
+		
+		Evento evento = ((Evento)Ruta.getPosicionActual()[1]);
+		ArrayList<FichaTecnica> lista = new ArrayList<FichaTecnica>(evento.getListaFichasTecnicas());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
+		for (int i=0, size=evento.getListaFichasTecnicas().size(); i<size; i++) {
+			FichaTecnica ficha = evento.getListaFichasTecnicas().get(i);
+			if (!lista.contains(ficha)) {
+				evento.eliminarFichaTecnica(i);
+			}
+		}
 		actualizar(lista);
 	}
 

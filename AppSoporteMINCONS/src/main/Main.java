@@ -17,8 +17,6 @@ public class Main {
 		Sistema.addMaterial(new Construccion("Tejas"));
 		Sistema.addMaterial(new Construccion("Dashiell"));
 		
-		
-		
 		Login.run();
 	}
 }

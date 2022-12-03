@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import clases.Afectacion;
+import clases.Evento;
+import clases.FichaTecnica;
 import clases.Pared;
 
 public class ParedTableModel extends DefaultTableModel {
@@ -45,14 +48,23 @@ public class ParedTableModel extends DefaultTableModel {
 		Auxiliary.limpiar(this);
 	}
 	
-	public void filtrar(JTextField txtField, int column, ArrayList<Pared> listaFicha) {
-		actualizar(listaFicha);
-		Auxiliary.filtro(txtField, this, column, listaFicha.size());
+	public void filtrar(JTextField txtField, int column) {
+		ArrayList<Pared> lista = ((Afectacion)Ruta.getPosicionActual()[1]).getListaParedes();
+		actualizar(lista);
+		Auxiliary.filtro(txtField, this, column, lista.size());
 		
 	}
 	
-	public void borrarSeleccion(ArrayList<Pared> lista) {
+	public void borrarSeleccion() {
+		Afectacion afectacion = ((Afectacion)Ruta.getPosicionActual()[1]);
+		ArrayList<Pared> lista = new ArrayList<Pared>(afectacion.getListaParedes());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
+		for (int i=0, size=afectacion.getListaParedes().size(); i<size; i++) {
+			Pared ficha = afectacion.getListaParedes().get(i);
+			if (!lista.contains(ficha)) {
+				afectacion.eliminarPared(i);
+			}
+		}
 		actualizar(lista);
 	}
 

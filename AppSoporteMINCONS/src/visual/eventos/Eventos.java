@@ -29,6 +29,7 @@ import clases.Evento;
 import clases.Sistema;
 import util.Ruta;
 import visual.frame.Frame;
+import visual.principal.Principal;
 import visual.util.PrincipalPanel;
 
 public class Eventos extends PrincipalPanel {
@@ -63,16 +64,15 @@ public class Eventos extends PrincipalPanel {
 	private JComboBox cBoxAMFin;
 	private JLabel lblTipoEvento;
 	private JComboBox cBoxTipoEvento;
-	private Frame padre;
 
 	/**
 	 * Create the panel.
 	 */
-	public Eventos(final Frame padre) {
-		this.padre = padre;
+	public Eventos() {
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				padre.setContentPane(Frame.getInstance());
+				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
+				Frame.setContentPanes((Principal)Ruta.getPosicionActual()[0]);
 			}
 		});
 		add(getPanelNuevoEvento());
@@ -244,7 +244,7 @@ public class Eventos extends PrincipalPanel {
 								(enums.Evento) getCBoxTipoEvento().getSelectedItem());
 
 						Sistema.addEventos(evento);
-						padre.dispose();
+						System.exit(0);
 
 					}
 				}
@@ -259,8 +259,8 @@ public class Eventos extends PrincipalPanel {
 			btnCancel = new JButton("Cancelar");
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Ruta.removerRuta((Eventos)Ruta.getPosicionActual()[0]);
-					padre.setContentPane((Eventos)Ruta.getPosicionActual()[0]);
+					Ruta.removerRuta(Ruta.getPosicionActual()[0]);
+					Frame.setContentPanes((Principal)Ruta.getPosicionActual()[0]);
 				}
 			});
 			btnCancel.setBounds(539, 11, 103, 23);

@@ -21,12 +21,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import clases.Evento;
 import clases.FichaTecnica;
 import clases.Sistema;
 import util.Auxiliary;
 import util.FichaTableModel;
+import util.Ruta;
 import util.Validaciones;
 import visual.frame.Frame;
+import visual.principal.Principal;
 import visual.util.PrincipalPanel;
 import visual.vivienda.Viviendas;
 import java.awt.event.KeyAdapter;
@@ -49,7 +52,6 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JPanel panelButton2;
 	private JButton btnSalir;
 	private JButton btnAceptar;
-	private Sistema sistema = Sistema.getInstance();
 	private JPanel panelButton;
 	private JButton btnInsertar;
 	private JButton btnEditar;
@@ -59,18 +61,17 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTextField filtroNumero;
 	private JTextField filtroDireccion;
 	private JTextField filtroFecha;
-	private ArrayList<FichaTecnica> listaFichas;
 	/**
 	 * Create the panel.
 	 */
 	public FichasTecnicas(final Frame padre) {
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				padre.setContentPane(padre.evento);
+				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
+				padre.setContentPane((Principal)Ruta.getPosicionActual()[0]);
 			}
 		});
 		this.padre=padre;
-		listaFichas=sistema.getListaEventos().get(0).getListaFichasTecnicas();
 		add(getScrollPane());
 		add(getTextNotUsed());
 		add(getPanelTitulo());
@@ -119,7 +120,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			});
 			tableModel=new FichaTableModel();
 			table.setModel(tableModel);
-			tableModel.actualizar(listaFichas);
+			tableModel.actualizar(((Evento)Ruta.getPosicionActual()[1]).getListaFichasTecnicas());
 			table.getTableHeader().setReorderingAllowed(false);
 			table.getColumnModel().getColumn(0).setResizable(false);
 			table.getColumnModel().getColumn(0).setPreferredWidth(15);
@@ -251,7 +252,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnBorrar = new JButton("Borrar");
 			btnBorrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					 tableModel.borrarSeleccion(listaFichas);
+					 tableModel.borrarSeleccion();
 				}
 			});
 			btnBorrar.setEnabled(false);
@@ -270,7 +271,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					tableModel.filtrar(filtroNumero, 1, listaFichas);
+					tableModel.filtrar(filtroNumero, 1);
 				}
 			});
 			
@@ -285,7 +286,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			filtroDireccion.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					tableModel.filtrar(filtroDireccion, 2, listaFichas);
+					tableModel.filtrar(filtroDireccion, 2);
 				}
 			});
 			filtroDireccion.setColumns(10);

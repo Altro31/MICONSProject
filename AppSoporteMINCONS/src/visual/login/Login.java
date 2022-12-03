@@ -25,8 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import clases.Sistema;
-import visual.afectaciones.Afectaciones;
 import visual.frame.Frame;
 import visual.util.JImagen;
 
@@ -42,7 +40,6 @@ public class Login extends JFrame {
 	private JImagen fondo;
 	private JLabel lblinfo;
 	private JLabel lblContactarnos;
-	private Sistema sistema;
 
 	/** Constructor */
 	public Login() {
@@ -116,12 +113,7 @@ public class Login extends JFrame {
 						dispose();
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
-								try {
-									Frame frame = new Frame();
-									frame.setVisible(true);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								Frame.setVisibles();
 							}
 						});
 

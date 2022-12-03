@@ -13,6 +13,8 @@ import visual.principal.Principal;
 import visual.vivienda.Viviendas;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
+import java.awt.Container;
+
 import javax.swing.JPanel;
 
 public class Frame extends JFrame {
@@ -27,7 +29,7 @@ public class Frame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					getInstance().setVisible(true);
+					setVisibles();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -45,12 +47,23 @@ public class Frame extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	public static Frame getInstance() {
+	public static void getInstance() {
 		if(frame==null) {
 			frame=new Frame();
 			Ruta.addRuta(new Principal(frame), null);
 			frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
 		}
-		return frame;
+	}
+	
+	public static void setContentPanes(Container c) {
+		getInstance();
+		if(c==null)
+			throw new IllegalArgumentException("Container no puede ser null");
+		frame.setContentPane(c);
+	}
+	
+	public static void setVisibles() {
+		getInstance();
+		frame.setVisible(true);
 	}
 }

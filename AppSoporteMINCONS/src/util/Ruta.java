@@ -36,12 +36,17 @@ public class Ruta {
 			throw new IllegalArgumentException("El objeto no puede ser null");
 		}
 		boolean borrar = false;
-		for (Object[] objects : ruta) {
-			if (objects[0].equals(o) || objects[1].equals(o)) {
+		int count=ruta.size();
+		for (int i = 0; i<count;) {
+			Object[] objects = ruta.get(i);
+			if (objects[0].equals(o) || (objects[1]!=null && objects[1].equals(o))) {
 				borrar = true;
 			}
 			if (borrar) {
 				ruta.remove(objects);
+				count--;
+			} else {
+				i++;
 			}
 		}
 

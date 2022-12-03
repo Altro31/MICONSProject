@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
 import clases.Evento;
-import clases.Sistema;
 import util.Ruta;
 import visual.eventos.Eventos;
 import visual.frame.Frame;
@@ -210,9 +209,9 @@ public class Principal extends JImagen {
 			btnNuevoEvento = new JButton("Nuevo Evento");
 			btnNuevoEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					Ruta.addRuta(new Eventos(Frame.getInstance()), new Evento(null, null, null, null));
-					padre.setContentPane(new Eventos(padre));
+					Eventos eventos = new Eventos();
+					Ruta.addRuta(eventos, new Evento(null, null, null, null));
+					Frame.setContentPanes(eventos);
 				}
 			});
 		}
