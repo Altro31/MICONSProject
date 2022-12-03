@@ -14,6 +14,9 @@ public class Main {
 		Sistema.addMaterial(new Construccion("Cemento"));
 		Sistema.addMaterial(new Construccion("Gravilla"));
 		Sistema.addMaterial(new Construccion("Arena"));
+		Sistema.addMaterial(new Construccion("Tejas"));
+		
+		
 		
 		Login.run();
 	}
