@@ -43,7 +43,7 @@ public class Afectaciones extends JDialog {
 	private static ArrayList<Techo> listaTechos;
 	private static ArrayList<Inmueble> listaInmuebles;
 	private static ArrayList<Material> listaMateriales;
-	private Sistema sistema = Sistema.getSistema();
+	private Sistema sistema = Sistema.getInstance();
 
 	/**
 	 * Launch the application.

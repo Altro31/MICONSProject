@@ -40,7 +40,7 @@ public class Viviendas extends PrincipalPanel {
 	private JLabel lblName;
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
-	private Sistema sistema = Sistema.getSistema();
+	private Sistema sistema = Sistema.getInstance();
 	private Frame padre;
 	private JPanel panelProp;
 	private JLabel lblDireccion;

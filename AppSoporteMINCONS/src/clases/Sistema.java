@@ -4,45 +4,48 @@ import java.util.ArrayList;
 
 public class Sistema {
 	
-	private ArrayList<Evento> listaEventos;
-	private ArrayList<Material> listaMateriales;
-	
+	private static ArrayList<Evento> listaEventos;
+	private static ArrayList<Material> listaMateriales;
 	private static Sistema sistema;
 	
 	private Sistema(){
 		listaEventos = new ArrayList<Evento>();
-		listaEventos.add(new Evento("Al", null, null, enums.Evento.TERREMOTO));
 		listaMateriales= new ArrayList<Material>();
 	}
 	
-	public static Sistema getSistema() {
+	public static void getInstance() {
 		if(sistema==null)
 			sistema=new Sistema();
-		return sistema;
 	}
-	public ArrayList<Evento> getListaEventos() {
-		return listaEventos;
+	public static ArrayList<Evento> getListaEventos() {
+		getInstance();
+		return new ArrayList<Evento>(listaEventos);
 	}
-	public void addEventos(Evento evento) {
+	public static void addEventos(Evento evento) {
+		getInstance();
 		if(evento==null)
 			throw new IllegalArgumentException("Evento tiene valor null");
 		listaEventos.add(evento);
 	}
-	public void eliminarEvento(int pos) {
+	public static void eliminarEvento(int pos) {
+		getInstance();
 		if(pos<0)
 			throw new IllegalArgumentException("Pos debe tener valor negativo");
 		listaEventos.remove(pos);
 	}
 	
-	public ArrayList<Material> getListaMateriales() {
+	public static ArrayList<Material> getListaMateriales() {
+		getInstance();
 		return new ArrayList<Material>(listaMateriales);
 	}
-	public void addMaterial(Material material) {
+	public static void addMaterial(Material material) {
+		getInstance();
 		if(material==null)
 			throw new IllegalArgumentException("Material tiene valor null");
 		listaMateriales.add(material);
 	}
-	public void eliminarMaterial(int pos) {
+	public static void eliminarMaterial(int pos) {
+		getInstance();
 		if(pos<0)
 			throw new IllegalArgumentException("Pos debe tener valor negativo");
 		listaMateriales.remove(pos);

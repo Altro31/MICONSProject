@@ -11,11 +11,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		Sistema sistema = Sistema.getSistema();
-		
-		sistema.addMaterial(new Construccion("Cemento"));
-		sistema.addMaterial(new Construccion("Gravilla"));
-		sistema.addMaterial(new Construccion("Arena"));
+		Sistema.addMaterial(new Construccion("Cemento"));
+		Sistema.addMaterial(new Construccion("Gravilla"));
+		Sistema.addMaterial(new Construccion("Arena"));
 		
 		Login.run();
 	}

@@ -27,6 +27,7 @@ import com.toedter.calendar.JDateChooser;
 
 import clases.Evento;
 import clases.Sistema;
+import util.Ruta;
 import visual.frame.Frame;
 import visual.util.PrincipalPanel;
 
@@ -62,7 +63,6 @@ public class Eventos extends PrincipalPanel {
 	private JComboBox cBoxAMFin;
 	private JLabel lblTipoEvento;
 	private JComboBox cBoxTipoEvento;
-	private Sistema sistema = Sistema.getSistema();
 	private Frame padre;
 
 	/**
@@ -72,7 +72,7 @@ public class Eventos extends PrincipalPanel {
 		this.padre = padre;
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				padre.setContentPane(padre.principal);
+				padre.setContentPane(Frame.getInstance());
 			}
 		});
 		add(getPanelNuevoEvento());
@@ -243,7 +243,7 @@ public class Eventos extends PrincipalPanel {
 						Evento evento = new Evento(textNombre.getText(), fechaInicio, fechaFin,
 								(enums.Evento) getCBoxTipoEvento().getSelectedItem());
 
-						sistema.addEventos(evento);
+						Sistema.addEventos(evento);
 						padre.dispose();
 
 					}
@@ -259,7 +259,8 @@ public class Eventos extends PrincipalPanel {
 			btnCancel = new JButton("Cancelar");
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					padre.setContentPane(padre.principal);
+					Ruta.removerRuta((Eventos)Ruta.getPosicionActual()[0]);
+					padre.setContentPane((Eventos)Ruta.getPosicionActual()[0]);
 				}
 			});
 			btnCancel.setBounds(539, 11, 103, 23);

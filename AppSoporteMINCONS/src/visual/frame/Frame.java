@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import clases.Sistema;
+import util.Ruta;
 import visual.afectaciones.JAfectaciones;
 import visual.eventos.Eventos;
 import visual.fichasTecnicas.FichasTecnicas;
@@ -20,19 +21,13 @@ public class Frame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 2638223278346798429L;
-	private Sistema sistema = Sistema.getSistema();
-	public Principal principal;
-	public Eventos evento;
-	public FichasTecnicas fichaTecnica;
-	public Viviendas vivienda;
-	private JAfectaciones afectacion;
+	private static Frame frame;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Frame frame = new Frame();
-					frame.setVisible(true);
+					getInstance().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -42,20 +37,20 @@ public class Frame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Frame() {
+	private Frame() {
 		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(891, 491);
 		setLocationRelativeTo(null);
-		this.principal = new Principal(this);
-		this.evento = new Eventos(this);
-		this.fichaTecnica = new FichasTecnicas(this);
-		this.vivienda = new Viviendas(this);
-		this.afectacion = new JAfectaciones(this);
-		setContentPane(afectacion);
-		principal.setVisible(true);
-		
-
+	}
+	
+	public static Frame getInstance() {
+		if(frame==null) {
+			frame=new Frame();
+			Ruta.addRuta(new Principal(frame), null);
+			frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
+		}
+		return frame;
 	}
 }

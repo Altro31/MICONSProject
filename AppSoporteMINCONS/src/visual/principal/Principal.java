@@ -22,7 +22,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
+import clases.Evento;
 import clases.Sistema;
+import util.Ruta;
 import visual.eventos.Eventos;
 import visual.frame.Frame;
 import visual.login.Login;
@@ -35,7 +37,6 @@ public class Principal extends JImagen {
 	 */
 	private static final long serialVersionUID = 8456631965220967379L;
 	private Frame padre;
-	private Sistema sistema = Sistema.getSistema();
 	private JImagen micons;
 	private JImagen imagenUsername;
 	private JLabel lblUsername;
@@ -209,6 +210,8 @@ public class Principal extends JImagen {
 			btnNuevoEvento = new JButton("Nuevo Evento");
 			btnNuevoEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					Ruta.addRuta(new Eventos(Frame.getInstance()), new Evento(null, null, null, null));
 					padre.setContentPane(new Eventos(padre));
 				}
 			});

@@ -49,7 +49,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JPanel panelButton2;
 	private JButton btnSalir;
 	private JButton btnAceptar;
-	private Sistema sistema = Sistema.getSistema();
+	private Sistema sistema = Sistema.getInstance();
 	private JPanel panelButton;
 	private JButton btnInsertar;
 	private JButton btnEditar;

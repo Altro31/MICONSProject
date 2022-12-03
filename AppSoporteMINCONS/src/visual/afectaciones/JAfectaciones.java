@@ -40,7 +40,6 @@ public class JAfectaciones extends PrincipalPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -3579071471874747942L;
-	private Sistema sistema;
 	private Frame padre;
 	private JTabbedPane tabbedPane;
 	private JPanel panelInmueble;
@@ -76,6 +75,9 @@ public class JAfectaciones extends PrincipalPanel {
 	 * Create the panel.
 	 */
 	public JAfectaciones(Frame padre) {
+		btnCerrar.setLocation(851, 0);
+		btnAtras.setLocation(0, 0);
+		btnCerrar.setSize(40, 29);
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -342,6 +344,7 @@ public class JAfectaciones extends PrincipalPanel {
 		}
 		return btnCancelar;
 	}
+	
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
@@ -351,7 +354,7 @@ public class JAfectaciones extends PrincipalPanel {
 	private JTextField getTxtNoUsado() {
 		if (txtNoUsado == null) {
 			txtNoUsado = new JTextField();
-			txtNoUsado.setEnabled(false);
+			txtNoUsado.setEditable(false);
 			txtNoUsado.setBounds(10, 25, 46, 20);
 			txtNoUsado.setColumns(10);
 		}
@@ -363,7 +366,7 @@ public class JAfectaciones extends PrincipalPanel {
 			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					paredModel.filtrar(filtroNumero, 1, Sistema.getSistema().getListaEventos().get(0).getListaFichasTecnicas().get(0).getAfect().getListaParedes());
+					paredModel.filtrar(filtroNumero, 1, Sistema.getInstance().getListaEventos().get(0).getListaFichasTecnicas().get(0).getAfect().getListaParedes());
 				}
 			});
 			filtroNumero.setColumns(10);
