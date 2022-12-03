@@ -21,6 +21,7 @@ public class Main {
 		sistema.addMaterial(new Construccion("a"));
 		sistema.addMaterial(new Construccion("b"));
 		sistema.addMaterial(new Construccion("c"));
+		sistema.addMaterial(new Construccion("d"));
 		
 		Login.run();
 	}
