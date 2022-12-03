@@ -17,6 +17,8 @@ public class Main {
 		sistema.addMaterial(new Construccion("Gravilla"));
 		sistema.addMaterial(new Construccion("Arena"));
 		sistema.addMaterial(new Construccion("Tejas"));
+		sistema.addMaterial(new Construccion("Tejas"));
+		sistema.addMaterial(new Construccion("Tejas"));
 		
 		Login.run();
 	}
