@@ -10,6 +10,12 @@ public class Afectacion {
 	
 	//Constructores
 	//Constructor por defecto
+	public Afectacion() {
+		listaInmuebles = new ArrayList<Inmueble>();
+		listaInmuebles.add(new Inmueble("Lavadora", "123", 1));
+		listaInmuebles.add(new Inmueble("Lavamanos", "456", 2));
+		listaInmuebles.add(new Inmueble("Refrigerador", "789", 4));
+	}
 	
 	//Getters and Setters
 	

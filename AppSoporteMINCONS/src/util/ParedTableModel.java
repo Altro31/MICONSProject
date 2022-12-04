@@ -6,8 +6,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
-import clases.Evento;
-import clases.FichaTecnica;
 import clases.Pared;
 
 public class ParedTableModel extends DefaultTableModel {
@@ -18,6 +16,7 @@ public class ParedTableModel extends DefaultTableModel {
 	private static final long serialVersionUID = -8515650816743836254L;
 
 	private Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class };
+	boolean[] columnEditables = new boolean[] { true, false, false, false };
 
 	public ParedTableModel() {
 		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe", "Pared de Carga"});
@@ -27,8 +26,6 @@ public class ParedTableModel extends DefaultTableModel {
 	public Class getColumnClass(int columnIndex) {
 		return columnTypes[columnIndex];
 	}
-
-	boolean[] columnEditables = new boolean[] { true, false, false, false };
 
 	@Override
 	public boolean isCellEditable(int row, int column) {

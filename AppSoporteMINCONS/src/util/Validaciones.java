@@ -130,7 +130,6 @@ public final class Validaciones {
 					receptor.setValue((int)receptor.getValue()-1);
 				}
 				check.value=value;
-				Enum.valueOf(null, null);
 			}
 		});
 	}

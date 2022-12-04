@@ -46,7 +46,7 @@ public final class Auxiliary {
 		// Filtra los datos
 		for (Object vector : listaObject) {
 			String field = (String) ((Vector) vector).get(column);
-			if (field.contains(string)) {
+			if (field.toLowerCase().contains(string.toLowerCase())) {
 				subList.add(vector);
 			}
 		}

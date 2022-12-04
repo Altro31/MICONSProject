@@ -1,12 +1,16 @@
 package clases;
 
-public class Material {
+import interfaces.Identificador;
 
+public class Material implements Identificador{
+	
+	private String id;
 	protected String nombre;
 	protected float precioUnitario;
 
-	public Material(String nombre) {
+	public Material(String nombre, String id) {
 		this.setNombre(nombre);
+		this.setIdentificador(id);
 	}
 
 	public Material(String nombre, float precioUnitario) {
@@ -39,6 +43,16 @@ public class Material {
 																									// los mil
 
 		this.precioUnitario = precioUnitario;
+	}
+	
+	public String getIdentificador() {
+		return id;
+	}
+
+	@Override
+	public void setIdentificador(String id) {
+		this.id = id;
+		
 	}
 
 }

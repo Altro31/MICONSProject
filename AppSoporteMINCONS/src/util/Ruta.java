@@ -29,6 +29,10 @@ public class Ruta {
 		getInstace();
 		return ruta.get(ruta.size()-1);
 	}
+	
+	public static Object[] get(int pos) {
+		return ruta.get(pos);
+	}
 
 	public static void removerRuta(Object o) throws IllegalArgumentException {
 		getInstace();

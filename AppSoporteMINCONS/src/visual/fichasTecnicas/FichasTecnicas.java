@@ -2,16 +2,16 @@ package visual.fichasTecnicas;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,23 +19,18 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.table.DefaultTableModel;
 
+import clases.Afectacion;
 import clases.Evento;
-import clases.FichaTecnica;
-import clases.Sistema;
+import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
 import util.Ruta;
-import util.Validaciones;
+import visual.eventos.Eventos;
 import visual.frame.Frame;
 import visual.principal.Principal;
 import visual.util.PrincipalPanel;
 import visual.vivienda.Viviendas;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class FichasTecnicas extends PrincipalPanel {
 
@@ -57,21 +52,20 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton btnEditar;
 	private JButton btnBorrar;
 	private JButton btnInfo;
-	private Frame padre;
 	private JTextField filtroNumero;
 	private JTextField filtroDireccion;
 	private JTextField filtroFecha;
+
 	/**
 	 * Create the panel.
 	 */
-	public FichasTecnicas(final Frame padre) {
+	public FichasTecnicas() {
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
-				padre.setContentPane((Principal)Ruta.getPosicionActual()[0]);
+				Frame.setContentPanes((Eventos) Ruta.getPosicionActual()[0]);
 			}
 		});
-		this.padre=padre;
 		add(getScrollPane());
 		add(getTextNotUsed());
 		add(getPanelTitulo());
@@ -81,25 +75,19 @@ public class FichasTecnicas extends PrincipalPanel {
 		add(getFiltroDireccion());
 		add(getFiltroFecha());
 	}
-	
-	//Métodos
-	
+
+	// Métodos
+
 	private void activarBotonBorrar() {
 		int filas = tableModel.getRowCount();
 		boolean check = false;
-		for (int i = 0; i<filas && !check;i++) {
-			if(Auxiliary.isSelected(i, 0, tableModel))
-				check=true;
+		for (int i = 0; i < filas && !check; i++) {
+			if (Auxiliary.isSelected(i, 0, tableModel))
+				check = true;
 		}
-		if (check) {
-			btnBorrar.setEnabled(true);
-		} else {
-			btnBorrar.setEnabled(false);
-		}
+		btnBorrar.setEnabled(check);
 	}
-	
-	
-	
+
 	// Componentes
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
@@ -109,6 +97,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return scrollPane;
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
@@ -118,9 +107,9 @@ public class FichasTecnicas extends PrincipalPanel {
 					activarBotonBorrar();
 				}
 			});
-			tableModel=new FichaTableModel();
+			tableModel = new FichaTableModel();
 			table.setModel(tableModel);
-			tableModel.actualizar(((Evento)Ruta.getPosicionActual()[1]).getListaFichasTecnicas());
+			tableModel.actualizar(((Evento) Ruta.getPosicionActual()[1]).getListaFichasTecnicas());
 			table.getTableHeader().setReorderingAllowed(false);
 			table.getColumnModel().getColumn(0).setResizable(false);
 			table.getColumnModel().getColumn(0).setPreferredWidth(15);
@@ -133,6 +122,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return table;
 	}
+
 	private JTextField getTextNotUsed() {
 		if (textNotUsed == null) {
 			textNotUsed = new JTextField();
@@ -142,6 +132,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return textNotUsed;
 	}
+
 	private JPanel getPanelTitulo() {
 		if (panelTitulo == null) {
 			panelTitulo = new JPanel();
@@ -151,6 +142,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return panelTitulo;
 	}
+
 	private JLabel getLblTitulo() {
 		if (lblTitulo == null) {
 			lblTitulo = new JLabel("Insección de Fichas Técnicas");
@@ -158,6 +150,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return lblTitulo;
 	}
+
 	private JPanel getPanelButton2() {
 		if (panelButton2 == null) {
 			panelButton2 = new JPanel();
@@ -169,12 +162,14 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return panelButton2;
 	}
+
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Cancelar");
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					padre.dispose();
+					Ruta.removerRuta(Ruta.get(1)[0]);
+					Frame.setContentPanes((Principal) Ruta.getPosicionActual()[0]);
 				}
 			});
 			btnSalir.setBounds(537, 11, 89, 23);
@@ -182,89 +177,91 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return btnSalir;
 	}
+
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					// TODO document why this method is empty
 				}
 			});
 			btnAceptar.setBounds(224, 11, 89, 23);
 		}
 		return btnAceptar;
 	}
+
 	private JPanel getPanelButton() {
 		if (panelButton == null) {
 			panelButton = new JPanel();
 			panelButton.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelButton.setBounds(772, 92, 100, 334);
 			GroupLayout gl_panelButton = new GroupLayout(panelButton);
-			gl_panelButton.setHorizontalGroup(
-				gl_panelButton.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelButton.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_panelButton.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(getBtnInsertar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnEditar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnBorrar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnInfo(), 0, 0, Short.MAX_VALUE))
-						.addContainerGap(15, Short.MAX_VALUE))
-			);
-			gl_panelButton.setVerticalGroup(
-				gl_panelButton.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelButton.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(getBtnInsertar())
-						.addGap(18)
-						.addComponent(getBtnEditar())
-						.addGap(18)
-						.addComponent(getBtnBorrar())
-						.addGap(18)
-						.addComponent(getBtnInfo())
-						.addContainerGap(177, Short.MAX_VALUE))
-			);
-			gl_panelButton.linkSize(SwingConstants.HORIZONTAL, new Component[] {getBtnInsertar(), getBtnEditar(), getBtnBorrar()});
+			gl_panelButton.setHorizontalGroup(gl_panelButton.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelButton.createSequentialGroup().addContainerGap()
+							.addGroup(gl_panelButton.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(getBtnInsertar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+											Short.MAX_VALUE)
+									.addComponent(getBtnEditar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+											Short.MAX_VALUE)
+									.addComponent(getBtnBorrar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+											Short.MAX_VALUE)
+									.addComponent(getBtnInfo(), 0, 0, Short.MAX_VALUE))
+							.addContainerGap(15, Short.MAX_VALUE)));
+			gl_panelButton.setVerticalGroup(gl_panelButton.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelButton.createSequentialGroup().addContainerGap().addComponent(getBtnInsertar())
+							.addGap(18).addComponent(getBtnEditar()).addGap(18).addComponent(getBtnBorrar()).addGap(18)
+							.addComponent(getBtnInfo()).addContainerGap(177, Short.MAX_VALUE)));
+			gl_panelButton.linkSize(SwingConstants.HORIZONTAL,
+					new Component[] { getBtnInsertar(), getBtnEditar(), getBtnBorrar() });
 			panelButton.setLayout(gl_panelButton);
 		}
 		return panelButton;
 	}
+
 	private JButton getBtnInsertar() {
 		if (btnInsertar == null) {
 			btnInsertar = new JButton("Insertar");
 			btnInsertar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//clases.FichaTecnica ficha = new clases.FichaTecnica();
-					//padre.setContentPane(padre.fichaTecnica);
 					
+					Viviendas viviendas = new Viviendas((Evento)Ruta.getPosicionActual()[1]);
+					Ruta.addRuta(viviendas, new Vivienda());
+					Frame.setContentPanes(viviendas);
 				}
 			});
 		}
 		return btnInsertar;
 	}
+
 	private JButton getBtnEditar() {
 		if (btnEditar == null) {
 			btnEditar = new JButton("Editar");
 		}
 		return btnEditar;
 	}
+
 	private JButton getBtnBorrar() {
 		if (btnBorrar == null) {
 			btnBorrar = new JButton("Borrar");
 			btnBorrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					 tableModel.borrarSeleccion();
+					tableModel.borrarSeleccion();
+					activarBotonBorrar();
 				}
 			});
 			btnBorrar.setEnabled(false);
 		}
 		return btnBorrar;
 	}
+
 	private JButton getBtnInfo() {
 		if (btnInfo == null) {
 			btnInfo = new JButton("Info");
 		}
 		return btnInfo;
 	}
+
 	private JTextField getFiltroNumero() {
 		if (filtroNumero == null) {
 			filtroNumero = new JTextField();
@@ -274,12 +271,13 @@ public class FichasTecnicas extends PrincipalPanel {
 					tableModel.filtrar(filtroNumero, 1);
 				}
 			});
-			
+
 			filtroNumero.setColumns(10);
 			filtroNumero.setBounds(120, 92, 97, 20);
 		}
 		return filtroNumero;
 	}
+
 	private JTextField getFiltroDireccion() {
 		if (filtroDireccion == null) {
 			filtroDireccion = new JTextField();
@@ -294,6 +292,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		}
 		return filtroDireccion;
 	}
+
 	private JTextField getFiltroFecha() {
 		if (filtroFecha == null) {
 			filtroFecha = new JTextField();

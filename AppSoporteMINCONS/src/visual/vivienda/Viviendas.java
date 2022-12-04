@@ -20,6 +20,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import clases.Afectacion;
+import clases.Evento;
 import clases.FichaTecnica;
 import clases.Vivienda;
 import enums.Doc;
@@ -28,6 +30,7 @@ import enums.TipoHab;
 import util.PreviousValue;
 import util.Ruta;
 import util.Validaciones;
+import visual.afectaciones.JAfectaciones;
 import visual.fichasTecnicas.FichasTecnicas;
 import visual.frame.Frame;
 import visual.util.PrincipalPanel;
@@ -41,7 +44,6 @@ public class Viviendas extends PrincipalPanel {
 	private JLabel lblName;
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
-	private Frame padre;
 	private JPanel panelProp;
 	private JLabel lblDireccion;
 	private JTextField txtDireccion;
@@ -73,12 +75,13 @@ public class Viviendas extends PrincipalPanel {
 	private PreviousValue ancianosPreviuosValue = new PreviousValue(0);
 	private PreviousValue infantesPreviousValue = new PreviousValue(0);
 	private PreviousValue embarazadasPreviousValue = new PreviousValue(0);
+	private Evento evento;
 
 	/**
 	 * Create the panel.
 	 */
-	public Viviendas(final Frame padre) {
-		this.padre = padre;
+	public Viviendas(Evento evento) {
+		this.evento=evento;
 		add(getLblName());
 		add(getBtnSiguiente());
 		add(getBtnCancelar());
@@ -89,8 +92,8 @@ public class Viviendas extends PrincipalPanel {
 	private ActionListener getActionBtnAtras() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ruta.removerRuta(Ruta.getPosicionActual());
-				Frame.setContentPanes((FichasTecnicas)Ruta.getPosicionActual()[0]);
+				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
+				Frame.setContentPanes((FichasTecnicas) Ruta.getPosicionActual()[0]);
 			}
 		};
 	}
@@ -122,13 +125,29 @@ public class Viviendas extends PrincipalPanel {
 								TipoHab.getValue(getCombTipoHab().getSelectedItem().toString()),
 								TipoConst.getValue(getCombTipoCons().getSelectedItem().toString()),
 								Double.parseDouble(getTxtLargo().getText()),
-								Double.parseDouble(getTxtAncho().getText()),
-								Double.parseDouble(getTxtArea().getText()),
+								Double.parseDouble(getTxtAncho().getText()), Double.parseDouble(getTxtArea().getText()),
 								Integer.parseInt(getSpinnerPersonas().getValue().toString()),
 								Integer.parseInt(getSpinnerInfantes().getValue().toString()),
 								Integer.parseInt(getSpinnerAncianos().getValue().toString()),
 								Integer.parseInt(getSpinnerEmbarazadas().getValue().toString())));
 
+						JAfectaciones afectaciones = new JAfectaciones(evento);
+						Vivienda vivienda = (Vivienda) Ruta.getPosicionActual()[1];
+						vivienda.setDireccion(getTxtDireccion().getText());
+						vivienda.setCiJefe(getTxtCI().getText());
+						vivienda.setDocLegal(Doc.getValue(getCombDocLegal().getSelectedItem().toString()));
+						vivienda.setTipoHabitacional(TipoHab.getValue(getCombTipoHab().getSelectedItem().toString()));
+						vivienda.setTipoConstructiva(TipoConst.getValue(getCombTipoCons().getSelectedItem().toString()));
+						vivienda.setLargo(Double.parseDouble(getTxtLargo().getText()));
+						vivienda.setAncho(Double.parseDouble(getTxtAncho().getText()));
+						vivienda.setArea(Double.parseDouble(getTxtArea().getText()));
+						vivienda.setTotalPersonas(Integer.parseInt(getSpinnerPersonas().getValue().toString()));
+						vivienda.setTotalInfantes(Integer.parseInt(getSpinnerInfantes().getValue().toString()));
+						vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
+						vivienda.setTotalEmbarazadas(Integer.parseInt(getSpinnerEmbarazadas().getValue().toString()));
+						
+						Ruta.addRuta(afectaciones, new Afectacion());
+						Frame.setContentPanes(afectaciones);
 					}
 				}
 			});
@@ -142,7 +161,8 @@ public class Viviendas extends PrincipalPanel {
 			btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO implementar
+					Ruta.removerRuta(Ruta.get(3)[0]);
+					Frame.setContentPanes((FichasTecnicas) Ruta.getPosicionActual()[0]);
 				}
 			});
 			btnCancelar.setBounds(563, 437, 89, 23);
@@ -251,7 +271,7 @@ public class Viviendas extends PrincipalPanel {
 
 	private JComboBox getCombTipoHab() {
 		if (combTipoHab == null) {
-			String[] items = {"Casa", "Apartamento", "Bohío", "Otro" };
+			String[] items = { "Casa", "Apartamento", "Bohío", "Otro" };
 			combTipoHab = new JComboBox(items);
 			combTipoHab.setSelectedItem(null);
 			combTipoHab.setBounds(205, 139, 226, 21);
@@ -359,7 +379,7 @@ public class Viviendas extends PrincipalPanel {
 		if (spinnerAncianos == null) {
 			spinnerAncianos = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
 			spinnerAncianos.setBounds(698, 46, 44, 28);
-			((DefaultEditor)(spinnerAncianos.getEditor())).getTextField().setEditable(false);
+			((DefaultEditor) (spinnerAncianos.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerAncianos;
 	}
@@ -376,7 +396,7 @@ public class Viviendas extends PrincipalPanel {
 		if (spinnerInfantes == null) {
 			spinnerInfantes = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
 			spinnerInfantes.setBounds(698, 92, 44, 28);
-			((DefaultEditor)(spinnerInfantes.getEditor())).getTextField().setEditable(false);
+			((DefaultEditor) (spinnerInfantes.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerInfantes;
 	}
@@ -393,7 +413,7 @@ public class Viviendas extends PrincipalPanel {
 		if (spinnerEmbarazadas == null) {
 			spinnerEmbarazadas = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
 			spinnerEmbarazadas.setBounds(698, 138, 44, 28);
-			((DefaultEditor)(spinnerEmbarazadas.getEditor())).getTextField().setEditable(false);
+			((DefaultEditor) (spinnerEmbarazadas.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerEmbarazadas;
 	}
@@ -411,9 +431,10 @@ public class Viviendas extends PrincipalPanel {
 			spinnerPersonas = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
 			spinnerPersonas.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					int value = (int)spinnerPersonas.getValue();
-					int total = (int)spinnerAncianos.getValue()+(int)spinnerInfantes.getValue()+(int)spinnerEmbarazadas.getValue();
-					if(value<total)
+					int value = (int) spinnerPersonas.getValue();
+					int total = (int) spinnerAncianos.getValue() + (int) spinnerInfantes.getValue()
+							+ (int) spinnerEmbarazadas.getValue();
+					if (value < total)
 						spinnerPersonas.setValue(total);
 				}
 			});
@@ -421,7 +442,7 @@ public class Viviendas extends PrincipalPanel {
 			Validaciones.relacionarSpinners(spinnerInfantes, spinnerPersonas, infantesPreviousValue);
 			Validaciones.relacionarSpinners(spinnerEmbarazadas, spinnerPersonas, embarazadasPreviousValue);
 			spinnerPersonas.setBounds(698, 184, 44, 28);
-			((DefaultEditor)(spinnerPersonas.getEditor())).getTextField().setEditable(false);
+			((DefaultEditor) (spinnerPersonas.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerPersonas;
 	}

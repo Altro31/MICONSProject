@@ -13,21 +13,21 @@ public class Evento {
 	
 	public Evento() {
 		listaFichasTecnicas = new ArrayList<FichaTecnica>();
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
+		listaFichasTecnicas.add(new FichaTecnica());
 	}
 	
 	public Evento(String nombre, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, enums.Evento tipoEvento) {
 		this();
-		listaFichasTecnicas.add(new FichaTecnica(12));
-		listaFichasTecnicas.add(new FichaTecnica(22));
-		listaFichasTecnicas.add(new FichaTecnica(33));
-		listaFichasTecnicas.add(new FichaTecnica(44));
-		listaFichasTecnicas.add(new FichaTecnica(55));
-		listaFichasTecnicas.add(new FichaTecnica(66));
-		listaFichasTecnicas.add(new FichaTecnica(75));
-		listaFichasTecnicas.add(new FichaTecnica(23435));
-		listaFichasTecnicas.add(new FichaTecnica(13562));
-		listaFichasTecnicas.add(new FichaTecnica(365));
-		listaFichasTecnicas.add(new FichaTecnica(345));
 		
 		setFechaFin(fechaFin);
 		setFechaInicio(fechaInicio);

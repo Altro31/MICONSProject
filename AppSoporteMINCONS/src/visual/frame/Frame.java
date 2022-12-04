@@ -4,6 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import clases.Afectacion;
+import clases.Construccion;
+import clases.Evento;
+import clases.Inmueble;
 import clases.Sistema;
 import util.Ruta;
 import visual.afectaciones.JAfectaciones;
@@ -50,8 +54,9 @@ public class Frame extends JFrame {
 	public static void getInstance() {
 		if(frame==null) {
 			frame=new Frame();
-			Ruta.addRuta(new Principal(frame), null);
-			frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
+			Ruta.addRuta(new Principal(frame), new Afectacion());
+			//frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
+			frame.setContentPane(new JAfectaciones(new Evento()));
 		}
 	}
 	

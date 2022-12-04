@@ -26,8 +26,8 @@ import javax.swing.border.BevelBorder;
 import com.toedter.calendar.JDateChooser;
 
 import clases.Evento;
-import clases.Sistema;
 import util.Ruta;
+import visual.fichasTecnicas.FichasTecnicas;
 import visual.frame.Frame;
 import visual.principal.Principal;
 import visual.util.PrincipalPanel;
@@ -227,6 +227,7 @@ public class Eventos extends PrincipalPanel {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
+				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
 					if (!textNombre.getText().isEmpty() && dChFechaInicio.getDate() != null
 							&& dChFechaFin.getDate() != null) {
@@ -240,11 +241,16 @@ public class Eventos extends PrincipalPanel {
 								((Integer) spinnerHoraFin.getValue()).intValue(),
 								((Integer) spinnerMinFin.getValue()).intValue());
 
-						Evento evento = new Evento(textNombre.getText(), fechaInicio, fechaFin,
-								(enums.Evento) getCBoxTipoEvento().getSelectedItem());
-
-						Sistema.addEventos(evento);
-						System.exit(0);
+						FichasTecnicas fichasTecnicas = new FichasTecnicas();
+						
+						Evento evento = (Evento) (Ruta.getPosicionActual()[1]);
+						evento.setNombre(textNombre.getText());
+						evento.setFechaInicio(fechaInicio);
+						evento.setFechaFin(fechaFin);
+						evento.setTipoEvento((enums.Evento) getCBoxTipoEvento().getSelectedItem());
+						
+						Ruta.addRuta(fichasTecnicas, evento);
+						Frame.setContentPanes(fichasTecnicas);
 
 					}
 				}

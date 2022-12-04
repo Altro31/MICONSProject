@@ -5,11 +5,6 @@ public class FichaTecnica {
 	private Vivienda vivienda;
 	private Afectacion afect;
 	private float cubicacion;
-	
-	public FichaTecnica(float cub) {
-		this.cubicacion=cub;
-	}
-	
 	private static FichaTecnica ficha;
 
 	public Vivienda getVivienda() {
@@ -47,7 +42,7 @@ public class FichaTecnica {
 	
 	public static FichaTecnica getInstance(boolean nuevaInstancia) {
 		if (ficha==null || nuevaInstancia) {
-			ficha=new FichaTecnica(0F);
+			ficha=new FichaTecnica();
 		}
 		return ficha;
 	}

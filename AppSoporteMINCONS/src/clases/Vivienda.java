@@ -155,7 +155,7 @@ public class Vivienda {
 	}
 
 	public void setTotalAncianos(int totalAncianos) {
-		if(totalAncianos <= 0 || totalAncianos > getTotalPersonas())
+		if(totalAncianos < 0 || totalAncianos > getTotalPersonas())
 			throw new IllegalArgumentException("El total de ancianos debe estar entre cero y el numero de personas residentes en la vivieda"); 
 		
 		this.totalAncianos = totalAncianos;
@@ -166,8 +166,8 @@ public class Vivienda {
 	}
 
 	public void setTotalEmbarazadas(int totalEmbarazadas) {
-		if(totalEmbarazadas <= 0 || totalEmbarazadas > getTotalPersonas())
-			throw new IllegalArgumentException(" El largo debe estar en el intervalo de 0 y la cantidad de personas que residen en la vivienda"); 
+		if(totalEmbarazadas < 0 || totalEmbarazadas > getTotalPersonas())
+			throw new IllegalArgumentException(" El total de embarazadas debe estar en el intervalo de 0 y la cantidad de personas que residen en la vivienda"); 
 		
 		this.totalEmbarazadas = totalEmbarazadas;
 	}

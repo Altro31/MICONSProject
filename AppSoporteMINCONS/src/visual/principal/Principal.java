@@ -210,7 +210,7 @@ public class Principal extends JImagen {
 			btnNuevoEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Eventos eventos = new Eventos();
-					Ruta.addRuta(eventos, new Evento(null, null, null, null));
+					Ruta.addRuta(eventos, new Evento());
 					Frame.setContentPanes(eventos);
 				}
 			});

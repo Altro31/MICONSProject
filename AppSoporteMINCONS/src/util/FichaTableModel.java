@@ -37,7 +37,7 @@ public class FichaTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (FichaTecnica fichaTecnica : lista) {
-			addRow(new Object[] {null, index+"", fichaTecnica.getCubicacion()+"", ""});
+			addRow(new Object[] {null, index+"", "", ""});
 			index++;
 		}
 	}
@@ -62,6 +62,7 @@ public class FichaTableModel extends DefaultTableModel {
 			FichaTecnica ficha = evento.getListaFichasTecnicas().get(i);
 			if (!lista.contains(ficha)) {
 				evento.eliminarFichaTecnica(i);
+				size--;
 			}
 		}
 		actualizar(lista);
