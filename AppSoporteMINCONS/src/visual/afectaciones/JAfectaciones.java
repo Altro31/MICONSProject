@@ -535,6 +535,11 @@ public class JAfectaciones extends PrincipalPanel {
 	private JButton getBtnBorrarInmueble() {
 		if (btnBorrarInmueble == null) {
 			btnBorrarInmueble = new JButton("Borrar");
+			btnBorrarInmueble.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inmuebleModel.borrarSeleccion();
+				}
+			});
 		}
 		return btnBorrarInmueble;
 	}
