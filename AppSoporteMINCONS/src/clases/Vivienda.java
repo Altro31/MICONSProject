@@ -16,6 +16,8 @@ public class Vivienda {
 	private int totalAncianos;
 	private int totalEmbarazadas;
 	
+	public Vivienda() {}
+	
 	public Vivienda(String direccion, String ciJefe, Doc docLegal, TipoHab tipoHabitacional, TipoConst tipoConstructiva,
 			double largo, double ancho, double area, int totalPersonas, int totalInfantes, int totalAncianos,
 			int totalEmbarazadas) {
