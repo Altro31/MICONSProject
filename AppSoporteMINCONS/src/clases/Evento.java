@@ -11,8 +11,12 @@ public class Evento {
 	private GregorianCalendar fechaFin;
 	private enums.Evento tipoEvento;
 	
-	public Evento(String nombre, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, enums.Evento tipoEvento) {
+	public Evento() {
 		listaFichasTecnicas = new ArrayList<FichaTecnica>();
+	}
+	
+	public Evento(String nombre, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, enums.Evento tipoEvento) {
+		this();
 		listaFichasTecnicas.add(new FichaTecnica(12));
 		listaFichasTecnicas.add(new FichaTecnica(22));
 		listaFichasTecnicas.add(new FichaTecnica(33));
