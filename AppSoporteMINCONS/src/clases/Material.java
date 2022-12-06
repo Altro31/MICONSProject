@@ -49,10 +49,13 @@ public class Material implements Identificador{
 		return id;
 	}
 
-	@Override
 	public void setIdentificador(String id) {
-		this.id = id;
+              this.id = id;
+		   
+		
+		   }
 		
 	}
+	
 
-}
+

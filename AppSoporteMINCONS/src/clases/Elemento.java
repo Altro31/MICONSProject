@@ -24,4 +24,7 @@ public class Elemento {
 		listaInmuebles.remove(pos);
 	}
 	
+	public Elemento() {
+		listaInmuebles = new ArrayList<Inmueble>();   //Constructor por defecto :)
+	}
 }

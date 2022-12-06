@@ -22,5 +22,8 @@ public class Inmueble extends Material{
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
+	public Inmueble() {
+	cantidad = 0;
+	}
 
 }

@@ -15,6 +15,12 @@ public class Fachada extends Afectacion{
 		this.setTipoDerrumbe(tipoDerrumbe);
 	
 	}
+	public Fachada() {
+		identificador = "";
+		materialPredominante = new Construccion(); 
+		tipoDerrumbe =  ; //me falto aqui
+		
+	}
 
 	public String getIdentificador() {
 		return identificador;

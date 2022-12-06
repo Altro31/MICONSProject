@@ -14,6 +14,12 @@ public class Construccion extends Material {
 		this.setUnidadMedida(unidadMedida);
 
 	}
+	public Construccion() {
+		String unidadMedida= "";  //TODO añadi este constructor 
+		String nombre= "";
+		float precioUnitario= 0;
+	}
+	
 
 	public String getUnidadMedida() {
 		return unidadMedida;
