@@ -15,9 +15,8 @@ public class Construccion extends Material {
 
 	}
 	public Construccion() {
-		String unidadMedida= "";  //TODO añadi este constructor 
-		String nombre= "";
-		float precioUnitario= 0;
+		super("", 0);
+		unidadMedida= ""; 
 	}
 	
 
