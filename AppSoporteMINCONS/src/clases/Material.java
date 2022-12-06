@@ -8,6 +8,12 @@ public class Material implements Identificador{
 	private String id;
 	protected String nombre;
 	protected float precioUnitario;
+	
+	public Material() {
+		id = "";
+		nombre = "";
+		precioUnitario = 0;
+	}
 
 	public Material(String nombre, String id) {
 		this.setNombre(nombre);
@@ -57,4 +63,3 @@ public class Material implements Identificador{
 	}
 
 }
->>>>>>> b0b798b7ee21aa275e89c8b043d7d56bb4fb0cb0
