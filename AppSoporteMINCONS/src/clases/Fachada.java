@@ -18,7 +18,7 @@ public class Fachada extends Afectacion{
 	public Fachada() {
 		identificador = "";
 		materialPredominante = new Construccion(); 
-		tipoDerrumbe =  ; //me falto aqui
+		tipoDerrumbe =  null;
 		
 	}
 
