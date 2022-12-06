@@ -6,7 +6,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
+import clases.Inmueble;
 import clases.Pared;
+import enums.TipoDerrumbe;
 
 public class ParedTableModel extends DefaultTableModel {
 
@@ -15,8 +17,8 @@ public class ParedTableModel extends DefaultTableModel {
 	 */
 	private static final long serialVersionUID = -8515650816743836254L;
 
-	private Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class };
-	boolean[] columnEditables = new boolean[] { true, false, false, false };
+	private Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class, Object.class};
+	boolean[] columnEditables = new boolean[] { true, false, false, false, false };
 
 	public ParedTableModel() {
 		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe", "Pared de Carga"});
@@ -36,7 +38,7 @@ public class ParedTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (Pared pared : lista) {
-			addRow(new Object[] {null, index+"", "", ""});
+			addRow(new Object[] {null, index+"", pared.getIdentificador(), pared.getTipoDerrumbe().toString(), pared.isEsParedCarga()? "Si" : "No"});
 			index++;
 		}
 	}
@@ -60,6 +62,7 @@ public class ParedTableModel extends DefaultTableModel {
 			Pared ficha = afectacion.getListaParedes().get(i);
 			if (!lista.contains(ficha)) {
 				afectacion.eliminarPared(i);
+				size--;
 			}
 		}
 		actualizar(lista);

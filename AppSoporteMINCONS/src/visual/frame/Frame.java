@@ -28,7 +28,7 @@ public class Frame extends JFrame {
 	 */
 	private static final long serialVersionUID = 2638223278346798429L;
 	private static Frame frame;
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -40,6 +40,7 @@ public class Frame extends JFrame {
 			}
 		});
 	}
+
 	/**
 	 * Create the frame.
 	 */
@@ -50,23 +51,23 @@ public class Frame extends JFrame {
 		setSize(891, 491);
 		setLocationRelativeTo(null);
 	}
-	
+
 	public static void getInstance() {
-		if(frame==null) {
-			frame=new Frame();
-			Ruta.addRuta(new Principal(frame), new Afectacion());
+		if (frame == null) {
+			frame = new Frame();
+			Ruta.addRuta(new JAfectaciones(new Evento()), new Afectacion());
 			//frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
-			frame.setContentPane(new JAfectaciones(new Evento()));
+			//frame.setContentPane((FichasTecnicas) Ruta.getPosicionActual()[0]);
 		}
 	}
-	
+
 	public static void setContentPanes(Container c) {
 		getInstance();
-		if(c==null)
+		if (c == null)
 			throw new IllegalArgumentException("Container no puede ser null");
 		frame.setContentPane(c);
 	}
-	
+
 	public static void setVisibles() {
 		getInstance();
 		frame.setVisible(true);

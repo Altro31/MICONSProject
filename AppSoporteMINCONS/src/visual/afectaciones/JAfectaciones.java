@@ -34,15 +34,20 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import clases.Afectacion;
+import clases.Construccion;
 import clases.Evento;
 import clases.Inmueble;
 import clases.Material;
+import clases.Pared;
 import clases.Sistema;
 import enums.TipoDerrumbe;
+import util.Auxiliary;
 import util.InmuebleTableModel;
 import util.ParedTableModel;
 import util.Ruta;
 import visual.util.PrincipalPanel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class JAfectaciones extends PrincipalPanel {
 
@@ -236,7 +241,13 @@ public class JAfectaciones extends PrincipalPanel {
 	private JTable getTablePared() {
 		if (tablePared == null) {
 			paredModel = new ParedTableModel();
+			paredModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaParedes());
 			tablePared = new JTable(paredModel);
+			tablePared.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 			tablePared.getTableHeader().setReorderingAllowed(false);
 			tablePared.getColumnModel().getColumn(0).setResizable(false);
 			tablePared.getColumnModel().getColumn(0).setPreferredWidth(15);
@@ -351,7 +362,14 @@ public class JAfectaciones extends PrincipalPanel {
 
 	private JComboBox getComboBoxMatPred() {
 		if (comboBoxMatPred == null) {
-			comboBoxMatPred = new JComboBox(new Object[] {});
+			ArrayList<String> names = new ArrayList<String>();
+			for (Material mat : Sistema.getListaMateriales()) {
+				if (mat instanceof Construccion) {
+					names.add(mat.getNombre());
+				}
+			}
+			comboBoxMatPred = new JComboBox(new DefaultComboBoxModel<>(names.toArray()));
+			comboBoxMatPred.setSelectedItem(null);
 		}
 		return comboBoxMatPred;
 	}
@@ -393,6 +411,18 @@ public class JAfectaciones extends PrincipalPanel {
 	private JButton getBtnAgnadirPared() {
 		if (btnAgnadirPared == null) {
 			btnAgnadirPared = new JButton("Añadir");
+			btnAgnadirPared.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(((String)comboBoxMatPred.getSelectedItem())!=null && comboBoxTipoDerrumbePared.getSelectedItem()!=null && !(txtIdentificadorPared.getText()).isEmpty() ) {
+						((Afectacion)Ruta.getPosicionActual()[1]).addPared(new Pared((txtIdentificadorPared.getText()), (Construccion)Sistema.getMaterial((String)comboBoxMatPred.getSelectedItem()), (TipoDerrumbe)comboBoxTipoDerrumbePared.getSelectedItem(), cBoxParedCarga.isSelected()));
+						paredModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaParedes());
+						comboBoxMatPred.setSelectedItem(null);
+						comboBoxTipoDerrumbePared.setSelectedItem(null);
+						cBoxParedCarga.setSelected(false);
+						txtIdentificadorPared.setText("");
+					}
+				}
+			});
 		}
 		return btnAgnadirPared;
 	}
@@ -400,6 +430,11 @@ public class JAfectaciones extends PrincipalPanel {
 	private JButton getBtnBorrarPared() {
 		if (btnBorrarPared == null) {
 			btnBorrarPared = new JButton("Borrar");
+			btnBorrarPared.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					paredModel.borrarSeleccion();
+				}
+			});
 		}
 		return btnBorrarPared;
 	}
@@ -513,7 +548,27 @@ public class JAfectaciones extends PrincipalPanel {
 		}
 		return panelButtonInmueble;
 	}
-
+	
+	private void activarBotonBorrarInmueble() {
+		int filas = inmuebleModel.getRowCount();
+		boolean check = false;
+		for (int i = 0; i < filas && !check; i++) {
+			if (Auxiliary.isSelected(i, 0, inmuebleModel))
+				check = true;
+		}
+		btnBorrarInmueble.setEnabled(check);
+	}
+	
+	private void activarBotonBorrarPared() {
+		int filas = paredModel.getRowCount();
+		boolean check = false;
+		for (int i = 0; i < filas && !check; i++) {
+			if (Auxiliary.isSelected(i, 0, paredModel))
+				check = true;
+		}
+		btnBorrarPared.setEnabled(check);
+	}
+	
 	private JButton getBtnAgnadirInmueble() {
 		if (btnAgnadirInmueble == null) {
 			btnAgnadirInmueble = new JButton("Añadir");
@@ -535,9 +590,11 @@ public class JAfectaciones extends PrincipalPanel {
 	private JButton getBtnBorrarInmueble() {
 		if (btnBorrarInmueble == null) {
 			btnBorrarInmueble = new JButton("Borrar");
+			btnBorrarInmueble.setEnabled(false);
 			btnBorrarInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inmuebleModel.borrarSeleccion();
+					activarBotonBorrarInmueble();
 				}
 			});
 		}
@@ -880,6 +937,12 @@ public class JAfectaciones extends PrincipalPanel {
 			inmuebleModel = new InmuebleTableModel();
 			inmuebleModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaInmuebles());
 			tableInmueble = new JTable(inmuebleModel);
+			tableInmueble.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					activarBotonBorrarInmueble();
+				}
+			});
 			tableInmueble.getTableHeader().setReorderingAllowed(false);
 			tableInmueble.getColumnModel().getColumn(0).setResizable(false);
 			tableInmueble.getColumnModel().getColumn(0).setPreferredWidth(35);

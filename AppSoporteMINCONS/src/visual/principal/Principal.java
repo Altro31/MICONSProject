@@ -35,7 +35,6 @@ public class Principal extends JImagen {
 	 * Atributos de la Clase
 	 */
 	private static final long serialVersionUID = 8456631965220967379L;
-	private Frame padre;
 	private JImagen micons;
 	private JImagen imagenUsername;
 	private JLabel lblUsername;
@@ -51,8 +50,7 @@ public class Principal extends JImagen {
 	/**
 	 * Constructor de la clase
 	 */
-	public Principal(Frame padre) {
-		this.padre = padre;
+	public Principal() {
 		llenarComponentes();
 		setAlignmentX(Component.RIGHT_ALIGNMENT);
 		setImagePath("fondo.jpg");
@@ -187,7 +185,7 @@ public class Principal extends JImagen {
 			btnLogout.setOpaque(false);
 			btnLogout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					padre.dispose();
+					System.exit(0);
 				}
 			});
 			btnLogout.setBounds(572, 11, 32, 23);
