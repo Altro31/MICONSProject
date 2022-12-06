@@ -1,3 +1,4 @@
+
 package clases;
 
 import interfaces.Identificador;
@@ -8,11 +9,19 @@ public class Material implements Identificador{
 	protected String nombre;
 	protected float precioUnitario;
 
+	//Ejempo de Constructor por defecto que inicializa los datos por default
+	public Material() {
+		nombre = "";
+		id = "";
+		precioUnitario = 0;
+	}
+	
+	//Constructor normal
 	public Material(String nombre, String id) {
 		this.setNombre(nombre);
 		this.setIdentificador(id);
 	}
-
+	//Constructor normal
 	public Material(String nombre, float precioUnitario) {
 		this.setNombre(nombre);
 		this.setPrecioUnitario(precioUnitario);
@@ -49,13 +58,11 @@ public class Material implements Identificador{
 		return id;
 	}
 
+	@Override
 	public void setIdentificador(String id) {
-              this.id = id;
-		   
-		
-		   }
+		this.id = id;
 		
 	}
-	
 
-
+}
+>>>>>>> b0b798b7ee21aa275e89c8b043d7d56bb4fb0cb0

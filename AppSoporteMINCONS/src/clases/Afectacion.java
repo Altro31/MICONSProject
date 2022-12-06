@@ -15,6 +15,8 @@ public class Afectacion {
 		listaInmuebles.add(new Inmueble("Lavadora", "123", 1));
 		listaInmuebles.add(new Inmueble("Lavamanos", "456", 2));
 		listaInmuebles.add(new Inmueble("Refrigerador", "789", 4));
+		
+		listaParedes=new ArrayList<Pared>();
 	}
 	
 	//Getters and Setters
