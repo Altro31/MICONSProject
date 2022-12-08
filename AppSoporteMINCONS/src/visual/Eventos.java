@@ -26,7 +26,6 @@ import javax.swing.border.BevelBorder;
 import com.toedter.calendar.JDateChooser;
 
 import clases.Evento;
-import util.Ruta;
 import visual.util.PrincipalPanel;
 
 public class Eventos extends PrincipalPanel {
@@ -68,8 +67,8 @@ public class Eventos extends PrincipalPanel {
 	public Eventos() {
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
-				Frame.setContentPanes((Principal)Ruta.getPosicionActual()[0]);
+				Frame.removerRuta(Frame.getPosicionActual()[0]);
+				Frame.setContentPanes((Principal)Frame.getPosicionActual()[0]);
 			}
 		});
 		add(getPanelNuevoEvento());
@@ -240,13 +239,13 @@ public class Eventos extends PrincipalPanel {
 
 						FichasTecnicas fichasTecnicas = new FichasTecnicas();
 						
-						Evento evento = (Evento) (Ruta.getPosicionActual()[1]);
+						Evento evento = (Evento) (Frame.getPosicionActual()[1]);
 						evento.setNombre(textNombre.getText());
 						evento.setFechaInicio(fechaInicio);
 						evento.setFechaFin(fechaFin);
 						evento.setTipoEvento((enums.Evento) getCBoxTipoEvento().getSelectedItem());
 						
-						Ruta.addRuta(fichasTecnicas, evento);
+						Frame.addRuta(fichasTecnicas, evento);
 						Frame.setContentPanes(fichasTecnicas);
 
 					}
@@ -262,8 +261,8 @@ public class Eventos extends PrincipalPanel {
 			btnCancel = new JButton("Cancelar");
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Ruta.removerRuta(Ruta.getPosicionActual()[0]);
-					Frame.setContentPanes((Principal)Ruta.getPosicionActual()[0]);
+					Frame.removerRuta(Frame.getPosicionActual()[0]);
+					Frame.setContentPanes((Principal)Frame.getPosicionActual()[0]);
 				}
 			});
 			btnCancel.setBounds(539, 11, 103, 23);

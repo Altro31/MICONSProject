@@ -46,7 +46,6 @@ import enums.TipoDerrumbe;
 import util.Auxiliary;
 import util.InmuebleTableModel;
 import util.ParedTableModel;
-import util.Ruta;
 import visual.util.PrincipalPanel;
 
 public class Afectaciones extends PrincipalPanel {
@@ -241,7 +240,7 @@ public class Afectaciones extends PrincipalPanel {
 	private JTable getTablePared() {
 		if (tablePared == null) {
 			paredModel = new ParedTableModel();
-			paredModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaParedes());
+			paredModel.actualizar(((Afectacion) Frame.getPosicionActual()[1]).getListaParedes());
 			tablePared = new JTable(paredModel);
 			tablePared.addMouseListener(new MouseAdapter() {
 				@Override
@@ -414,8 +413,8 @@ public class Afectaciones extends PrincipalPanel {
 			btnAgnadirPared.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(((String)comboBoxMatPred.getSelectedItem())!=null && comboBoxTipoDerrumbePared.getSelectedItem()!=null && !(txtIdentificadorPared.getText()).isEmpty() ) {
-						((Afectacion)Ruta.getPosicionActual()[1]).addPared(new Pared((txtIdentificadorPared.getText()), (Construccion)Sistema.getMaterial((String)comboBoxMatPred.getSelectedItem()), (TipoDerrumbe)comboBoxTipoDerrumbePared.getSelectedItem(), cBoxParedCarga.isSelected()));
-						paredModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaParedes());
+						((Afectacion)Frame.getPosicionActual()[1]).addPared(new Pared((txtIdentificadorPared.getText()), (Construccion)Sistema.getMaterial((String)comboBoxMatPred.getSelectedItem()), (TipoDerrumbe)comboBoxTipoDerrumbePared.getSelectedItem(), cBoxParedCarga.isSelected()));
+						paredModel.actualizar(((Afectacion) Frame.getPosicionActual()[1]).getListaParedes());
 						comboBoxMatPred.setSelectedItem(null);
 						comboBoxTipoDerrumbePared.setSelectedItem(null);
 						cBoxParedCarga.setSelected(false);
@@ -575,8 +574,8 @@ public class Afectaciones extends PrincipalPanel {
 			btnAgnadirInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(((String)comboBoxInmueble.getSelectedItem())!=null && ((Integer)spinnerCantidad.getValue()).intValue()>0 ) {
-						((Afectacion)Ruta.getPosicionActual()[1]).addInmueble(new Inmueble((String)comboBoxInmueble.getSelectedItem(), txtID.getText(), ((Integer)spinnerCantidad.getValue()).intValue()));
-						inmuebleModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaInmuebles());
+						((Afectacion)Frame.getPosicionActual()[1]).addInmueble(new Inmueble((String)comboBoxInmueble.getSelectedItem(), txtID.getText(), ((Integer)spinnerCantidad.getValue()).intValue()));
+						inmuebleModel.actualizar(((Afectacion) Frame.getPosicionActual()[1]).getListaInmuebles());
 						comboBoxInmueble.setSelectedItem(null);
 						spinnerCantidad.setValue(0);
 						txtID.setText("");
@@ -935,7 +934,7 @@ public class Afectaciones extends PrincipalPanel {
 	private JTable getTableInmueble() {
 		if (tableInmueble == null) {
 			inmuebleModel = new InmuebleTableModel();
-			inmuebleModel.actualizar(((Afectacion) Ruta.getPosicionActual()[1]).getListaInmuebles());
+			inmuebleModel.actualizar(((Afectacion) Frame.getPosicionActual()[1]).getListaInmuebles());
 			tableInmueble = new JTable(inmuebleModel);
 			tableInmueble.addMouseListener(new MouseAdapter() {
 				@Override

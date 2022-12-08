@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
 import clases.Inmueble;
+import visual.Frame;
 
 public class InmuebleTableModel extends DefaultTableModel {
 
@@ -44,14 +45,14 @@ public class InmuebleTableModel extends DefaultTableModel {
 	}
 	
 	public void filtrar(JTextField txtField, int column) {
-		ArrayList<Inmueble> lista = ((Afectacion)Ruta.getPosicionActual()[1]).getListaInmuebles();
+		ArrayList<Inmueble> lista = ((Afectacion)Frame.getPosicionActual()[1]).getListaInmuebles();
 		actualizar(lista);
 		Auxiliary.filtro(txtField, this, column, lista.size());
 		
 	}
 	
 	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion)Ruta.getPosicionActual()[1]);
+		Afectacion afectacion = ((Afectacion)Frame.getPosicionActual()[1]);
 		ArrayList<Inmueble> lista = new ArrayList<Inmueble>(afectacion.getListaInmuebles());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
 		for (int i=0, size=afectacion.getListaInmuebles().size(); i<size; i++) {

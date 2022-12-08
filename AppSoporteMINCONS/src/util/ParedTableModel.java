@@ -9,6 +9,7 @@ import clases.Afectacion;
 import clases.Inmueble;
 import clases.Pared;
 import enums.TipoDerrumbe;
+import visual.Frame;
 
 public class ParedTableModel extends DefaultTableModel {
 
@@ -48,14 +49,14 @@ public class ParedTableModel extends DefaultTableModel {
 	}
 	
 	public void filtrar(JTextField txtField, int column) {
-		ArrayList<Pared> lista = ((Afectacion)Ruta.getPosicionActual()[1]).getListaParedes();
+		ArrayList<Pared> lista = ((Afectacion)Frame.getPosicionActual()[1]).getListaParedes();
 		actualizar(lista);
 		Auxiliary.filtro(txtField, this, column, lista.size());
 		
 	}
 	
 	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion)Ruta.getPosicionActual()[1]);
+		Afectacion afectacion = ((Afectacion)Frame.getPosicionActual()[1]);
 		ArrayList<Pared> lista = new ArrayList<Pared>(afectacion.getListaParedes());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
 		for (int i=0, size=afectacion.getListaParedes().size(); i<size; i++) {

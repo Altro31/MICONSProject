@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
 import clases.Evento;
-import util.Ruta;
 import visual.login.Login;
 import visual.util.JImagen;
 
@@ -65,54 +64,53 @@ public class Principal extends JImagen {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private void llenarComponentes() {
 		GroupLayout gl_fondo = new GroupLayout(this);
-		gl_fondo.setHorizontalGroup(
-			gl_fondo.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_fondo.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(getMicons(), GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-					.addGroup(gl_fondo.createParallelGroup(Alignment.TRAILING)
+		gl_fondo.setHorizontalGroup(gl_fondo.createParallelGroup(Alignment.TRAILING).addGroup(gl_fondo
+				.createSequentialGroup().addContainerGap()
+				.addComponent(getMicons(), GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+				.addGroup(gl_fondo.createParallelGroup(Alignment.TRAILING).addGroup(gl_fondo.createSequentialGroup()
+						.addComponent(getFacebook(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(getInstagram(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(getTwitter(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+						.addGap(10))
 						.addGroup(gl_fondo.createSequentialGroup()
-							.addComponent(getFacebook(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(getInstagram(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(getTwitter(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-							.addGap(10))
+								.addComponent(getLblLogo_1(), GroupLayout.PREFERRED_SIZE, 415,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(145))
 						.addGroup(gl_fondo.createSequentialGroup()
-							.addComponent(getLblLogo_1(), GroupLayout.PREFERRED_SIZE, 415, GroupLayout.PREFERRED_SIZE)
-							.addGap(145))
-						.addGroup(gl_fondo.createSequentialGroup()
-							.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
-								.addComponent(getBtnViviendasRegistradas(), GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
-								.addComponent(getBtnNuevoEvento(), GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
-								.addComponent(getBtnOtrosEventos(), GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE))
-							.addGap(250))))
-		);
-		gl_fondo.setVerticalGroup(
-			gl_fondo.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_fondo.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_fondo.createSequentialGroup()
-							.addGap(74)
-							.addComponent(getLblLogo_1(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(getBtnNuevoEvento(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(getBtnViviendasRegistradas(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(getBtnOtrosEventos(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-							.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
-								.addComponent(getInstagram(), GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
+										.addComponent(getBtnViviendasRegistradas(), GroupLayout.PREFERRED_SIZE, 215,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(getBtnNuevoEvento(), GroupLayout.PREFERRED_SIZE, 215,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(getBtnOtrosEventos(), GroupLayout.PREFERRED_SIZE, 215,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(250)))));
+		gl_fondo.setVerticalGroup(gl_fondo.createParallelGroup(Alignment.TRAILING).addGroup(gl_fondo
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING).addGroup(gl_fondo.createSequentialGroup()
+						.addGap(74)
+						.addComponent(getLblLogo_1(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+						.addGap(18)
+						.addComponent(getBtnNuevoEvento(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+						.addGap(18)
+						.addComponent(getBtnViviendasRegistradas(), GroupLayout.PREFERRED_SIZE, 33,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(18)
+						.addComponent(getBtnOtrosEventos(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+						.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
+								.addComponent(getInstagram(), GroupLayout.PREFERRED_SIZE, 45,
+										GroupLayout.PREFERRED_SIZE)
 								.addComponent(getFacebook(), GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-								.addComponent(getTwitter(), GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(getTwitter(), GroupLayout.PREFERRED_SIZE, 45,
+										GroupLayout.PREFERRED_SIZE)))
 						.addComponent(getMicons(), GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_fondo.linkSize(SwingConstants.VERTICAL, new Component[] {getFacebook(), getInstagram(), getTwitter()});
-		gl_fondo.linkSize(SwingConstants.HORIZONTAL, new Component[] {getFacebook(), getInstagram(), getTwitter()});
+				.addContainerGap()));
+		gl_fondo.linkSize(SwingConstants.VERTICAL, new Component[] { getFacebook(), getInstagram(), getTwitter() });
+		gl_fondo.linkSize(SwingConstants.HORIZONTAL, new Component[] { getFacebook(), getInstagram(), getTwitter() });
 		setLayout(gl_fondo);
 	}
 
@@ -206,7 +204,7 @@ public class Principal extends JImagen {
 			btnNuevoEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Eventos eventos = new Eventos();
-					Ruta.addRuta(eventos, new Evento());
+					Frame.addRuta(eventos, new Evento());
 					Frame.setContentPanes(eventos);
 				}
 			});

@@ -20,12 +20,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import clases.Afectacion;
 import clases.Evento;
 import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
-import util.Ruta;
 import visual.util.PrincipalPanel;
 
 public class FichasTecnicas extends PrincipalPanel {
@@ -58,8 +56,8 @@ public class FichasTecnicas extends PrincipalPanel {
 	public FichasTecnicas() {
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
-				Frame.setContentPanes((Eventos) Ruta.getPosicionActual()[0]);
+				Frame.removerRuta(Frame.getPosicionActual()[0]);
+				Frame.setContentPanes((Eventos) Frame.getPosicionActual()[0]);
 			}
 		});
 		add(getScrollPane());
@@ -105,7 +103,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			});
 			tableModel = new FichaTableModel();
 			table.setModel(tableModel);
-			tableModel.actualizar(((Evento) Ruta.getPosicionActual()[1]).getListaFichasTecnicas());
+			tableModel.actualizar(((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas());
 			table.getTableHeader().setReorderingAllowed(false);
 			table.getColumnModel().getColumn(0).setResizable(false);
 			table.getColumnModel().getColumn(0).setPreferredWidth(15);
@@ -164,8 +162,8 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnSalir = new JButton("Cancelar");
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Ruta.removerRuta(Ruta.get(1)[0]);
-					Frame.setContentPanes((Principal) Ruta.getPosicionActual()[0]);
+					Frame.removerRuta(Frame.get(1)[0]);
+					Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
 				}
 			});
 			btnSalir.setBounds(537, 11, 89, 23);
@@ -221,8 +219,8 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnInsertar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					Viviendas viviendas = new Viviendas((Evento)Ruta.getPosicionActual()[1]);
-					Ruta.addRuta(viviendas, new Vivienda());
+					Viviendas viviendas = new Viviendas((Evento)Frame.getPosicionActual()[1]);
+					Frame.addRuta(viviendas, new Vivienda());
 					Frame.setContentPanes(viviendas);
 				}
 			});

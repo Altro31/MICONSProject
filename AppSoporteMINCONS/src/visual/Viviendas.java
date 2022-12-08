@@ -28,7 +28,6 @@ import enums.Doc;
 import enums.TipoConst;
 import enums.TipoHab;
 import util.PreviousValue;
-import util.Ruta;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
 
@@ -89,8 +88,8 @@ public class Viviendas extends PrincipalPanel {
 	private ActionListener getActionBtnAtras() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ruta.removerRuta(Ruta.getPosicionActual()[0]);
-				Frame.setContentPanes((FichasTecnicas) Ruta.getPosicionActual()[0]);
+				Frame.removerRuta(Frame.getPosicionActual()[0]);
+				Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
 			}
 		};
 	}
@@ -129,7 +128,7 @@ public class Viviendas extends PrincipalPanel {
 								Integer.parseInt(getSpinnerEmbarazadas().getValue().toString())));
 
 						Afectaciones afectaciones = new Afectaciones(evento);
-						Vivienda vivienda = (Vivienda) Ruta.getPosicionActual()[1];
+						Vivienda vivienda = (Vivienda) Frame.getPosicionActual()[1];
 						vivienda.setDireccion(getTxtDireccion().getText());
 						vivienda.setCiJefe(getTxtCI().getText());
 						vivienda.setDocLegal(Doc.getValue(getCombDocLegal().getSelectedItem().toString()));
@@ -143,7 +142,7 @@ public class Viviendas extends PrincipalPanel {
 						vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
 						vivienda.setTotalEmbarazadas(Integer.parseInt(getSpinnerEmbarazadas().getValue().toString()));
 						
-						Ruta.addRuta(afectaciones, new Afectacion());
+						Frame.addRuta(afectaciones, new Afectacion());
 						Frame.setContentPanes(afectaciones);
 					}
 				}
@@ -158,8 +157,8 @@ public class Viviendas extends PrincipalPanel {
 			btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Ruta.removerRuta(Ruta.get(3)[0]);
-					Frame.setContentPanes((FichasTecnicas) Ruta.getPosicionActual()[0]);
+					Frame.removerRuta(Frame.get(3)[0]);
+					Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
 				}
 			});
 			btnCancelar.setBounds(563, 437, 89, 23);

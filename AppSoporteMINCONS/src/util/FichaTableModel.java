@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Evento;
 import clases.FichaTecnica;
+import visual.Frame;
 
 public class FichaTableModel extends DefaultTableModel {
 
@@ -47,7 +48,7 @@ public class FichaTableModel extends DefaultTableModel {
 	}
 	
 	public void filtrar(JTextField txtField, int column) {
-		ArrayList<FichaTecnica> lista = ((Evento)Ruta.getPosicionActual()[1]).getListaFichasTecnicas();
+		ArrayList<FichaTecnica> lista = ((Evento)Frame.getPosicionActual()[1]).getListaFichasTecnicas();
 		actualizar(lista);
 		Auxiliary.filtro(txtField, this, column, lista.size());
 		
@@ -55,7 +56,7 @@ public class FichaTableModel extends DefaultTableModel {
 	
 	public void borrarSeleccion() {
 		
-		Evento evento = ((Evento)Ruta.getPosicionActual()[1]);
+		Evento evento = ((Evento)Frame.getPosicionActual()[1]);
 		ArrayList<FichaTecnica> lista = new ArrayList<FichaTecnica>(evento.getListaFichasTecnicas());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
 		for (int i=0, size=evento.getListaFichasTecnicas().size(); i<size; i++) {
