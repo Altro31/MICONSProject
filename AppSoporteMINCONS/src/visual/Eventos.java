@@ -1,4 +1,4 @@
-package visual.eventos;
+package visual;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -27,9 +27,6 @@ import com.toedter.calendar.JDateChooser;
 
 import clases.Evento;
 import util.Ruta;
-import visual.fichasTecnicas.FichasTecnicas;
-import visual.frame.Frame;
-import visual.principal.Principal;
 import visual.util.PrincipalPanel;
 
 public class Eventos extends PrincipalPanel {

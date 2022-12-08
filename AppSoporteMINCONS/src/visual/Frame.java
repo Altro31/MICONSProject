@@ -1,4 +1,4 @@
-package visual.frame;
+package visual;
 
 import java.awt.EventQueue;
 
@@ -10,11 +10,7 @@ import clases.Evento;
 import clases.Inmueble;
 import clases.Sistema;
 import util.Ruta;
-import visual.afectaciones.JAfectaciones;
-import visual.eventos.Eventos;
-import visual.fichasTecnicas.FichasTecnicas;
-import visual.principal.Principal;
-import visual.vivienda.Viviendas;
+
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -55,7 +51,7 @@ public class Frame extends JFrame {
 	public static void getInstance() {
 		if (frame == null) {
 			frame = new Frame();
-			Ruta.addRuta(new JAfectaciones(new Evento()), new Afectacion());
+			Ruta.addRuta(new Afectaciones(new Evento()), new Afectacion());
 			//frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
 			//frame.setContentPane((FichasTecnicas) Ruta.getPosicionActual()[0]);
 		}

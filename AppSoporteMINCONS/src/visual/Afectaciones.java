@@ -1,4 +1,4 @@
-package visual.afectaciones;
+package visual;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -10,6 +10,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -46,8 +48,6 @@ import util.InmuebleTableModel;
 import util.ParedTableModel;
 import util.Ruta;
 import visual.util.PrincipalPanel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Afectaciones extends PrincipalPanel {
 

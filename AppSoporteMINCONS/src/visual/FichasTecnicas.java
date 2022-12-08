@@ -1,4 +1,4 @@
-package visual.fichasTecnicas;
+package visual;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -26,11 +26,7 @@ import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
 import util.Ruta;
-import visual.eventos.Eventos;
-import visual.frame.Frame;
-import visual.principal.Principal;
 import visual.util.PrincipalPanel;
-import visual.vivienda.Viviendas;
 
 public class FichasTecnicas extends PrincipalPanel {
 

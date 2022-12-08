@@ -1,4 +1,4 @@
-package visual.vivienda;
+package visual;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -30,9 +30,6 @@ import enums.TipoHab;
 import util.PreviousValue;
 import util.Ruta;
 import util.Validaciones;
-import visual.afectaciones.JAfectaciones;
-import visual.fichasTecnicas.FichasTecnicas;
-import visual.frame.Frame;
 import visual.util.PrincipalPanel;
 
 public class Viviendas extends PrincipalPanel {
@@ -131,7 +128,7 @@ public class Viviendas extends PrincipalPanel {
 								Integer.parseInt(getSpinnerAncianos().getValue().toString()),
 								Integer.parseInt(getSpinnerEmbarazadas().getValue().toString())));
 
-						JAfectaciones afectaciones = new JAfectaciones(evento);
+						Afectaciones afectaciones = new Afectaciones(evento);
 						Vivienda vivienda = (Vivienda) Ruta.getPosicionActual()[1];
 						vivienda.setDireccion(getTxtDireccion().getText());
 						vivienda.setCiJefe(getTxtCI().getText());

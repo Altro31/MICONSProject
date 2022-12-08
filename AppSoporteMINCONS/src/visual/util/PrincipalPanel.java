@@ -2,7 +2,7 @@ package visual.util;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import visual.principal.Principal;
+import visual.Principal;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

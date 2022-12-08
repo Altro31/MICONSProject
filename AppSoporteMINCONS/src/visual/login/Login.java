@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import visual.frame.Frame;
+import visual.Frame;
 import visual.util.JImagen;
 
 public class Login extends JFrame {

@@ -1,4 +1,4 @@
-package visual.principal;
+package visual;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -24,8 +24,6 @@ import javax.swing.border.CompoundBorder;
 
 import clases.Evento;
 import util.Ruta;
-import visual.eventos.Eventos;
-import visual.frame.Frame;
 import visual.login.Login;
 import visual.util.JImagen;
 
