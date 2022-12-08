@@ -49,7 +49,7 @@ import visual.util.PrincipalPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class JAfectaciones extends PrincipalPanel {
+public class Afectaciones extends PrincipalPanel {
 
 	/**
 	 * 
@@ -126,7 +126,7 @@ public class JAfectaciones extends PrincipalPanel {
 	/**
 	 * Create the panel.
 	 */
-	public JAfectaciones(Evento evento) {
+	public Afectaciones(Evento evento) {
 		btnCerrar.setLocation(851, 0);
 		btnAtras.setLocation(0, 0);
 		btnCerrar.setSize(40, 29);
