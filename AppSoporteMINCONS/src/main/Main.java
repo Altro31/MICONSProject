@@ -7,7 +7,7 @@ public class Main {
 	/**
 	 * Launch the application.
 	 */
-	//Altro
+	//Altroaa
 	public static void main(String[] args) {
 		Login.run();
 	}
