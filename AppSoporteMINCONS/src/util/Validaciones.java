@@ -1,5 +1,5 @@
 package util;
-
+// Validaciones
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
