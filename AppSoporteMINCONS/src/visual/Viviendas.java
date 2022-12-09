@@ -20,8 +20,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import clases.Afectacion;
-import clases.Evento;
 import clases.FichaTecnica;
 import clases.Vivienda;
 import enums.Doc;
@@ -31,6 +29,7 @@ import util.PreviousValue;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class Viviendas extends PrincipalPanel {
 
 	/**
@@ -71,27 +70,24 @@ public class Viviendas extends PrincipalPanel {
 	private PreviousValue ancianosPreviuosValue = new PreviousValue(0);
 	private PreviousValue infantesPreviousValue = new PreviousValue(0);
 	private PreviousValue embarazadasPreviousValue = new PreviousValue(0);
-	private Evento evento;
 
 	/**
 	 * Create the panel.
 	 */
-	public Viviendas(Evento evento) {
-		this.evento=evento;
+	public Viviendas() {
 		add(getLblName());
 		add(getBtnSiguiente());
 		add(getBtnCancelar());
 		add(getPanelProp());
-		btnAtras.addActionListener(getActionBtnAtras());
-	}
+		
+		btnAtras.addActionListener(new ActionListener() {
 
-	private ActionListener getActionBtnAtras() {
-		return new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Frame.removerRuta(Frame.getPosicionActual()[0]);
 				Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
 			}
-		};
+		});
 	}
 
 	private JLabel getLblName() {
@@ -127,13 +123,13 @@ public class Viviendas extends PrincipalPanel {
 								Integer.parseInt(getSpinnerAncianos().getValue().toString()),
 								Integer.parseInt(getSpinnerEmbarazadas().getValue().toString())));
 
-						Afectaciones afectaciones = new Afectaciones(evento);
-						Vivienda vivienda = (Vivienda) Frame.getPosicionActual()[1];
+						Vivienda vivienda = (Vivienda) ((Object[]) Frame.getPosicionActual()[1])[0];
 						vivienda.setDireccion(getTxtDireccion().getText());
 						vivienda.setCiJefe(getTxtCI().getText());
 						vivienda.setDocLegal(Doc.getValue(getCombDocLegal().getSelectedItem().toString()));
 						vivienda.setTipoHabitacional(TipoHab.getValue(getCombTipoHab().getSelectedItem().toString()));
-						vivienda.setTipoConstructiva(TipoConst.getValue(getCombTipoCons().getSelectedItem().toString()));
+						vivienda.setTipoConstructiva(
+								TipoConst.getValue(getCombTipoCons().getSelectedItem().toString()));
 						vivienda.setLargo(Double.parseDouble(getTxtLargo().getText()));
 						vivienda.setAncho(Double.parseDouble(getTxtAncho().getText()));
 						vivienda.setArea(Double.parseDouble(getTxtArea().getText()));
@@ -141,9 +137,8 @@ public class Viviendas extends PrincipalPanel {
 						vivienda.setTotalInfantes(Integer.parseInt(getSpinnerInfantes().getValue().toString()));
 						vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
 						vivienda.setTotalEmbarazadas(Integer.parseInt(getSpinnerEmbarazadas().getValue().toString()));
-						
-						Frame.addRuta(afectaciones, new Afectacion());
-						Frame.setContentPanes(afectaciones);
+
+						Frame.setContentPanes((Afectaciones)((Object[])Frame.getPosicionActual()[0])[1]);
 					}
 				}
 			});

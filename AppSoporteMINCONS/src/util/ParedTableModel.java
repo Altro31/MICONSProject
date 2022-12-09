@@ -11,6 +11,7 @@ import clases.Pared;
 import enums.TipoDerrumbe;
 import visual.Frame;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ParedTableModel extends DefaultTableModel {
 
 	/**
@@ -18,11 +19,11 @@ public class ParedTableModel extends DefaultTableModel {
 	 */
 	private static final long serialVersionUID = -8515650816743836254L;
 
-	private Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class, Object.class};
+	private Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class, Object.class };
 	boolean[] columnEditables = new boolean[] { true, false, false, false, false };
 
 	public ParedTableModel() {
-		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe", "Pared de Carga"});
+		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe", "Pared de Carga" });
 	}
 
 	@Override
@@ -39,27 +40,28 @@ public class ParedTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (Pared pared : lista) {
-			addRow(new Object[] {null, index+"", pared.getIdentificador(), pared.getTipoDerrumbe().toString(), pared.isEsParedCarga()? "Si" : "No"});
+			addRow(new Object[] { null, index + "", pared.getIdentificador(), pared.getTipoDerrumbe().toString(),
+					pared.isEsParedCarga() ? "Si" : "No" });
 			index++;
 		}
 	}
-	
+
 	public void limpiar() {
 		Auxiliary.limpiar(this);
 	}
-	
-	public void filtrar(JTextField txtField, int column) {
-		ArrayList<Pared> lista = ((Afectacion)Frame.getPosicionActual()[1]).getListaParedes();
+
+	public void filtrar(String textFilter, int column) {
+		ArrayList<Pared> lista = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaParedes();
 		actualizar(lista);
-		Auxiliary.filtro(txtField, this, column, lista.size());
-		
+		Auxiliary.filtro(textFilter, this, column, lista.size());
+
 	}
-	
+
 	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion)Frame.getPosicionActual()[1]);
+		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
 		ArrayList<Pared> lista = new ArrayList<Pared>(afectacion.getListaParedes());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		for (int i=0, size=afectacion.getListaParedes().size(); i<size; i++) {
+		for (int i = 0, size = afectacion.getListaParedes().size(); i < size; i++) {
 			Pared ficha = afectacion.getListaParedes().get(i);
 			if (!lista.contains(ficha)) {
 				afectacion.eliminarPared(i);

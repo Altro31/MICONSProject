@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JTextField;
+import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
 
 //Modificador final para que no se pueda heredar de esta clase
+@SuppressWarnings({"rawtypes", "unchecked"})
 public final class Auxiliary {
 
 	// Constructor privado para que no se pueda instanciar la Clase
@@ -36,8 +37,7 @@ public final class Auxiliary {
 	 * @param column     columna que se va a filtrar
 	 * @param arrayLimit tamaño de la lista con la cual se actualiza la tabla
 	 */
-	public static void filtro(JTextField txtField, DefaultTableModel tableModel, int column, int arrayLimit) {
-		String string = txtField.getText();
+	public static void filtro(String filterText, DefaultTableModel tableModel, int column, int arrayLimit) {
 		Vector<Object> vectorObjectDuplicado = new Vector<Object>(tableModel.getDataVector());
 		// Da una lista duplicada
 		List<Object> listaObject = vectorObjectDuplicado.subList(0, arrayLimit);
@@ -45,8 +45,8 @@ public final class Auxiliary {
 		List<Object> subList = new ArrayList<Object>();
 		// Filtra los datos
 		for (Object vector : listaObject) {
-			String field = (String) ((Vector) vector).get(column);
-			if (field.toLowerCase().contains(string.toLowerCase())) {
+			String field = ((Integer)(((Vector) vector).get(column))).intValue()+"";
+			if (field.toLowerCase().contains(filterText.toLowerCase())) {
 				subList.add(vector);
 			}
 		}
@@ -56,7 +56,7 @@ public final class Auxiliary {
 			for (Object object : subList) {
 				Vector v = (Vector) object;
 				ArrayList<Object> lista = new ArrayList<Object>();
-				for (int j = 0; j < v.size() - 1; j++) {
+				for (int j = 0; j < v.size(); j++) {
 					lista.add(v.get(j));
 				}
 				tableModel.addRow(lista.toArray());
@@ -69,7 +69,8 @@ public final class Auxiliary {
 		return tableModel.getValueAt(fila, columna) != null
 				&& ((Boolean) tableModel.getValueAt(fila, columna)).booleanValue();
 	}
-
+	
+	// Comprueba si un checkBox de una tabla está 
 	public static ArrayList<Object> getSelected(DefaultTableModel tableModel, int column) {
 		ArrayList<Object> lista = new ArrayList<Object>();
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -82,6 +83,15 @@ public final class Auxiliary {
 			}
 		}
 		return lista;
+	}
+	
+	//Selecciona todos los checkBox de una tabla
+	public static void selectAll(DefaultTableModel tableModel, JCheckBox checkBox, int column) {
+		if(tableModel.getRowCount()>0) {
+			for(int i = 0; i < tableModel.getRowCount(); i++) {
+				tableModel.setValueAt(checkBox.isSelected(), i, column);
+			}
+		}
 	}
 
 	public static <E> void borrarSeleccion(DefaultTableModel tableModel, ArrayList<E> listaFichas, int columnSelection,

@@ -9,6 +9,7 @@ import clases.Afectacion;
 import clases.Inmueble;
 import visual.Frame;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class InmuebleTableModel extends DefaultTableModel {
 
 	/**
@@ -26,36 +27,37 @@ public class InmuebleTableModel extends DefaultTableModel {
 	public Class getColumnClass(int columnIndex) {
 		return columnTypes[columnIndex];
 	}
-	
+
 	@Override
 	public boolean isCellEditable(int row, int column) {
 		return columnEditables[column];
 	}
-	
+
 	public void actualizar(ArrayList<Inmueble> lista) {
 		int index = 1;
 		limpiar();
 		for (Inmueble inmueble : lista) {
-			addRow(new Object[] {false, ""+index++, inmueble.getIdentificador(), inmueble.getNombre(), inmueble.getCantidad()});
+			addRow(new Object[] { false, "" + index++, inmueble.getIdentificador(), inmueble.getNombre(),
+					inmueble.getCantidad() });
 		}
 	}
-	
+
 	public void limpiar() {
 		Auxiliary.limpiar(this);
 	}
-	
-	public void filtrar(JTextField txtField, int column) {
-		ArrayList<Inmueble> lista = ((Afectacion)Frame.getPosicionActual()[1]).getListaInmuebles();
+
+	public void filtrar(String textFilter, int column) {
+		ArrayList<Inmueble> lista = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles();
 		actualizar(lista);
-		Auxiliary.filtro(txtField, this, column, lista.size());
-		
+		Auxiliary.filtro(textFilter, this, column, lista.size());
+
 	}
-	
+
 	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion)Frame.getPosicionActual()[1]);
+		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
 		ArrayList<Inmueble> lista = new ArrayList<Inmueble>(afectacion.getListaInmuebles());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		for (int i=0, size=afectacion.getListaInmuebles().size(); i<size; i++) {
+		for (int i = 0, size = afectacion.getListaInmuebles().size(); i < size; i++) {
 			Inmueble ficha = afectacion.getListaInmuebles().get(i);
 			if (!lista.contains(ficha)) {
 				afectacion.eliminarInmueble(i);

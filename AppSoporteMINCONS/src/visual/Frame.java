@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 
 import clases.Afectacion;
 import clases.Evento;
+import clases.Vivienda;
 
 public class Frame extends JFrame {
 
@@ -45,9 +46,15 @@ public class Frame extends JFrame {
 	public static void getInstance() {
 		if (frame == null) {
 			frame = new Frame();
-			Frame.addRuta(new Afectaciones(new Evento()), new Afectacion());
-			//frame.setContentPane((Principal)Ruta.getPosicionActual()[0]);
-			//frame.setContentPane((FichasTecnicas) Ruta.getPosicionActual()[0]);
+			Evento evento = new Evento();
+			Viviendas viviendas = new Viviendas();
+			Afectaciones afectaciones = new Afectaciones();
+//			Frame.addRuta(new Object[] {viviendas, afectaciones}, new Object[] {new Vivienda(), new Afectacion()});
+			Frame.addRuta(new Principal(), null);
+			Frame.addRuta(new Eventos(), evento);
+			Frame.addRuta(new FichasTecnicas(), evento);
+			Frame.addRuta(new Object[] {viviendas, afectaciones}, new Object[] {new Vivienda(), new Afectacion()});
+			frame.setContentPane((Container) ((Object[])Frame.getPosicionActual()[0])[1]);
 		}
 	}
 
@@ -62,20 +69,20 @@ public class Frame extends JFrame {
 		getInstance();
 		frame.setVisible(true);
 	}
-	
+
 	public static void addRuta(Object visual, Object data) throws IllegalArgumentException {
 		getInstance();
 		if (visual == null) {
 			throw new IllegalArgumentException("Visual no puede ser null");
 		}
-		ruta.add(new Object[] {visual, data});
+		ruta.add(new Object[] { visual, data });
 	}
-	
+
 	public static Object[] getPosicionActual() {
 		getInstance();
-		return ruta.get(ruta.size()-1);
+		return ruta.get(ruta.size() - 1);
 	}
-	
+
 	public static Object[] get(int pos) {
 		return ruta.get(pos);
 	}
@@ -86,10 +93,13 @@ public class Frame extends JFrame {
 			throw new IllegalArgumentException("El objeto no puede ser null");
 		}
 		boolean borrar = false;
-		int count=ruta.size();
-		for (int i = 0; i<count;) {
+		int count = ruta.size();
+
+		int i = 0;
+		while (i < count) {
 			Object[] objects = ruta.get(i);
-			if (objects[0].equals(o) || (objects[1]!=null && objects[1].equals(o))) {
+
+			if (objects[0].equals(o) || (objects[1] != null && objects[1].equals(o))) {
 				borrar = true;
 			}
 			if (borrar) {
@@ -99,6 +109,5 @@ public class Frame extends JFrame {
 				i++;
 			}
 		}
-
 	}
 }

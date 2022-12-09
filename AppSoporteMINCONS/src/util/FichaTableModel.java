@@ -2,13 +2,13 @@ package util;
 
 import java.util.ArrayList;
 
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import clases.Evento;
 import clases.FichaTecnica;
 import visual.Frame;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FichaTableModel extends DefaultTableModel {
 
 	/**
@@ -37,7 +37,7 @@ public class FichaTableModel extends DefaultTableModel {
 	public void actualizar(ArrayList<FichaTecnica> lista) {
 		int index = 1;
 		limpiar();
-		for (FichaTecnica fichaTecnica : lista) {
+		for (FichaTecnica ficha : lista) {
 			addRow(new Object[] {null, index+"", "", ""});
 			index++;
 		}
@@ -47,10 +47,10 @@ public class FichaTableModel extends DefaultTableModel {
 		Auxiliary.limpiar(this);
 	}
 	
-	public void filtrar(JTextField txtField, int column) {
+	public void filtrar(String textFilter, int column) {
 		ArrayList<FichaTecnica> lista = ((Evento)Frame.getPosicionActual()[1]).getListaFichasTecnicas();
 		actualizar(lista);
-		Auxiliary.filtro(txtField, this, column, lista.size());
+		Auxiliary.filtro(textFilter, this, column, lista.size());
 		
 	}
 	

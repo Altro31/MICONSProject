@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -17,9 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
+import clases.Afectacion;
 import clases.Evento;
 import clases.Vivienda;
 import util.Auxiliary;
@@ -60,10 +62,10 @@ public class FichasTecnicas extends PrincipalPanel {
 				Frame.setContentPanes((Eventos) Frame.getPosicionActual()[0]);
 			}
 		});
-		add(getScrollPane());
 		add(getTextNotUsed());
 		add(getPanelTitulo());
 		add(getPanelButton2());
+		add(getScrollPane());
 		add(getPanelButton());
 		add(getFiltroNumero());
 		add(getFiltroDireccion());
@@ -73,13 +75,15 @@ public class FichasTecnicas extends PrincipalPanel {
 	// Métodos
 
 	private void activarBotonBorrar() {
-		int filas = tableModel.getRowCount();
-		boolean check = false;
-		for (int i = 0; i < filas && !check; i++) {
-			if (Auxiliary.isSelected(i, 0, tableModel))
-				check = true;
+		if (btnBorrar!=null) {
+			int filas = tableModel.getRowCount();
+			boolean check = false;
+			for (int i = 0; i < filas && !check; i++) {
+				if (Auxiliary.isSelected(i, 0, tableModel))
+					check = true;
+			}
+			btnBorrar.setEnabled(check);
 		}
-		btnBorrar.setEnabled(check);
 	}
 
 	// Componentes
@@ -95,14 +99,16 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.addMouseListener(new MouseAdapter() {
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableModel = new FichaTableModel();
+			table.setModel(tableModel);
+			tableModel.addTableModelListener(new TableModelListener() {
+
 				@Override
-				public void mouseReleased(MouseEvent e) {
+				public void tableChanged(TableModelEvent e) {
 					activarBotonBorrar();
 				}
 			});
-			tableModel = new FichaTableModel();
-			table.setModel(tableModel);
 			tableModel.actualizar(((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas());
 			table.getTableHeader().setReorderingAllowed(false);
 			table.getColumnModel().getColumn(0).setResizable(false);
@@ -190,10 +196,10 @@ public class FichasTecnicas extends PrincipalPanel {
 			panelButton = new JPanel();
 			panelButton.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelButton.setBounds(772, 92, 100, 334);
-			GroupLayout gl_panelButton = new GroupLayout(panelButton);
-			gl_panelButton.setHorizontalGroup(gl_panelButton.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelButton.createSequentialGroup().addContainerGap()
-							.addGroup(gl_panelButton.createParallelGroup(Alignment.LEADING, false)
+			GroupLayout glPanelButton = new GroupLayout(panelButton);
+			glPanelButton.setHorizontalGroup(glPanelButton.createParallelGroup(Alignment.TRAILING)
+					.addGroup(glPanelButton.createSequentialGroup().addContainerGap()
+							.addGroup(glPanelButton.createParallelGroup(Alignment.LEADING, false)
 									.addComponent(getBtnInsertar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 											Short.MAX_VALUE)
 									.addComponent(getBtnEditar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -202,13 +208,13 @@ public class FichasTecnicas extends PrincipalPanel {
 											Short.MAX_VALUE)
 									.addComponent(getBtnInfo(), 0, 0, Short.MAX_VALUE))
 							.addContainerGap(15, Short.MAX_VALUE)));
-			gl_panelButton.setVerticalGroup(gl_panelButton.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelButton.createSequentialGroup().addContainerGap().addComponent(getBtnInsertar())
+			glPanelButton.setVerticalGroup(glPanelButton.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelButton.createSequentialGroup().addContainerGap().addComponent(getBtnInsertar())
 							.addGap(18).addComponent(getBtnEditar()).addGap(18).addComponent(getBtnBorrar()).addGap(18)
 							.addComponent(getBtnInfo()).addContainerGap(177, Short.MAX_VALUE)));
-			gl_panelButton.linkSize(SwingConstants.HORIZONTAL,
+			glPanelButton.linkSize(SwingConstants.HORIZONTAL,
 					new Component[] { getBtnInsertar(), getBtnEditar(), getBtnBorrar() });
-			panelButton.setLayout(gl_panelButton);
+			panelButton.setLayout(glPanelButton);
 		}
 		return panelButton;
 	}
@@ -218,9 +224,11 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnInsertar = new JButton("Insertar");
 			btnInsertar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					Viviendas viviendas = new Viviendas((Evento)Frame.getPosicionActual()[1]);
-					Frame.addRuta(viviendas, new Vivienda());
+
+					Viviendas viviendas = new Viviendas();
+					Afectaciones afectaciones = new Afectaciones();
+					Frame.addRuta(new Object[] { viviendas, afectaciones },
+							new Object[] { new Vivienda(), new Afectacion() });
 					Frame.setContentPanes(viviendas);
 				}
 			});
@@ -241,7 +249,6 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnBorrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					tableModel.borrarSeleccion();
-					activarBotonBorrar();
 				}
 			});
 			btnBorrar.setEnabled(false);
@@ -262,7 +269,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					tableModel.filtrar(filtroNumero, 1);
+					tableModel.filtrar(filtroNumero.getText(), 1);
 				}
 			});
 
@@ -278,7 +285,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			filtroDireccion.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					tableModel.filtrar(filtroDireccion, 2);
+					tableModel.filtrar(filtroDireccion.getText(), 2);
 				}
 			});
 			filtroDireccion.setColumns(10);
