@@ -15,7 +15,7 @@ public class Pared extends Fachada{
 		return esParedCarga;
 	}
 
-	public void setEsParedCarga(boolean esParedCarga) {  //NO TENGO MUY CLARO COMO VALIDAR AQUI
+	public void setEsParedCarga(boolean esParedCarga) {
 		this.esParedCarga = esParedCarga;
 	}
 	
