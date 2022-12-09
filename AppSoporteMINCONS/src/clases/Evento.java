@@ -38,8 +38,14 @@ public class Evento {
 	public String getNombre() {
 		return nombre;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombre(String nombre) {  //validacion
+		if (nombre == null || nombre.isEmpty())
+		throw new IllegalArgumentException("Nombre debe tener al menos un caracter");
+	if (nombre.length() > 40)
+		throw new IllegalArgumentException("Nombre no debe sobrepasar los 40 caracteres");
+
+	this.nombre = nombre;
+		
 	}
 	public GregorianCalendar getFechaInicio() {
 		return fechaInicio;

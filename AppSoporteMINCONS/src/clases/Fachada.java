@@ -27,7 +27,14 @@ public class Fachada extends Afectacion{
 	}
 
 	public void setIdentificador(String identificador) {
-		this.identificador = identificador;
+		if (identificador.length() != 11 || identificador.trim().length() == 0 || !identificador.matches("[0-9]*")) {
+			throw new IllegalArgumentException("Se debem introducir once numeros");  //validacion
+		}
+		else{
+			this.identificador = identificador;
+		}
+		
+	
 	}
 
 	public Construccion getMaterialPredominante() {
@@ -44,8 +51,14 @@ public class Fachada extends Afectacion{
 
 
 	public void setTipoDerrumbe(TipoDerrumbe tipoDerrumbe) {
+		if (tipoDerrumbe == null)
+			throw new IllegalArgumentException(" El tipo de derrumbe no debe tomar valor null");
+
+			
 		this.tipoDerrumbe = tipoDerrumbe;
 	}
+		
+	
 	
 	public TipoDerrumbe getTipoDerrumbe() {
 		return tipoDerrumbe;

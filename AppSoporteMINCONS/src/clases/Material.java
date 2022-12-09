@@ -58,7 +58,12 @@ public class Material implements Identificador{
 
 	@Override
 	public void setIdentificador(String id) {
-		this.id = id;
+		if (id.length() != 11 || id.trim().length() == 0 || !id.matches("[0-9]*")) {
+			throw new IllegalArgumentException("Se debem introducir once numeros");  //validacion
+		}
+		else{
+			this.id = id;
+		}
 		
 	}
 

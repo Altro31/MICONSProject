@@ -54,8 +54,14 @@ public class Vivienda {
 		return ciJefe;
 	}
 
-	public void setCiJefe(String ciJefe) { //FALTA ESTE TARECO
-		this.ciJefe = ciJefe;
+	public void setCiJefe(String ciJefe) { //FALTA ESTE TARECO ---> MIRA A VER SI TE GUSTA ASI :).dashiell
+		if (ciJefe.length() != 11 || ciJefe.trim().length() == 0 || !ciJefe.matches("[0-9]*")) {
+			throw new IllegalArgumentException("Se deben introducir once numeros");  
+		}
+		else{
+			this.ciJefe = ciJefe;
+		}
+		
 	}
 
 	public Doc getDocLegal() {
