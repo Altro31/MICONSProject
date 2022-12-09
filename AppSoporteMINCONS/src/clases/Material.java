@@ -46,8 +46,7 @@ public class Material implements Identificador{
 		if (precioUnitario <= 0)
 			throw new IllegalArgumentException("El precio debe ser mayor que cero");
 		if (precioUnitario > 1000)
-			throw new IllegalArgumentException("El precio unitario no puede ser mayor que 1000 "); // no debe sobrepasar
-																									// los mil
+			throw new IllegalArgumentException("El precio unitario no puede ser mayor que 1000 ");
 
 		this.precioUnitario = precioUnitario;
 	}
@@ -58,8 +57,8 @@ public class Material implements Identificador{
 
 	@Override
 	public void setIdentificador(String id) {
-		if (id.length() != 11 || id.trim().length() == 0 || !id.matches("[0-9]*")) {
-			throw new IllegalArgumentException("Se debe introducir once numeros");  //validacion
+		if (id.length() != 11 || !id.matches("\\d")) {
+			throw new IllegalArgumentException("Se debe introducir once numeros"); 
 		}
 		else{
 			this.id = id;
