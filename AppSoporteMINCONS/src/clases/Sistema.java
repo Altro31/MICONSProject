@@ -17,9 +17,9 @@ public class Sistema {
 		listaMateriales.add(new Construccion("Gravilla"));
 		listaMateriales.add(new Construccion("Arena"));
 		listaMateriales.add(new Construccion("Tejas"));
-		listaMateriales.add(new Inmueble("Lavadora", "123", 1));
-		listaMateriales.add(new Inmueble("Lavamanos", "456", 2));
-		listaMateriales.add(new Inmueble("Refrigerador", "789", 4));
+		listaMateriales.add(new Inmueble("Lavadora", "12345678919", 1));
+		listaMateriales.add(new Inmueble("Lavamanos", "45645678919", 2));
+		listaMateriales.add(new Inmueble("Refrigerador", "78945678919", 4));
 	}
 
 	public static void getInstance() {

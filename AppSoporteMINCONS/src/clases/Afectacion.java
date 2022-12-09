@@ -12,11 +12,13 @@ public class Afectacion {
 	//Constructor por defecto
 	public Afectacion() {
 		listaInmuebles = new ArrayList<Inmueble>();
-		listaInmuebles.add(new Inmueble("Lavadora", "123", 1));
-		listaInmuebles.add(new Inmueble("Lavamanos", "456", 2));
-		listaInmuebles.add(new Inmueble("Refrigerador", "789", 4));
+		listaInmuebles.add(new Inmueble("Lavadora", "12312312312", 1));
+		listaInmuebles.add(new Inmueble("Lavamanos", "45612312312", 2));
+		listaInmuebles.add(new Inmueble("Refrigerador", "78912312312", 4));
 		
 		listaParedes=new ArrayList<Pared>();
+		
+		listaTechos = new ArrayList<Techo>();
 	}
 	
 	//Getters and Setters
@@ -35,6 +37,12 @@ public class Afectacion {
 		listaInmuebles.remove(pos);
 	}
 	
+	public void setInmueble(int pos, Inmueble inmueble) throws IndexOutOfBoundsException, IllegalArgumentException{
+		if(pos<0)
+			throw new IllegalArgumentException("Pos debe tener valor negativo");
+		listaInmuebles.set(pos, inmueble);
+	}
+	
 	public ArrayList<Pared> getListaParedes() {
 		return new ArrayList<Pared>(listaParedes);
 	}
@@ -45,8 +53,14 @@ public class Afectacion {
 	}
 	public void eliminarPared(int pos) {
 		if(pos<0)
-			throw new IllegalArgumentException("Pos debe tener valor negativo");
+			throw new IllegalArgumentException("Pos no debe tener valor negativo");
 		listaParedes.remove(pos);
+	}
+	
+	public void setPared(int pos, Pared pared) throws IndexOutOfBoundsException, IllegalArgumentException{
+		if(pos<0)
+			throw new IllegalArgumentException("Pos no debe tener valor negativo");
+		listaParedes.set(pos, pared);
 	}
 	
 	public ArrayList<Techo> getListaTechos() {
@@ -61,5 +75,11 @@ public class Afectacion {
 		if(pos<0)
 			throw new IllegalArgumentException("Pos debe tener valor negativo");
 		listaTechos.remove(pos);
+	}
+	
+	public void setTecho(int pos, Techo techo) throws IndexOutOfBoundsException, IllegalArgumentException{
+		if(pos<0)
+			throw new IllegalArgumentException("Pos no debe tener valor negativo");
+		listaTechos.set(pos, techo);
 	}
 }
