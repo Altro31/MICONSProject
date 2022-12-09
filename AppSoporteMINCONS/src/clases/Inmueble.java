@@ -4,8 +4,8 @@ public class Inmueble extends Material {
 
 	private int cantidad;
 
-	public Inmueble(String id, String nombre, float precioUnitario) {
-		super(nombre, precioUnitario);
+	public Inmueble(String nombre) {
+		super(nombre, "00000000000");
 	}
 
 	public Inmueble(String nombre, String id, int cantidad) {

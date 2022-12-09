@@ -5,7 +5,7 @@ public class Construccion extends Material {
 	String unidadMedida;
 
 	public Construccion(String nombre) {
-		super(nombre,"");
+		super(nombre,"00000000000");
 
 	}
 
