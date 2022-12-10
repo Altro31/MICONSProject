@@ -38,7 +38,7 @@ public class FichaTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (FichaTecnica ficha : lista) {
-			addRow(new Object[] {null, index+"", "", ""});
+			addRow(new Object[] {null, index+"", ficha.getVivienda().getDireccion(), ""});
 			index++;
 		}
 	}

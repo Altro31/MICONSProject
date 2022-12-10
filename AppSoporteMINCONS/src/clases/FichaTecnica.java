@@ -4,7 +4,7 @@ public class FichaTecnica {
 
 	private Vivienda vivienda;
 	private Afectacion afect;
-	private float cubicacion;
+	private Cubicacion cubicacion;
 	private static FichaTecnica ficha;
 
 	public Vivienda getVivienda() {
@@ -29,14 +29,13 @@ public class FichaTecnica {
 		this.afect = afect;
 	}
 
-	public float getCubicacion() {
+	public Cubicacion getCubicacion() {
 		return cubicacion;
 	}
-
-	public void setCubicacion(float cubicacion) {
-		if (cubicacion < 0)
-			throw new IllegalArgumentException("La cubicacion no puede ser menor que cero");
-
+	
+	public void setCubicacion(Cubicacion cubicacion) {
+		if(cubicacion==null)
+			throw new IllegalArgumentException("La cubicacion no puede ser null");
 		this.cubicacion = cubicacion;
 	}
 	

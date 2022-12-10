@@ -2,28 +2,21 @@ package clases;
 
 public class Inmueble extends Material {
 
-	private int cantidad;
-
 	public Inmueble(String nombre) {
 		super(nombre, "00000000000");
 	}
 
+
 	public Inmueble(String nombre, String id, int cantidad) {
 		super(nombre, id);
 		this.cantidad = cantidad;
+		this.precioUnitario = 0;
 	}
-
-	public int getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(int cantidad) {
+	
+	public Inmueble(String nombre, String id, int cantidad, float precioUnitario) {
+		super(nombre, id);
 		this.cantidad = cantidad;
-	}
-
-	public Inmueble() {
-		super("", 0);
-		cantidad = 0;
+		this.precioUnitario = precioUnitario;
 	}
 
 }

@@ -22,11 +22,15 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import clases.Afectacion;
+import clases.Cubicacion;
 import clases.Evento;
 import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
 import visual.util.PrincipalPanel;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class FichasTecnicas extends PrincipalPanel {
 
@@ -51,11 +55,18 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTextField filtroNumero;
 	private JTextField filtroDireccion;
 	private JTextField filtroFecha;
+	private JButton btnNewButton;
 
 	/**
 	 * Create the panel.
 	 */
 	public FichasTecnicas() {
+		addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				System.out.println("a");
+			}
+		});
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Frame.removerRuta(Frame.getPosicionActual()[0]);
@@ -109,7 +120,7 @@ public class FichasTecnicas extends PrincipalPanel {
 					activarBotonBorrar();
 				}
 			});
-			tableModel.actualizar(((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas());
+			tableModel.actualizar(((Evento)Frame.get(1)[1]).getListaFichasTecnicas());
 			table.getTableHeader().setReorderingAllowed(false);
 			table.getColumnModel().getColumn(0).setResizable(false);
 			table.getColumnModel().getColumn(0).setPreferredWidth(15);
@@ -197,23 +208,34 @@ public class FichasTecnicas extends PrincipalPanel {
 			panelButton.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelButton.setBounds(772, 92, 100, 334);
 			GroupLayout glPanelButton = new GroupLayout(panelButton);
-			glPanelButton.setHorizontalGroup(glPanelButton.createParallelGroup(Alignment.TRAILING)
-					.addGroup(glPanelButton.createSequentialGroup().addContainerGap()
-							.addGroup(glPanelButton.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(getBtnInsertar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-											Short.MAX_VALUE)
-									.addComponent(getBtnEditar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-											Short.MAX_VALUE)
-									.addComponent(getBtnBorrar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-											Short.MAX_VALUE)
-									.addComponent(getBtnInfo(), 0, 0, Short.MAX_VALUE))
-							.addContainerGap(15, Short.MAX_VALUE)));
-			glPanelButton.setVerticalGroup(glPanelButton.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelButton.createSequentialGroup().addContainerGap().addComponent(getBtnInsertar())
-							.addGap(18).addComponent(getBtnEditar()).addGap(18).addComponent(getBtnBorrar()).addGap(18)
-							.addComponent(getBtnInfo()).addContainerGap(177, Short.MAX_VALUE)));
-			glPanelButton.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getBtnInsertar(), getBtnEditar(), getBtnBorrar() });
+			glPanelButton.setHorizontalGroup(
+				glPanelButton.createParallelGroup(Alignment.TRAILING)
+					.addGroup(Alignment.LEADING, glPanelButton.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(glPanelButton.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(getBtnNewButton(), Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+							.addComponent(getBtnInsertar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(getBtnEditar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(getBtnBorrar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(getBtnInfo(), Alignment.LEADING, 0, 0, Short.MAX_VALUE))
+						.addContainerGap(15, Short.MAX_VALUE))
+			);
+			glPanelButton.setVerticalGroup(
+				glPanelButton.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelButton.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(getBtnInsertar())
+						.addGap(18)
+						.addComponent(getBtnEditar())
+						.addGap(18)
+						.addComponent(getBtnBorrar())
+						.addGap(18)
+						.addComponent(getBtnInfo())
+						.addGap(120)
+						.addComponent(getBtnNewButton())
+						.addContainerGap(30, Short.MAX_VALUE))
+			);
+			glPanelButton.linkSize(SwingConstants.HORIZONTAL, new Component[] {getBtnInsertar(), getBtnEditar(), getBtnBorrar()});
 			panelButton.setLayout(glPanelButton);
 		}
 		return panelButton;
@@ -227,8 +249,9 @@ public class FichasTecnicas extends PrincipalPanel {
 
 					Viviendas viviendas = new Viviendas();
 					Afectaciones afectaciones = new Afectaciones();
-					Frame.addRuta(new Object[] { viviendas, afectaciones },
-							new Object[] { new Vivienda(), new Afectacion() });
+					AsignarMateriales asignarMateriales = new AsignarMateriales();
+					Frame.addRuta(new Object[] { viviendas, afectaciones, asignarMateriales},
+							new Object[] { new Vivienda(), new Afectacion(), new Cubicacion()});
 					Frame.setContentPanes(viviendas);
 				}
 			});
@@ -301,5 +324,17 @@ public class FichasTecnicas extends PrincipalPanel {
 			filtroFecha.setBounds(539, 92, 223, 20);
 		}
 		return filtroFecha;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("actualizar");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tableModel.actualizar(((Evento)Frame.get(1)[1]).getListaFichasTecnicas());
+				}
+			});
+			btnNewButton.setHorizontalAlignment(SwingConstants.LEADING);
+		}
+		return btnNewButton;
 	}
 }

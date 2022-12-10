@@ -13,13 +13,13 @@ public class Sistema {
 		listaEventos = new ArrayList<Evento>();
 
 		listaMateriales = new ArrayList<Material>();
-		listaMateriales.add(new Construccion("Cemento"));
-		listaMateriales.add(new Construccion("Gravilla"));
-		listaMateriales.add(new Construccion("Arena"));
-		listaMateriales.add(new Construccion("Tejas"));
-		listaMateriales.add(new Inmueble("Lavadora", "12345678919", 1));
-		listaMateriales.add(new Inmueble("Lavamanos", "45645678919", 2));
-		listaMateriales.add(new Inmueble("Refrigerador", "78945678919", 4));
+		listaMateriales.add(new Construccion("Cemento",3,6));
+		listaMateriales.add(new Construccion("Gravilla",2,2));
+		listaMateriales.add(new Construccion("Arena",4,6));
+		listaMateriales.add(new Construccion("Tejas",7,9));
+		listaMateriales.add(new Inmueble("Lavadora", "12345678919", 1, 11));
+		listaMateriales.add(new Inmueble("Lavamanos", "45645678919", 2, 12));
+		listaMateriales.add(new Inmueble("Refrigerador", "78945678919", 4, 13));
 	}
 
 	public static void getInstance() {

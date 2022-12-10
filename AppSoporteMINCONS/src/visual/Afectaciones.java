@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -40,11 +41,13 @@ import javax.swing.event.TableModelListener;
 
 import clases.Afectacion;
 import clases.Construccion;
+import clases.Cubicacion;
 import clases.Inmueble;
 import clases.Material;
 import clases.Pared;
 import clases.Sistema;
 import clases.Techo;
+import clases.Vivienda;
 import enums.TipoDerrumbe;
 import util.Auxiliary;
 import util.InmuebleTableModel;
@@ -312,25 +315,25 @@ public class Afectaciones extends PrincipalPanel {
 											.addComponent(getTxtIdentificadorPared(), GroupLayout.DEFAULT_SIZE, 173,
 													Short.MAX_VALUE)
 											.addComponent(getCBoxParedCarga(), GroupLayout.PREFERRED_SIZE, 19,
-													GroupLayout.PREFERRED_SIZE)))
+													GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED))
 									.addGroup(glPanelInsertarPared.createSequentialGroup()
 											.addComponent(getBtnOKPared(), GroupLayout.PREFERRED_SIZE, 75,
 													GroupLayout.PREFERRED_SIZE)
-											.addGap(10).addComponent(getBtnCancelarPared(), GroupLayout.PREFERRED_SIZE,
-													75, GroupLayout.PREFERRED_SIZE)))
-							.addContainerGap()));
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(getBtnCancelarPared())))
+							.addGap(10)));
 			glPanelInsertarPared.setVerticalGroup(glPanelInsertarPared.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertarPared.createSequentialGroup()
-							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(glPanelInsertarPared.createSequentialGroup().addContainerGap()
 							.addGroup(glPanelInsertarPared.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblIdentificadorPared()).addComponent(getTxtIdentificadorPared(),
 											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 											GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addGroup(glPanelInsertarPared.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblMatPred()).addComponent(getComboBoxMatPredPared(),
-											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-											GroupLayout.PREFERRED_SIZE))
+									.addComponent(getLblMatPred())
+									.addComponent(getComboBoxMatPredPared(), GroupLayout.PREFERRED_SIZE,
+											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addGroup(glPanelInsertarPared.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblTipoDerrumbePared())
@@ -339,13 +342,14 @@ public class Afectaciones extends PrincipalPanel {
 							.addGap(18)
 							.addGroup(glPanelInsertarPared.createParallelGroup(Alignment.TRAILING)
 									.addComponent(getCBoxParedCarga()).addComponent(getLblParedCarga()))
-							.addGap(56).addGroup(glPanelInsertarPared.createParallelGroup(Alignment.LEADING)
+							.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+							.addGroup(glPanelInsertarPared.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getBtnOKPared()).addComponent(getBtnCancelarPared()))
-							.addGap(184)));
-			glPanelInsertarPared.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblIdentificadorPared(), getLblMatPred(), getLblTipoDerrumbePared() });
+							.addGap(23)));
 			glPanelInsertarPared.linkSize(SwingConstants.VERTICAL, new Component[] { getComboBoxTipoDerrumbePared(),
 					getComboBoxMatPredPared(), getTxtIdentificadorPared() });
+			glPanelInsertarPared.linkSize(SwingConstants.VERTICAL,
+					new Component[] { getLblIdentificadorPared(), getLblMatPred(), getLblTipoDerrumbePared() });
 			panelInsertarPared.setLayout(glPanelInsertarPared);
 		}
 		return panelInsertarPared;
@@ -531,7 +535,14 @@ public class Afectaciones extends PrincipalPanel {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// TODO
+					if (JOptionPane.showConfirmDialog(Frame.getInstance(),
+							"Está a punto de guardar los datos registrados en una Ficha Técnica.\n"
+									+ "¿Desea asignar los materiales necesarios para las reparaciones de la Vivienda?\n"
+									+ "*Tenga en cuenta que éste proceso puede realizarse más adelante") == 0) {
+						
+						Frame.setContentPanes((AsignarMateriales)((Object[])Frame.getPosicionActual()[0])[2]);
+						
+					}
 				}
 			});
 		}
@@ -567,7 +578,7 @@ public class Afectaciones extends PrincipalPanel {
 			comboBoxTipoDerrumbe = new JComboBox();
 			comboBoxTipoDerrumbe.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					paredModel.filtrar((String)comboBoxTipoDerrumbe.getSelectedItem(), 3);
+					paredModel.filtrar((String) comboBoxTipoDerrumbe.getSelectedItem(), 3);
 				}
 			});
 			comboBoxTipoDerrumbe.setModel(new DefaultComboBoxModel(new String[] { "", "Parcial", "Total" }));
@@ -582,7 +593,7 @@ public class Afectaciones extends PrincipalPanel {
 			comboBoxParedCarga = new JComboBox();
 			comboBoxParedCarga.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					paredModel.filtrar((String)comboBoxParedCarga.getSelectedItem(), 4);
+					paredModel.filtrar((String) comboBoxParedCarga.getSelectedItem(), 4);
 				}
 			});
 			comboBoxParedCarga.setModel(new DefaultComboBoxModel(new String[] { "", "Si", "No" }));
@@ -754,16 +765,17 @@ public class Afectaciones extends PrincipalPanel {
 											.addComponent(getTxtIdentificadorTecho(), GroupLayout.DEFAULT_SIZE, 170,
 													Short.MAX_VALUE)
 											.addComponent(getComboBoxMatPredTecho(), 0, 170, Short.MAX_VALUE)
-											.addComponent(getComboBoxTipoDerrumbeTecho(), 0, 170, Short.MAX_VALUE)))
+											.addComponent(getComboBoxTipoDerrumbeTecho(), 0, 170, Short.MAX_VALUE))
+									.addGap(10))
 									.addGroup(glPanelInsertarTecho.createSequentialGroup()
-											.addComponent(getBtnOKTecho(), GroupLayout.PREFERRED_SIZE, 75,
+											.addComponent(getBtnOKTecho(), GroupLayout.PREFERRED_SIZE, 84,
 													GroupLayout.PREFERRED_SIZE)
-											.addGap(10).addComponent(getBtnCancelarTecho(), GroupLayout.PREFERRED_SIZE,
-													75, GroupLayout.PREFERRED_SIZE)))
-							.addContainerGap()));
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(getBtnCancelarTecho(), GroupLayout.PREFERRED_SIZE, 91,
+													GroupLayout.PREFERRED_SIZE)
+											.addContainerGap()))));
 			glPanelInsertarTecho.setVerticalGroup(glPanelInsertarTecho.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertarTecho.createSequentialGroup()
-							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(glPanelInsertarTecho.createSequentialGroup().addContainerGap()
 							.addGroup(glPanelInsertarTecho.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblIdentificadorTecho()).addComponent(getTxtIdentificadorTecho(),
 											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -778,13 +790,17 @@ public class Afectaciones extends PrincipalPanel {
 									.addComponent(getLblTipoDerrumbeTecho())
 									.addComponent(getComboBoxTipoDerrumbeTecho(), GroupLayout.PREFERRED_SIZE,
 											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(54).addGroup(glPanelInsertarTecho.createParallelGroup(Alignment.LEADING)
-									.addComponent(getBtnOKTecho()).addComponent(getBtnCancelarTecho()))
-							.addGap(190)));
-			glPanelInsertarTecho.linkSize(SwingConstants.VERTICAL, new Component[] { getTxtIdentificadorTecho(),
-					getComboBoxMatPredTecho(), getComboBoxTipoDerrumbeTecho() });
+							.addGap(42)
+							.addGroup(glPanelInsertarTecho.createParallelGroup(Alignment.BASELINE)
+									.addComponent(getBtnOKTecho())
+									.addComponent(getBtnCancelarTecho(), GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
+							.addGap(32)));
 			glPanelInsertarTecho.linkSize(SwingConstants.VERTICAL,
 					new Component[] { getLblIdentificadorTecho(), getLblMatPredTecho(), getLblTipoDerrumbeTecho() });
+			glPanelInsertarTecho.linkSize(SwingConstants.VERTICAL, new Component[] { getTxtIdentificadorTecho(),
+					getComboBoxMatPredTecho(), getComboBoxTipoDerrumbeTecho() });
+			glPanelInsertarTecho.linkSize(SwingConstants.HORIZONTAL,
+					new Component[] { getBtnOKTecho(), getBtnCancelarTecho() });
 			panelInsertarTecho.setLayout(glPanelInsertarTecho);
 		}
 		return panelInsertarTecho;
@@ -1401,11 +1417,11 @@ public class Afectaciones extends PrincipalPanel {
 										(TipoDerrumbe) comboBoxTipoDerrumbeTecho.getSelectedItem()));
 						techoModel.actualizar(
 								((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaTechos());
-						
+
 						comboBoxMatPredTecho.setSelectedItem(null);
 						comboBoxTipoDerrumbeTecho.setSelectedItem(null);
 						txtIdentificadorTecho.setText("");
-						
+
 						bloquearCamposTecho(false);
 					}
 				}

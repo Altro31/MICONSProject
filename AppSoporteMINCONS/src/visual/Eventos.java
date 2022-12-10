@@ -245,7 +245,7 @@ public class Eventos extends PrincipalPanel {
 						evento.setFechaFin(fechaFin);
 						evento.setTipoEvento((enums.Evento) getCBoxTipoEvento().getSelectedItem());
 						
-						Frame.addRuta(fichasTecnicas, evento);
+						Frame.addRuta(fichasTecnicas, null);
 						Frame.setContentPanes(fichasTecnicas);
 
 					}

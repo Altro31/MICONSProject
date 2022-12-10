@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import clases.Afectacion;
+import clases.Cubicacion;
 import clases.Evento;
 import clases.Vivienda;
+import util.FichaTableModel;
 
 public class Frame extends JFrame {
 
@@ -43,19 +45,22 @@ public class Frame extends JFrame {
 		ruta = new ArrayList<Object[]>();
 	}
 
-	public static void getInstance() {
+	public static Frame getInstance() {
 		if (frame == null) {
 			frame = new Frame();
 			Evento evento = new Evento();
 			Viviendas viviendas = new Viviendas();
 			Afectaciones afectaciones = new Afectaciones();
+			AsignarMateriales asignarMateriales = new AsignarMateriales();
 //			Frame.addRuta(new Object[] {viviendas, afectaciones}, new Object[] {new Vivienda(), new Afectacion()});
 			Frame.addRuta(new Principal(), null);
-			Frame.addRuta(new Eventos(), evento);
-			Frame.addRuta(new FichasTecnicas(), evento);
-			Frame.addRuta(new Object[] {viviendas, afectaciones}, new Object[] {new Vivienda(), new Afectacion()});
-			frame.setContentPane((Container) ((Object[])Frame.getPosicionActual()[0])[1]);
+//			Frame.addRuta(new Eventos(), evento);
+//			Frame.addRuta(new FichasTecnicas(), null);
+//			Frame.addRuta(new Object[] {viviendas, afectaciones, asignarMateriales}, new Object[] {new Vivienda(), new Afectacion(), new Cubicacion()});
+			//frame.setContentPane((Container) ((Object[])Frame.getPosicionActual()[0])[2]);
+			frame.setContentPanes((Container)Frame.getPosicionActual()[0]);
 		}
+		return frame;
 	}
 
 	public static void setContentPanes(Container c) {
@@ -84,6 +89,7 @@ public class Frame extends JFrame {
 	}
 
 	public static Object[] get(int pos) {
+		getInstance();
 		return ruta.get(pos);
 	}
 

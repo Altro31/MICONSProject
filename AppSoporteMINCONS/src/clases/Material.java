@@ -5,14 +5,16 @@ import interfaces.Identificador;
 
 public class Material implements Identificador{
 	
-	private String id;
+	protected String id;
 	protected String nombre;
 	protected float precioUnitario;
+	protected int cantidad;
 	
 	public Material() {
 		id = "";
 		nombre = "";
 		precioUnitario = 0;
+		cantidad = 0;
 	}
 
 	public Material(String nombre, String id) {
@@ -64,6 +66,14 @@ public class Material implements Identificador{
 			this.id = id;
 		}
 		
+	}
+	
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
 	}
 
 }

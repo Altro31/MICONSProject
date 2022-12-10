@@ -9,9 +9,9 @@ public class Construccion extends Material {
 
 	}
 
-	public Construccion(String nombre, String unidadMedida, float precioUnitario) {
+	public Construccion(String nombre, int cantidad, float precioUnitario) {
 		super(nombre, precioUnitario);
-		this.setUnidadMedida(unidadMedida);
+		this.cantidad = cantidad;
 
 	}
 	public Construccion() {

@@ -13,17 +13,6 @@ public class Evento {
 	
 	public Evento() {
 		listaFichasTecnicas = new ArrayList<FichaTecnica>();
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
-		listaFichasTecnicas.add(new FichaTecnica());
 	}
 	
 	public Evento(String nombre, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, enums.Evento tipoEvento) {
