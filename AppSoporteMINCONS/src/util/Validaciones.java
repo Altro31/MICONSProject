@@ -9,8 +9,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 //Modificador final para que no se pueda heredar de esta clase
 public final class Validaciones {

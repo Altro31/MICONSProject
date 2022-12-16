@@ -3,35 +3,28 @@ package clases;
 
 import interfaces.Identificador;
 
-public class Material implements Identificador{
-	
+public abstract class Material implements Identificador {
+
 	protected String id;
 	protected String nombre;
 	protected float precioUnitario;
 	protected int cantidad;
-	
-	public Material() {
-		id = "";
-		nombre = "";
-		precioUnitario = 0;
-		cantidad = 0;
+
+	// Constructor con todos los campos
+	protected Material(String id, String nombre, float precioUnitario, int cant) {
+		setId(id);
+		setNombre(nombre);
+		setPrecioUnitario(precioUnitario);
+		setCantidad(cant);
 	}
 
-	public Material(String nombre, String id) {
-		this.setNombre(nombre);
-		this.setIdentificador(id);
-	}
-
-	public Material(String nombre, float precioUnitario) {
-		this.setNombre(nombre);
-		this.setPrecioUnitario(precioUnitario);
-	}
+	// Setters y Getters
 
 	public String getNombre() {
-		return nombre;
+		return nombre.intern();
 	}
 
-	public void setNombre(String nombre) {
+	public void setNombre(String nombre) throws IllegalArgumentException {
 		if (nombre == null || nombre.isEmpty())
 			throw new IllegalArgumentException("Nombre debe tener al menos un caracter");
 		if (nombre.length() > 40)
@@ -44,7 +37,7 @@ public class Material implements Identificador{
 		return precioUnitario;
 	}
 
-	public void setPrecioUnitario(float precioUnitario) {
+	public void setPrecioUnitario(float precioUnitario) throws IllegalArgumentException {
 		if (precioUnitario <= 0)
 			throw new IllegalArgumentException("El precio debe ser mayor que cero");
 		if (precioUnitario > 1000)
@@ -52,27 +45,27 @@ public class Material implements Identificador{
 
 		this.precioUnitario = precioUnitario;
 	}
-	
-	public String getIdentificador() {
-		return id;
+
+	public String getID() {
+		return id.intern();
 	}
 
-	@Override
-	public void setIdentificador(String id) {
-		if (id.length() != 11 || !id.matches("[0-9]*")) {
-			throw new IllegalArgumentException("Se debe introducir once numeros"); 
-		}
-		else{
-			this.id = id;
-		}
-		
+	private void setId(String id) throws IllegalArgumentException {
+		if (id.length() != 8)
+			throw new IllegalArgumentException("Identificador debe terner tamaño 8");
+		if (!id.matches("[0-9]*"))
+			throw new IllegalArgumentException("Identificador sólo puede contener numeros");
+		this.id = id;
 	}
-	
+
 	public int getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(int cantidad) {
+	public void setCantidad(int cantidad) throws IllegalArgumentException {
+		if (cantidad <= 0) {
+			throw new IllegalArgumentException("Cantidad debe ser mayor que 0");
+		}
 		this.cantidad = cantidad;
 	}
 

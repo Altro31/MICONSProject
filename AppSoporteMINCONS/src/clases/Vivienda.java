@@ -16,7 +16,20 @@ public class Vivienda {
 	private int totalAncianos;
 	private int totalEmbarazadas;
 	
-	public Vivienda() {}
+	public Vivienda() {
+		direccion = "";
+		ciJefe = "";
+		docLegal = null;
+		tipoHabitacional = null;
+		tipoConstructiva = null;
+		largo = 0;
+		ancho = 0;
+		area = 0;
+		totalPersonas = 0;
+		totalAncianos = 0;
+		totalInfantes = 0;
+		totalEmbarazadas = 0;
+	}
 	
 	public Vivienda(String direccion, String ciJefe, Doc docLegal, TipoHab tipoHabitacional, TipoConst tipoConstructiva,
 			double largo, double ancho, double area, int totalPersonas, int totalInfantes, int totalAncianos,
@@ -104,8 +117,8 @@ public class Vivienda {
 	}
 
 	public void setLargo(double largo) {
-		if(largo <= 0 || largo > 2000)
-			throw new IllegalArgumentException(" El largo debe estar en el intervalo de 0 a 2000"); 
+		if(largo <= 0)
+			throw new IllegalArgumentException(" El largo debe estar en el intervalo positivo"); 
 		
 		this.largo = largo;
 	}
@@ -115,8 +128,8 @@ public class Vivienda {
 	}
 
 	public void setAncho(double ancho) {
-		if(ancho <= 0 || ancho > 2000)
-			throw new IllegalArgumentException(" El ancho debe estar en el intervalo de 0 a 2000"); 
+		if(ancho <= 0)
+			throw new IllegalArgumentException(" El ancho debe estar en el intervalo positivo"); 
 		
 		this.ancho = ancho;
 	}
@@ -126,7 +139,7 @@ public class Vivienda {
 	}
 
 	public void setArea(double area) {
-		if(area <= 0 || area > 2000)
+		if(area <= 0)
 			throw new IllegalArgumentException(" El area debe estar en el intervalo de 0 a 2000"); 
 		
 		this.area = area;
@@ -137,22 +150,22 @@ public class Vivienda {
 	}
 
 	public void setTotalPersonas(int totalPersonas) {
-		if(totalPersonas <= 0 || totalPersonas > 20)
-			throw new IllegalArgumentException(" El total de personas por vivienda debe estar en el intervalo de 0 a 20"); 
+		if(totalPersonas < 0)
+			throw new IllegalArgumentException(" El total de personas por vivienda debe ser mayor que 0"); 
 		
 		this.totalPersonas = totalPersonas;
 	}
 
 	public int getTotalInfantes() {
-		if(largo <= 0 || largo > 2000)
-			throw new IllegalArgumentException(" El largo debe estar en el intervalo de 0 a 2000"); 
+		if(largo < 0 || largo > 200)
+			throw new IllegalArgumentException(" El largo debe estar en el intervalo de 0 a 200"); 
 	
 		return totalInfantes;
 	}
 
 	public void setTotalInfantes(int totalInfantes) {
-		if(totalInfantes < 0 || totalInfantes > getTotalPersonas()-1)
-			throw new IllegalArgumentException(" El total de infantes debe mayor o igual a cero y menor a la cantidad de personas que residan en la vivienda "); 
+		if(totalInfantes < 0)
+			throw new IllegalArgumentException(" El total de infantes debe mayor o igual a cero"); 
 		this.totalInfantes = totalInfantes;
 	}
 

@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
 import clases.Techo;
-import enums.TipoDerrumbe;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -40,7 +39,7 @@ public class TechoTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (Techo techo : lista) {
-			addRow(new Object[] { false, index + "", techo.getIdentificador(), techo.getTipoDerrumbe().name()});
+			addRow(new Object[] { false, index + "", techo.getID(), techo.getTipoDerrumbe().name()});
 			index++;
 		}
 	}

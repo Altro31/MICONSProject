@@ -11,10 +11,11 @@ public class Afectacion {
 	//Constructores
 	//Constructor por defecto
 	public Afectacion() {
+		
 		listaInmuebles = new ArrayList<Inmueble>();
-		listaInmuebles.add(new Inmueble("Lavadora", "12312312312", 1));
-		listaInmuebles.add(new Inmueble("Lavamanos", "45612312312", 2));
-		listaInmuebles.add(new Inmueble("Refrigerador", "78912312312", 4));
+		listaInmuebles.add(new Inmueble("Lavadora", 50 ,1));
+		listaInmuebles.add(new Inmueble("Lavamanos", 23, 2));
+		listaInmuebles.add(new Inmueble("Refrigerador", 38, 4));
 		
 		listaParedes=new ArrayList<Pared>();
 		

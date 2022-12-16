@@ -1,25 +1,25 @@
 package enums;
 
-public enum Evento {
+public enum TipoEvento {
 	URACAN,
 	TORNADO,
 	TERREMOTO,
 	OTRO;
 	
-	public static Evento getValue(String string) {
-		Evento tipo;
+	public static TipoEvento getValue(String string) {
+		TipoEvento tipo;
 		switch (string.toUpperCase()) {
 		case "URACAN":
-			tipo = Evento.URACAN;
+			tipo = TipoEvento.URACAN;
 			break;
 		case "TORNADO":
-			tipo = Evento.TORNADO;
+			tipo = TipoEvento.TORNADO;
 			break;
 		case "TERREMOTO":
-			tipo = Evento.TERREMOTO;
+			tipo = TipoEvento.TERREMOTO;
 			break;
 		default:
-			tipo = Evento.OTRO;
+			tipo = TipoEvento.OTRO;
 			break;
 		}
 		return tipo;

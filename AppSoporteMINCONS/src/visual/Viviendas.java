@@ -1,5 +1,6 @@
 package visual;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,9 +26,12 @@ import clases.Vivienda;
 import enums.Doc;
 import enums.TipoConst;
 import enums.TipoHab;
+import util.Auxiliary;
 import util.PreviousValue;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Viviendas extends PrincipalPanel {
@@ -79,7 +83,7 @@ public class Viviendas extends PrincipalPanel {
 		add(getBtnSiguiente());
 		add(getBtnCancelar());
 		add(getPanelProp());
-		
+
 		btnAtras.addActionListener(new ActionListener() {
 
 			@Override
@@ -108,10 +112,19 @@ public class Viviendas extends PrincipalPanel {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (!getTxtDireccion().getText().isEmpty() && !getTxtCI().getText().isEmpty()
-							&& !getTxtLargo().getText().isEmpty() && !getTxtAncho().getText().isEmpty()
-							&& !getTxtArea().getText().isEmpty()) {
-						FichaTecnica ficha = FichaTecnica.getInstance(true);
+
+					boolean direccionVacia = getTxtDireccion().getText().isEmpty();
+					boolean ciIncorrecto = getTxtCI().getText().isEmpty() || getTxtCI().getText().length() != 11;
+					boolean largoVacio = getTxtLargo().getText().isEmpty();
+					boolean anchoVacio = getTxtAncho().getText().isEmpty();
+					boolean areaVacia = getTxtArea().getText().isEmpty();
+					boolean isDocLegal = combDocLegal.getSelectedItem() != null;
+					boolean isTipoHab = combDocLegal.getSelectedItem() != null;
+					boolean isTipoConst = combTipoCons.getSelectedItem() != null;
+
+					if (!direccionVacia && !ciIncorrecto && !largoVacio && !anchoVacio && !areaVacia && isDocLegal
+							&& isTipoConst && isTipoConst) {
+						FichaTecnica ficha = new FichaTecnica();
 						ficha.setVivienda(new Vivienda(getTxtDireccion().getText(), getTxtCI().getText(),
 								Doc.getValue(getCombDocLegal().getSelectedItem().toString()),
 								TipoHab.getValue(getCombTipoHab().getSelectedItem().toString()),
@@ -124,12 +137,11 @@ public class Viviendas extends PrincipalPanel {
 								Integer.parseInt(getSpinnerEmbarazadas().getValue().toString())));
 
 						Vivienda vivienda = (Vivienda) ((Object[]) Frame.getPosicionActual()[1])[0];
-						vivienda.setDireccion(getTxtDireccion().getText());
-						vivienda.setCiJefe(getTxtCI().getText());
-						vivienda.setDocLegal(Doc.getValue(getCombDocLegal().getSelectedItem().toString()));
-						vivienda.setTipoHabitacional(TipoHab.getValue(getCombTipoHab().getSelectedItem().toString()));
-						vivienda.setTipoConstructiva(
-								TipoConst.getValue(getCombTipoCons().getSelectedItem().toString()));
+						vivienda.setDireccion(txtDireccion.getText());
+						vivienda.setCiJefe(txtCI.getText());
+						vivienda.setDocLegal(Doc.getValue(combDocLegal.getSelectedItem().toString()));
+						vivienda.setTipoHabitacional(TipoHab.getValue(combTipoHab.getSelectedItem().toString()));
+						vivienda.setTipoConstructiva(TipoConst.getValue(combTipoCons.getSelectedItem().toString()));
 						vivienda.setLargo(Double.parseDouble(getTxtLargo().getText()));
 						vivienda.setAncho(Double.parseDouble(getTxtAncho().getText()));
 						vivienda.setArea(Double.parseDouble(getTxtArea().getText()));
@@ -138,7 +150,48 @@ public class Viviendas extends PrincipalPanel {
 						vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
 						vivienda.setTotalEmbarazadas(Integer.parseInt(getSpinnerEmbarazadas().getValue().toString()));
 
-						Frame.setContentPanes((Afectaciones)((Object[])Frame.getPosicionActual()[0])[1]);
+						Frame.setContentPanes((Afectaciones) ((Object[]) Frame.getPosicionActual()[0])[1]);
+					} else {
+						if (direccionVacia) {
+							lblDireccion.setForeground(Color.RED);
+						} else {
+							lblDireccion.setForeground(Color.BLACK);
+						}
+						if (ciIncorrecto) {
+							lblCI.setForeground(Color.RED);
+						} else {
+							lblCI.setForeground(Color.BLACK);
+						}
+						if (largoVacio) {
+							lblLargo.setForeground(Color.RED);
+						} else {
+							lblLargo.setForeground(Color.BLACK);
+						}
+						if (anchoVacio) {
+							lblAncho.setForeground(Color.RED);
+						} else {
+							lblLargo.setForeground(Color.BLACK);
+						}
+						if (areaVacia) {
+							lblArea.setForeground(Color.RED);
+						} else {
+							lblArea.setForeground(Color.BLACK);
+						}
+						if (!isDocLegal) {
+							lblDocLegal.setForeground(Color.RED);
+						} else {
+							lblDocLegal.setForeground(Color.BLACK);
+						}
+						if (!isTipoHab) {
+							lblTipoHab.setForeground(Color.RED);
+						} else {
+							lblTipoHab.setForeground(Color.BLACK);
+						}
+						if (!isTipoConst) {
+							lblTipoCons.setForeground(Color.RED);
+						} else {
+							lblTipoCons.setForeground(Color.BLACK);
+						}
 					}
 				}
 			});
@@ -307,6 +360,15 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtLargo() {
 		if (txtLargo == null) {
 			txtLargo = new JFormattedTextField();
+			txtLargo.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (!txtLargo.getText().isEmpty() && !txtAncho.getText().isEmpty()) {
+						txtArea.setText(Auxiliary.calcularArea(Float.parseFloat(txtLargo.getText()),
+								Integer.parseInt(txtAncho.getText())) + "");
+					}
+				}
+			});
 			Validaciones.soloNumeros(txtLargo, true);
 			txtLargo.setColumns(10);
 			txtLargo.setBounds(143, 251, 95, 19);
@@ -317,6 +379,15 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtAncho() {
 		if (txtAncho == null) {
 			txtAncho = new JTextField();
+			txtAncho.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (!txtLargo.getText().isEmpty() && !txtAncho.getText().isEmpty()) {
+						txtArea.setText(Auxiliary.calcularArea(Float.parseFloat(txtLargo.getText()),
+								Integer.parseInt(txtAncho.getText())) + "");
+					}
+				}
+			});
 			txtAncho.setColumns(10);
 			Validaciones.soloNumeros(txtAncho, true);
 			txtAncho.setBounds(143, 284, 95, 19);
@@ -343,6 +414,7 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtArea() {
 		if (txtArea == null) {
 			txtArea = new JTextField();
+			txtArea.setEditable(false);
 			txtArea.setColumns(10);
 			Validaciones.soloNumeros(txtArea, true);
 			txtArea.setBounds(143, 316, 95, 19);

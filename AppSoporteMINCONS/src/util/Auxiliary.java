@@ -2,6 +2,7 @@ package util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JCheckBox;
@@ -26,6 +27,17 @@ public final class Auxiliary {
 			tableModel.removeRow(0);
 		}
 	}
+	
+	//Calcular Area
+	public static float calcularArea(float largo, float ancho) {
+		if (largo<=0) {
+			throw new IllegalArgumentException("largo debe ser mayor que 0");
+		}
+		if (largo<=0) {
+			throw new IllegalArgumentException("ancho debe ser mayor que 0");
+		}
+		return largo*ancho;
+	}
 
 	/**
 	 * Filtra los datos de una Tabla
@@ -45,7 +57,7 @@ public final class Auxiliary {
 		List<Object> subList = new ArrayList<Object>();
 		// Filtra los datos
 		for (Object vector : listaObject) {
-			String field = ((Integer)(((Vector) vector).get(column))).intValue()+"";
+			String field = (String) ((Vector)vector).get(column);
 			if (field.toLowerCase().contains(filterText.toLowerCase())) {
 				subList.add(vector);
 			}
@@ -106,5 +118,31 @@ public final class Auxiliary {
 			listaFichas.removeAll(lista2);
 		}
 
+	}
+	
+	/**
+	 * Genera un String de tamaño size con numero aleatorios enteros
+	 * @param size Tamaño que se desea
+	 * @throws IllegalArgumentException
+	 * @deprecated Use {@link #random(int)} instead
+	 */
+	public static String randomInt(int size) throws IllegalArgumentException {
+		return random(size);
+	}
+
+	/**
+	 * Genera un String de tamaño size con numero aleatorios enteros
+	 * @param size Tamaño que se desea
+	 * @throws IllegalArgumentException
+	 */
+	public static String random(int size) throws IllegalArgumentException {
+		StringBuilder code = new StringBuilder();
+		if (size>0) {
+			Random random = new Random();
+			for (int i = 0; i < size; i++) {
+				code.append(random.nextInt(10));
+			}
+		}
+		return code.toString();
 	}
 }

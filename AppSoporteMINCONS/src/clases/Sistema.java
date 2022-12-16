@@ -4,38 +4,50 @@ import java.util.ArrayList;
 
 public class Sistema {
 
-	private static ArrayList<Evento> listaEventos;
-	private static ArrayList<Material> listaMateriales;
+	private static ArrayList<Evento> listaEventos = new ArrayList<Evento>();
+	private static ArrayList<Material> listaMateriales = new ArrayList<Material>();
 	private static Sistema sistema;
 
 	private Sistema() {
-
-		listaEventos = new ArrayList<Evento>();
-
-		listaMateriales = new ArrayList<Material>();
-		listaMateriales.add(new Construccion("Cemento",3,6));
-		listaMateriales.add(new Construccion("Gravilla",2,2));
-		listaMateriales.add(new Construccion("Arena",4,6));
-		listaMateriales.add(new Construccion("Tejas",7,9));
-		listaMateriales.add(new Inmueble("Lavadora", "12345678919", 1, 11));
-		listaMateriales.add(new Inmueble("Lavamanos", "45645678919", 2, 12));
-		listaMateriales.add(new Inmueble("Refrigerador", "78945678919", 4, 13));
+		
+		listaMateriales.add(new Construccion("Cemento", 3F, 6, "metros"));
+		listaMateriales.add(new Construccion("Gravilla", 2F, 2, "metros"));
+		listaMateriales.add(new Construccion("Arena", 4F, 6, "metros"));
+		listaMateriales.add(new Construccion("Tejas", 7F, 9, "metros"));
+		listaMateriales.add(new Inmueble("12345678", "Lavadora", 1, 11));
+		listaMateriales.add(new Inmueble("45645679", "Lavamanos", 2, 12));
+		listaMateriales.add(new Inmueble("78945671", "Refrigerador", 4, 13));
+		
 	}
 
 	public static void getInstance() {
 		if (sistema == null)
 			sistema = new Sistema();
 	}
+	// Métodos
 
+	// Busca un material por su nombre o ID
+	public static Material getMaterial(String nombreOrID) {
+		getInstance();
+		Material material = null;
+		for (Material mat : listaMateriales) {
+			if (mat.getNombre().equalsIgnoreCase(nombreOrID) || mat.getID().equalsIgnoreCase(nombreOrID)) {
+				material = mat;
+			}
+		}
+		return material;
+	}
+	//Devuelve una única instancia de Sistema (Singleton)
 	public static ArrayList<Evento> getListaEventos() {
 		getInstance();
 		return new ArrayList<Evento>(listaEventos);
 	}
 
+	// Getters y Setters
 	public static void addEventos(Evento evento) {
 		getInstance();
 		if (evento == null)
-			throw new IllegalArgumentException("Evento tiene valor null");
+			throw new IllegalArgumentException("TipoEvento tiene valor null");
 		listaEventos.add(evento);
 	}
 
@@ -49,17 +61,6 @@ public class Sistema {
 	public static ArrayList<Material> getListaMateriales() {
 		getInstance();
 		return new ArrayList<Material>(listaMateriales);
-	}
-
-	public static Material getMaterial(String nombre) {
-		getInstance();
-		Material material = null;
-		for (Material mat : listaMateriales) {
-			if (mat.getNombre().equalsIgnoreCase(nombre)) {
-				material = mat;
-			}
-		}
-		return material;
 	}
 
 	public static void addMaterial(Material material) {

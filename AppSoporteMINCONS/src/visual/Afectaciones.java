@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -27,6 +29,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
@@ -34,20 +37,16 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import clases.Afectacion;
 import clases.Construccion;
-import clases.Cubicacion;
 import clases.Inmueble;
 import clases.Material;
 import clases.Pared;
 import clases.Sistema;
 import clases.Techo;
-import clases.Vivienda;
 import enums.TipoDerrumbe;
 import util.Auxiliary;
 import util.InmuebleTableModel;
@@ -55,9 +54,6 @@ import util.ParedTableModel;
 import util.TechoTableModel;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
-import javax.swing.ListSelectionModel;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Afectaciones extends PrincipalPanel {
@@ -489,7 +485,7 @@ public class Afectaciones extends PrincipalPanel {
 					if (tablePared.getSelectedRowCount() > 0) {
 						Pared pared = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaParedes()
 								.get(tablePared.getSelectedRow());
-						txtIdentificadorPared.setText(pared.getIdentificador());
+						txtIdentificadorPared.setText(pared.getID());
 						comboBoxMatPredPared.setSelectedItem(pared.getMaterialPredominante().getNombre());
 						comboBoxTipoDerrumbePared.setSelectedItem(pared.getTipoDerrumbe());
 						cBoxParedCarga.setSelected(pared.isEsParedCarga());
@@ -539,9 +535,9 @@ public class Afectaciones extends PrincipalPanel {
 							"Está a punto de guardar los datos registrados en una Ficha Técnica.\n"
 									+ "¿Desea asignar los materiales necesarios para las reparaciones de la Vivienda?\n"
 									+ "*Tenga en cuenta que éste proceso puede realizarse más adelante") == 0) {
-						
-						Frame.setContentPanes((AsignarMateriales)((Object[])Frame.getPosicionActual()[0])[2]);
-						
+
+						Frame.setContentPanes((AsignarMateriales) ((Object[]) Frame.getPosicionActual()[0])[2]);
+
 					}
 				}
 			});
@@ -664,9 +660,10 @@ public class Afectaciones extends PrincipalPanel {
 				public void actionPerformed(ActionEvent e) {
 					if (((String) comboBoxInmueble.getSelectedItem()) != null
 							&& ((Integer) spinnerCantidad.getValue()).intValue() > 0) {
-						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1])
-								.addInmueble(new Inmueble((String) comboBoxInmueble.getSelectedItem(),
-										txtIDInmueble.getText(), ((Integer) spinnerCantidad.getValue()).intValue()));
+						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).addInmueble(
+								new Inmueble(txtIDInmueble.getText(), (String) comboBoxInmueble.getSelectedItem(),
+										((Inmueble) Sistema.getMaterial(txtIDInmueble.getText())).getPrecioUnitario(),
+										((Integer) spinnerCantidad.getValue()).intValue()));
 						inmuebleModel.actualizar(
 								((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles());
 						comboBoxInmueble.setSelectedItem(null);
@@ -700,7 +697,7 @@ public class Afectaciones extends PrincipalPanel {
 					if (tableInmueble.getSelectedRowCount() > 0) {
 						Inmueble inmueble = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1])
 								.getListaInmuebles().get(tableInmueble.getSelectedRow());
-						txtIDInmueble.setText(inmueble.getIdentificador());
+						txtIDInmueble.setText(inmueble.getID());
 						comboBoxInmueble.setSelectedItem(inmueble.getNombre());
 						spinnerCantidad.setValue(inmueble.getCantidad());
 
@@ -914,7 +911,7 @@ public class Afectaciones extends PrincipalPanel {
 					if (tableTecho.getSelectedRowCount() > 0) {
 						Techo techo = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaTechos()
 								.get(tableTecho.getSelectedRow());
-						txtIdentificadorTecho.setText(techo.getIdentificador());
+						txtIdentificadorTecho.setText(techo.getID());
 						comboBoxMatPredTecho.setSelectedItem(techo.getMaterialPredominante().getNombre());
 						comboBoxTipoDerrumbeTecho.setSelectedItem(techo.getTipoDerrumbe());
 
@@ -1063,7 +1060,7 @@ public class Afectaciones extends PrincipalPanel {
 				public void itemStateChanged(ItemEvent e) {
 					Material mat = Sistema.getMaterial((String) comboBoxInmueble.getSelectedItem());
 					if (mat != null) {
-						txtIDInmueble.setText(mat.getIdentificador());
+						txtIDInmueble.setText(mat.getID());
 					}
 				}
 			});
@@ -1302,11 +1299,11 @@ public class Afectaciones extends PrincipalPanel {
 				public void actionPerformed(ActionEvent e) {
 					if (((String) comboBoxInmueble.getSelectedItem()) != null
 							&& ((Integer) spinnerCantidad.getValue()).intValue() > 0) {
-						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1])
-								.setInmueble(tableInmueble.getSelectedRow(),
-										new Inmueble((String) comboBoxInmueble.getSelectedItem(),
-												txtIDInmueble.getText(),
-												((Integer) spinnerCantidad.getValue()).intValue()));
+						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).setInmueble(
+								tableInmueble.getSelectedRow(),
+								new Inmueble(txtIDInmueble.getText(), (String) comboBoxInmueble.getSelectedItem(),
+										((Inmueble) Sistema.getMaterial(txtIDInmueble.getText())).getPrecioUnitario(),
+										((Integer) spinnerCantidad.getValue()).intValue()));
 						inmuebleModel.actualizar(
 								((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles());
 

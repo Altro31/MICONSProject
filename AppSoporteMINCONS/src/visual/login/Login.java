@@ -27,6 +27,7 @@ import javax.swing.border.LineBorder;
 
 import visual.Frame;
 import visual.util.JImagen;
+import java.awt.Cursor;
 
 public class Login extends JFrame {
 
@@ -248,6 +249,7 @@ public class Login extends JFrame {
 	private JLabel getLblContactarnos() {
 		if (lblContactarnos == null) {
 			lblContactarnos = new JLabel("Contactarnos");
+			lblContactarnos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 			final Font oldFont = lblContactarnos.getFont();
 			@SuppressWarnings("rawtypes")

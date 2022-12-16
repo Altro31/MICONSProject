@@ -24,11 +24,13 @@ public class JImagen extends JPanel{
 	
 	@Override
 	public void paint(Graphics g) {
-		Dimension dimension = this.getSize();
-		ImageIcon image = new ImageIcon(getClass().getResource("/imagenes/"+path));
-		g.drawImage( image.getImage(), 0, 0, dimension.width, dimension.height, null);
-		this.setOpaque(true);
-		super.paintChildren(g);
+		if(path!=null) {
+			Dimension dimension = this.getSize();
+			ImageIcon image = new ImageIcon(getClass().getResource("/imagenes/"+path));
+			g.drawImage( image.getImage(), 0, 0, dimension.width, dimension.height, null);
+			this.setOpaque(true);
+			super.paintChildren(g);
+		}
 	}
 	
 	public void setImagePath(String imagePath) {

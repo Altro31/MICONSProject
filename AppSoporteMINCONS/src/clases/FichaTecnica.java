@@ -1,12 +1,23 @@
 package clases;
 
-public class FichaTecnica {
+import interfaces.Identificador;
+import util.Auxiliary;
 
+public class FichaTecnica implements Identificador{
+	
+	private String id;
 	private Vivienda vivienda;
 	private Afectacion afect;
 	private Cubicacion cubicacion;
-	private static FichaTecnica ficha;
+	
 
+	public FichaTecnica() {
+		id = Auxiliary.random(8);
+		vivienda = new Vivienda();
+		afect = new Afectacion();
+		cubicacion = new Cubicacion();
+	}
+	
 	public Vivienda getVivienda() {
 		return vivienda;
 	}
@@ -38,12 +49,10 @@ public class FichaTecnica {
 			throw new IllegalArgumentException("La cubicacion no puede ser null");
 		this.cubicacion = cubicacion;
 	}
-	
-	public static FichaTecnica getInstance(boolean nuevaInstancia) {
-		if (ficha==null || nuevaInstancia) {
-			ficha=new FichaTecnica();
-		}
-		return ficha;
+
+	@Override
+	public String getID() {
+		return id.intern();
 	}
 
 }

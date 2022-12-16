@@ -1,9 +1,12 @@
 package visual;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -24,13 +27,11 @@ import javax.swing.event.TableModelListener;
 import clases.Afectacion;
 import clases.Cubicacion;
 import clases.Evento;
+import clases.Sistema;
 import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
 import visual.util.PrincipalPanel;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class FichasTecnicas extends PrincipalPanel {
 
@@ -194,7 +195,9 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// TODO document why this method is empty
+					Sistema.addEventos((Evento)(Frame.get(1))[1]);
+					Frame.removerRuta(Frame.get(1)[1]);
+					Frame.setContentPanes((Container)(Frame.get(0)[0]));
 				}
 			});
 			btnAceptar.setBounds(224, 11, 89, 23);

@@ -1,5 +1,6 @@
 package visual;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -68,7 +69,7 @@ public class Eventos extends PrincipalPanel {
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Frame.removerRuta(Frame.getPosicionActual()[0]);
-				Frame.setContentPanes((Principal)Frame.getPosicionActual()[0]);
+				Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
 			}
 		});
 		add(getPanelNuevoEvento());
@@ -225,8 +226,13 @@ public class Eventos extends PrincipalPanel {
 			btnSiguiente.addActionListener(new ActionListener() {
 				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
-					if (!textNombre.getText().isEmpty() && dChFechaInicio.getDate() != null
-							&& dChFechaFin.getDate() != null) {
+					
+					boolean nombreVacio = textNombre.getText().isEmpty();
+					boolean isfechaInicio = dChFechaInicio.getDate() != null;
+					boolean isfechaFin = dChFechaFin.getDate() != null;
+					boolean isTipoEvento = cBoxTipoEvento.getSelectedItem()!=null;
+					
+					if (!nombreVacio && isfechaInicio && isfechaFin && isTipoEvento) {
 
 						GregorianCalendar fechaInicio = new GregorianCalendar(dChFechaInicio.getDate().getYear(),
 								dChFechaInicio.getDate().getMonth(), dChFechaInicio.getDate().getDate(),
@@ -238,16 +244,41 @@ public class Eventos extends PrincipalPanel {
 								((Integer) spinnerMinFin.getValue()).intValue());
 
 						FichasTecnicas fichasTecnicas = new FichasTecnicas();
-						
+
 						Evento evento = (Evento) (Frame.getPosicionActual()[1]);
 						evento.setNombre(textNombre.getText());
 						evento.setFechaInicio(fechaInicio);
 						evento.setFechaFin(fechaFin);
-						evento.setTipoEvento((enums.Evento) getCBoxTipoEvento().getSelectedItem());
+						evento.setTipoEvento((enums.TipoEvento) getCBoxTipoEvento().getSelectedItem());
 						
 						Frame.addRuta(fichasTecnicas, null);
 						Frame.setContentPanes(fichasTecnicas);
+						
+						lblNombre.setForeground(Color.BLACK);
+						lblFechaInicio.setForeground(Color.BLACK);
+						lblFechaFin.setForeground(Color.BLACK);
+						lblTipoEvento.setForeground(Color.BLACK);
+						
 
+					} else if (nombreVacio) {
+						lblNombre.setForeground(Color.RED);
+					} else {
+						lblNombre.setForeground(Color.BLACK);
+					}
+					if (!isfechaInicio) {
+						lblFechaInicio.setForeground(Color.RED);
+					} else {
+						lblFechaInicio.setForeground(Color.BLACK);
+					}
+					if (!isfechaFin) {
+						lblFechaFin.setForeground(Color.RED);
+					} else {
+						lblFechaFin.setForeground(Color.BLACK);
+					}
+					if (!isTipoEvento) {
+						lblTipoEvento.setForeground(Color.RED);
+					} else {
+						lblTipoEvento.setForeground(Color.BLACK);
 					}
 				}
 			});
@@ -262,7 +293,7 @@ public class Eventos extends PrincipalPanel {
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Frame.removerRuta(Frame.getPosicionActual()[0]);
-					Frame.setContentPanes((Principal)Frame.getPosicionActual()[0]);
+					Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
 				}
 			});
 			btnCancel.setBounds(539, 11, 103, 23);
@@ -417,7 +448,7 @@ public class Eventos extends PrincipalPanel {
 
 	private JLabel getLblTipoEvento() {
 		if (lblTipoEvento == null) {
-			lblTipoEvento = new JLabel("Tipo de Evento:");
+			lblTipoEvento = new JLabel("Tipo de TipoEvento:");
 		}
 		return lblTipoEvento;
 	}
@@ -425,7 +456,7 @@ public class Eventos extends PrincipalPanel {
 	private JComboBox getCBoxTipoEvento() {
 		if (cBoxTipoEvento == null) {
 			cBoxTipoEvento = new JComboBox();
-			cBoxTipoEvento.setModel(new DefaultComboBoxModel(enums.Evento.values()));
+			cBoxTipoEvento.setModel(new DefaultComboBoxModel(enums.TipoEvento.values()));
 			cBoxTipoEvento.setSelectedItem(null);
 		}
 		return cBoxTipoEvento;

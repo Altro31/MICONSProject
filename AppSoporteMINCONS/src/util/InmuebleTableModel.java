@@ -2,7 +2,6 @@ package util;
 
 import java.util.ArrayList;
 
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
@@ -37,7 +36,7 @@ public class InmuebleTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (Inmueble inmueble : lista) {
-			addRow(new Object[] { false, "" + index++, inmueble.getIdentificador(), inmueble.getNombre(),
+			addRow(new Object[] { false, "" + index++, inmueble.getID(), inmueble.getNombre(),
 					inmueble.getCantidad() });
 		}
 	}

@@ -1,13 +1,19 @@
 package clases;
 
 import enums.TipoDerrumbe;
+import util.Auxiliary;
 
 public class Pared extends Fachada{
 	
 	private boolean esParedCarga;
 
 	public Pared(String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe, boolean esParedCarga) {
-		super(identidicador, materialPredominante, tipoDerrumbe);
+		super(Auxiliary.random(8), identidicador, materialPredominante, tipoDerrumbe);
+		this.setEsParedCarga(esParedCarga);
+	}
+	
+	public Pared(String id, String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe, boolean esParedCarga) {
+		super(id, identidicador, materialPredominante, tipoDerrumbe);
 		this.setEsParedCarga(esParedCarga);
 	}
 

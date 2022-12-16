@@ -1,37 +1,30 @@
 package clases;
 
 import enums.TipoDerrumbe;
+import interfaces.Identificador;
 
-public class Fachada extends Afectacion{
+public class Fachada extends Afectacion implements Identificador{
 	
-	protected String identificador;
+	protected String id;
+	protected String nombre;
 	protected Construccion materialPredominante;
 	protected TipoDerrumbe tipoDerrumbe;
 	
-	public Fachada(String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe) {
-		this.setIdentificador(identidicador);
-		this.setMaterialPredominante(materialPredominante);
-		this.setTipoDerrumbe(tipoDerrumbe);
-		this.setTipoDerrumbe(tipoDerrumbe);
+	public Fachada(String id, String nombre, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe) {
+		setId(id);
+		setNombre(nombre);
+		setMaterialPredominante(materialPredominante);
+		setTipoDerrumbe(tipoDerrumbe);
 	
 	}
-	public Fachada() {
-		identificador = "";
-		materialPredominante = new Construccion(); 
-		tipoDerrumbe =  null;
-		
-	}
 
-	public String getIdentificador() {
-		return identificador;
-	}
-
-	public void setIdentificador(String identificador) {
-		if (identificador.length() != 11 || !identificador.matches("[0-9]*")) {
-			throw new IllegalArgumentException("Se debem introducir once numeros");
-		}
+	private void setId(String id) {
+		if (id.length() != 8)
+			throw new IllegalArgumentException("Identificador debe terner tamaño 8");
+		if (!id.matches("[0-9]*"))
+			throw new IllegalArgumentException("Identificador sólo puede contener numeros");
 		else{
-			this.identificador = identificador;
+			this.id = id;
 		}
 		
 	
@@ -64,5 +57,17 @@ public class Fachada extends Afectacion{
 		return tipoDerrumbe;
 
 		
+	}
+	@Override
+	public String getID() {
+		return id.intern();
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 }

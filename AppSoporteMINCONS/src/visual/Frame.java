@@ -21,18 +21,6 @@ public class Frame extends JFrame {
 	private static Frame frame;
 	private static ArrayList<Object[]> ruta;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					setVisibles();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */

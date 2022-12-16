@@ -2,13 +2,10 @@ package util;
 
 import java.util.ArrayList;
 
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
-import clases.Inmueble;
 import clases.Pared;
-import enums.TipoDerrumbe;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -40,7 +37,7 @@ public class ParedTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (Pared pared : lista) {
-			addRow(new Object[] { null, index + "", pared.getIdentificador(), pared.getTipoDerrumbe().toString(),
+			addRow(new Object[] { null, index + "", pared.getID(), pared.getTipoDerrumbe().toString(),
 					pared.isEsParedCarga() ? "Si" : "No" });
 			index++;
 		}
