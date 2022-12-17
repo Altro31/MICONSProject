@@ -27,7 +27,7 @@ import enums.Doc;
 import enums.TipoConst;
 import enums.TipoHab;
 import util.Auxiliary;
-import util.PreviousValue;
+import util.Value;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
 import java.awt.event.KeyAdapter;
@@ -71,9 +71,9 @@ public class Viviendas extends PrincipalPanel {
 	private JLabel lblTotalPersonas;
 	private JSpinner spinnerPersonas;
 	private JSeparator separador;
-	private PreviousValue ancianosPreviuosValue = new PreviousValue(0);
-	private PreviousValue infantesPreviousValue = new PreviousValue(0);
-	private PreviousValue embarazadasPreviousValue = new PreviousValue(0);
+	private Value ancianosPreviuosValue = new Value(0);
+	private Value infantesPreviousValue = new Value(0);
+	private Value embarazadasPreviousValue = new Value(0);
 
 	/**
 	 * Create the panel.

@@ -15,7 +15,7 @@ public class InmuebleTableModel extends DefaultTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = 7853621716070275671L;
-	Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class, Object.class };
+	Class[] columnTypes = new Class[] { Boolean.class, String.class, String.class, String.class, String.class };
 	boolean[] columnEditables = new boolean[] { true, false, false, false, false };
 
 	public InmuebleTableModel() {
@@ -56,11 +56,15 @@ public class InmuebleTableModel extends DefaultTableModel {
 		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
 		ArrayList<Inmueble> lista = new ArrayList<Inmueble>(afectacion.getListaInmuebles());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		for (int i = 0, size = afectacion.getListaInmuebles().size(); i < size; i++) {
-			Inmueble ficha = afectacion.getListaInmuebles().get(i);
-			if (!lista.contains(ficha)) {
+		int i = 0;
+		int size = afectacion.getListaInmuebles().size();
+		while (i < size) {
+			Inmueble inmueble = afectacion.getListaInmuebles().get(i);
+			if (!lista.contains(inmueble)) {
 				afectacion.eliminarInmueble(i);
 				size--;
+			} else {
+				i++;
 			}
 		}
 		actualizar(lista);

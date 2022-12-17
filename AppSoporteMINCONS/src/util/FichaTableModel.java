@@ -16,7 +16,7 @@ public class FichaTableModel extends DefaultTableModel {
 	 */
 	private static final long serialVersionUID = -8515650816743836254L;
 
-	private Class[] columnTypes = new Class[] { Boolean.class, Object.class, Object.class, Object.class };
+	private Class[] columnTypes = new Class[] { Boolean.class, String.class, String.class, String.class };
 
 	public FichaTableModel() {
 		super(new Object[][] {}, new String[] { "", "#", "Direcci\u00F3n", "Fecha del Levantamiento" });
@@ -38,34 +38,40 @@ public class FichaTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (FichaTecnica ficha : lista) {
-			addRow(new Object[] {null, index+"", ficha.getVivienda().getDireccion(), ""});
+			addRow(new Object[] { null, index + "", ficha.getVivienda().getDireccion(), "" });
 			index++;
 		}
 	}
-	
+
 	public void limpiar() {
 		Auxiliary.limpiar(this);
 	}
-	
+
 	public void filtrar(String textFilter, int column) {
-		ArrayList<FichaTecnica> lista = ((Evento)Frame.getPosicionActual()[1]).getListaFichasTecnicas();
+		ArrayList<FichaTecnica> lista = ((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas();
 		actualizar(lista);
 		Auxiliary.filtro(textFilter, this, column, lista.size());
-		
+
 	}
-	
+
 	public void borrarSeleccion() {
-		
-		Evento evento = ((Evento)Frame.getPosicionActual()[1]);
+
+		Evento evento = ((Evento) Frame.getPosicionActual()[1]);
 		ArrayList<FichaTecnica> lista = new ArrayList<FichaTecnica>(evento.getListaFichasTecnicas());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		for (int i=0, size=evento.getListaFichasTecnicas().size(); i<size; i++) {
+		
+		int i = 0;
+		int size = evento.getListaFichasTecnicas().size();
+		while (i < size) {
 			FichaTecnica ficha = evento.getListaFichasTecnicas().get(i);
 			if (!lista.contains(ficha)) {
 				evento.eliminarFichaTecnica(i);
 				size--;
+			} else {
+				i++;
 			}
 		}
+		
 		actualizar(lista);
 	}
 

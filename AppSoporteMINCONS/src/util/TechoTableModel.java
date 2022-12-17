@@ -16,15 +16,13 @@ public class TechoTableModel extends DefaultTableModel {
 	 */
 	private static final long serialVersionUID = -8515650816743836254L;
 
-	@SuppressWarnings("rawtypes")
-	Class[] columnTypes = new Class[] { Boolean.class, Integer.class, String.class, String.class };
+	Class[] columnTypes = new Class[] { Boolean.class, String.class, String.class, String.class };
 	boolean[] columnEditables = new boolean[] { true, false, false, false };
 
 	public TechoTableModel() {
 		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe" });
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Class getColumnClass(int columnIndex) {
 		return columnTypes[columnIndex];
@@ -39,7 +37,7 @@ public class TechoTableModel extends DefaultTableModel {
 		int index = 1;
 		limpiar();
 		for (Techo techo : lista) {
-			addRow(new Object[] { false, index + "", techo.getID(), techo.getTipoDerrumbe().name()});
+			addRow(new Object[] { false, index + "", techo.getID(), techo.getTipoDerrumbe().name() });
 			index++;
 		}
 	}
@@ -59,11 +57,15 @@ public class TechoTableModel extends DefaultTableModel {
 		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
 		ArrayList<Techo> lista = new ArrayList<Techo>(afectacion.getListaTechos());
 		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		for (int i = 0, size = afectacion.getListaTechos().size(); i < size; i++) {
+		int i = 0;
+		int size = afectacion.getListaTechos().size();
+		while (i < size) {
 			Techo techo = afectacion.getListaTechos().get(i);
 			if (!lista.contains(techo)) {
-				afectacion.eliminarPared(i);
+				afectacion.eliminarTecho(i);
 				size--;
+			} else {
+				i++;
 			}
 		}
 		actualizar(lista);

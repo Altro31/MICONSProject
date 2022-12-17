@@ -7,12 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,7 +45,6 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JScrollPane scrollPane;
 	private JTable table;
 	private FichaTableModel tableModel;
-	private JTextField textNotUsed;
 	private JPanel panelTitulo;
 	private JLabel lblTitulo;
 	private JPanel panelButton2;
@@ -56,7 +58,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTextField filtroNumero;
 	private JTextField filtroDireccion;
 	private JTextField filtroFecha;
-	private JButton btnNewButton;
+	private JCheckBox cBoxSelectInmuebles;
 
 	/**
 	 * Create the panel.
@@ -74,7 +76,6 @@ public class FichasTecnicas extends PrincipalPanel {
 				Frame.setContentPanes((Eventos) Frame.getPosicionActual()[0]);
 			}
 		});
-		add(getTextNotUsed());
 		add(getPanelTitulo());
 		add(getPanelButton2());
 		add(getScrollPane());
@@ -82,20 +83,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		add(getFiltroNumero());
 		add(getFiltroDireccion());
 		add(getFiltroFecha());
-	}
-
-	// Métodos
-
-	private void activarBotonBorrar() {
-		if (btnBorrar!=null) {
-			int filas = tableModel.getRowCount();
-			boolean check = false;
-			for (int i = 0; i < filas && !check; i++) {
-				if (Auxiliary.isSelected(i, 0, tableModel))
-					check = true;
-			}
-			btnBorrar.setEnabled(check);
-		}
+		add(getCBoxSelectInmuebles());
 	}
 
 	// Componentes
@@ -111,18 +99,19 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tableModel = new FichaTableModel();
 			table.setModel(tableModel);
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tableModel.addTableModelListener(new TableModelListener() {
-
 				@Override
 				public void tableChanged(TableModelEvent e) {
-					activarBotonBorrar();
+					Auxiliary.activarBotonBorrar(btnBorrar, tableModel, 0);
+					Auxiliary.activarBotonEditar(btnEditar, tableModel, 0);
 				}
 			});
-			tableModel.actualizar(((Evento)Frame.get(1)[1]).getListaFichasTecnicas());
-			table.getTableHeader().setReorderingAllowed(false);
+			Auxiliary.centrarColumnas(table, new int[] {1});
+			Auxiliary.quitarReordenamientoTabla(table);
+			tableModel.actualizar(((Evento) Frame.get(1)[1]).getListaFichasTecnicas());
 			table.getColumnModel().getColumn(0).setResizable(false);
 			table.getColumnModel().getColumn(0).setPreferredWidth(15);
 			table.getColumnModel().getColumn(0).setMinWidth(0);
@@ -133,16 +122,6 @@ public class FichasTecnicas extends PrincipalPanel {
 			table.getColumnModel().getColumn(3).setPreferredWidth(137);
 		}
 		return table;
-	}
-
-	private JTextField getTextNotUsed() {
-		if (textNotUsed == null) {
-			textNotUsed = new JTextField();
-			textNotUsed.setEnabled(false);
-			textNotUsed.setBounds(20, 92, 97, 20);
-			textNotUsed.setColumns(10);
-		}
-		return textNotUsed;
 	}
 
 	private JPanel getPanelTitulo() {
@@ -195,9 +174,9 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Sistema.addEventos((Evento)(Frame.get(1))[1]);
+					Sistema.addEventos((Evento) (Frame.get(1))[1]);
 					Frame.removerRuta(Frame.get(1)[1]);
-					Frame.setContentPanes((Container)(Frame.get(0)[0]));
+					Frame.setContentPanes((Container) (Frame.get(0)[0]));
 				}
 			});
 			btnAceptar.setBounds(224, 11, 89, 23);
@@ -212,11 +191,10 @@ public class FichasTecnicas extends PrincipalPanel {
 			panelButton.setBounds(772, 92, 100, 334);
 			GroupLayout glPanelButton = new GroupLayout(panelButton);
 			glPanelButton.setHorizontalGroup(
-				glPanelButton.createParallelGroup(Alignment.TRAILING)
-					.addGroup(Alignment.LEADING, glPanelButton.createSequentialGroup()
+				glPanelButton.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelButton.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(glPanelButton.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(getBtnNewButton(), Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 							.addComponent(getBtnInsertar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(getBtnEditar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(getBtnBorrar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -234,9 +212,7 @@ public class FichasTecnicas extends PrincipalPanel {
 						.addComponent(getBtnBorrar())
 						.addGap(18)
 						.addComponent(getBtnInfo())
-						.addGap(120)
-						.addComponent(getBtnNewButton())
-						.addContainerGap(30, Short.MAX_VALUE))
+						.addContainerGap(173, Short.MAX_VALUE))
 			);
 			glPanelButton.linkSize(SwingConstants.HORIZONTAL, new Component[] {getBtnInsertar(), getBtnEditar(), getBtnBorrar()});
 			panelButton.setLayout(glPanelButton);
@@ -253,8 +229,8 @@ public class FichasTecnicas extends PrincipalPanel {
 					Viviendas viviendas = new Viviendas();
 					Afectaciones afectaciones = new Afectaciones();
 					AsignarMateriales asignarMateriales = new AsignarMateriales();
-					Frame.addRuta(new Object[] { viviendas, afectaciones, asignarMateriales},
-							new Object[] { new Vivienda(), new Afectacion(), new Cubicacion()});
+					Frame.addRuta(new Object[] { viviendas, afectaciones, asignarMateriales },
+							new Object[] { new Vivienda(), new Afectacion(), new Cubicacion() });
 					Frame.setContentPanes(viviendas);
 				}
 			});
@@ -265,6 +241,12 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnEditar() {
 		if (btnEditar == null) {
 			btnEditar = new JButton("Editar");
+			btnEditar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//TODO
+				}
+			});
+			btnEditar.setEnabled(false);
 		}
 		return btnEditar;
 	}
@@ -292,6 +274,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTextField getFiltroNumero() {
 		if (filtroNumero == null) {
 			filtroNumero = new JTextField();
+			filtroNumero.setBorder(null);
 			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -300,7 +283,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			});
 
 			filtroNumero.setColumns(10);
-			filtroNumero.setBounds(120, 92, 97, 20);
+			filtroNumero.setBounds(121, 92, 97, 20);
 		}
 		return filtroNumero;
 	}
@@ -308,6 +291,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTextField getFiltroDireccion() {
 		if (filtroDireccion == null) {
 			filtroDireccion = new JTextField();
+			filtroDireccion.setBorder(null);
 			filtroDireccion.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -323,21 +307,31 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JTextField getFiltroFecha() {
 		if (filtroFecha == null) {
 			filtroFecha = new JTextField();
+			filtroFecha.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					tableModel.filtrar(filtroFecha.getText(), 3);
+				}
+			});
+			filtroFecha.setBorder(null);
 			filtroFecha.setColumns(10);
 			filtroFecha.setBounds(539, 92, 223, 20);
 		}
 		return filtroFecha;
 	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("actualizar");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					tableModel.actualizar(((Evento)Frame.get(1)[1]).getListaFichasTecnicas());
+	private JCheckBox getCBoxSelectInmuebles() {
+		if (cBoxSelectInmuebles == null) {
+			cBoxSelectInmuebles = new JCheckBox("");
+			cBoxSelectInmuebles.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					Auxiliary.selectAll(tableModel, cBoxSelectInmuebles, 0);
 				}
 			});
-			btnNewButton.setHorizontalAlignment(SwingConstants.LEADING);
+			cBoxSelectInmuebles.setBorder(null);
+			cBoxSelectInmuebles.setHorizontalAlignment(SwingConstants.CENTER);
+			cBoxSelectInmuebles.setBorderPainted(true);
+			cBoxSelectInmuebles.setBounds(20, 92, 99, 20);
 		}
-		return btnNewButton;
+		return cBoxSelectInmuebles;
 	}
 }

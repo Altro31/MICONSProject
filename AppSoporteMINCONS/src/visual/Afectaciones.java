@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -62,9 +60,12 @@ public class Afectaciones extends PrincipalPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -3579071471874747942L;
+
 	private static final String BORRAR = "Borrar";
 	private static final String EDITAR = "Editar";
 	private static final String ADD = "Añadir";
+	private static final String CANCEL = "Cancelar";
+
 	private JTabbedPane tabbedPane;
 	private JPanel panelInmueble;
 	private JPanel panelPared;
@@ -258,11 +259,15 @@ public class Afectaciones extends PrincipalPanel {
 			paredModel.addTableModelListener(new TableModelListener() {
 				@Override
 				public void tableChanged(TableModelEvent e) {
-					activarBotonBorrarPared();
+					Auxiliary.activarBotonBorrar(btnBorrarPared, paredModel, 0);
+					Auxiliary.activarBotonEditar(btnEditarPared, paredModel, 0);
 				}
 			});
 			tablePared = new JTable(paredModel);
-			tablePared.getTableHeader().setReorderingAllowed(false);
+			tablePared.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Auxiliary.centrarColumnas(tablePared, new int[] { 1, 4 });
+			Auxiliary.quitarReordenamientoTabla(tablePared);
+
 			tablePared.getColumnModel().getColumn(0).setResizable(false);
 			tablePared.getColumnModel().getColumn(0).setPreferredWidth(15);
 			tablePared.getColumnModel().getColumn(0).setMinWidth(0);
@@ -445,8 +450,8 @@ public class Afectaciones extends PrincipalPanel {
 					if (((String) comboBoxMatPredPared.getSelectedItem()) != null
 							&& comboBoxTipoDerrumbePared.getSelectedItem() != null
 							&& !(txtIdentificadorPared.getText()).isEmpty()) {
-						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).addPared(new Pared(
-								(txtIdentificadorPared.getText()),
+						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).addPared(new Pared(						
+								txtIdentificadorPared.getText(),
 								(Construccion) Sistema.getMaterial((String) comboBoxMatPredPared.getSelectedItem()),
 								(TipoDerrumbe) comboBoxTipoDerrumbePared.getSelectedItem(),
 								cBoxParedCarga.isSelected()));
@@ -480,6 +485,7 @@ public class Afectaciones extends PrincipalPanel {
 	private JButton getBtnEditarPared() {
 		if (btnEditarPared == null) {
 			btnEditarPared = new JButton(EDITAR);
+			btnEditarPared.setEnabled(false);
 			btnEditarPared.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (tablePared.getSelectedRowCount() > 0) {
@@ -515,7 +521,7 @@ public class Afectaciones extends PrincipalPanel {
 
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
-			btnCancelar = new JButton("Cancelar");
+			btnCancelar = new JButton(CANCEL);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Frame.removerRuta(Frame.get(3)[0]);
@@ -623,16 +629,6 @@ public class Afectaciones extends PrincipalPanel {
 		return panelButtonInmueble;
 	}
 
-	private void activarBotonBorrarInmueble() {
-		int filas = inmuebleModel.getRowCount();
-		boolean check = false;
-		for (int i = 0; i < filas && !check; i++) {
-			if (Auxiliary.isSelected(i, 0, inmuebleModel))
-				check = true;
-		}
-		btnBorrarInmueble.setEnabled(check);
-	}
-
 	private void activarBotonBorrarPared() {
 		int filas = paredModel.getRowCount();
 		boolean check = false;
@@ -643,19 +639,9 @@ public class Afectaciones extends PrincipalPanel {
 		btnBorrarPared.setEnabled(check);
 	}
 
-	private void activarBotonBorrarTecho() {
-		int filas = techoModel.getRowCount();
-		boolean check = false;
-		for (int i = 0; i < filas && !check; i++) {
-			if (Auxiliary.isSelected(i, 0, techoModel))
-				check = true;
-		}
-		btnBorrarTecho.setEnabled(check);
-	}
-
 	private JButton getBtnAgnadirInmueble() {
 		if (btnAgnadirInmueble == null) {
-			btnAgnadirInmueble = new JButton("Añadir");
+			btnAgnadirInmueble = new JButton(ADD);
 			btnAgnadirInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (((String) comboBoxInmueble.getSelectedItem()) != null
@@ -692,6 +678,7 @@ public class Afectaciones extends PrincipalPanel {
 	private JButton getBtnEditarInmueble() {
 		if (btnEditarInmueble == null) {
 			btnEditarInmueble = new JButton(EDITAR);
+			btnEditarInmueble.setEnabled(false);
 			btnEditarInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (tableInmueble.getSelectedRowCount() > 0) {
@@ -906,6 +893,7 @@ public class Afectaciones extends PrincipalPanel {
 	private JButton getBtnEditarTecho() {
 		if (btnEditarTecho == null) {
 			btnEditarTecho = new JButton(EDITAR);
+			btnEditarTecho.setEnabled(false);
 			btnEditarTecho.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (tableTecho.getSelectedRowCount() > 0) {
@@ -1092,21 +1080,15 @@ public class Afectaciones extends PrincipalPanel {
 			inmuebleModel.addTableModelListener(new TableModelListener() {
 				@Override
 				public void tableChanged(TableModelEvent e) {
-					activarBotonBorrarInmueble();
+					Auxiliary.activarBotonBorrar(btnBorrarInmueble, inmuebleModel, 0);
+					Auxiliary.activarBotonEditar(btnEditarInmueble, inmuebleModel, 0);
 				}
 			});
 			tableInmueble = new JTable(inmuebleModel);
-			tableInmueble.addInputMethodListener(new InputMethodListener() {
-				public void caretPositionChanged(InputMethodEvent event) {
-					System.out.println("a");
-				}
-
-				public void inputMethodTextChanged(InputMethodEvent event) {
-					System.out.println("b");
-				}
-			});
 			tableInmueble.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			tableInmueble.getTableHeader().setReorderingAllowed(false);
+			Auxiliary.centrarColumnas(tableInmueble, new int[] { 1, 4 });
+			Auxiliary.quitarReordenamientoTabla(tableInmueble);
+
 			tableInmueble.getColumnModel().getColumn(0).setResizable(false);
 			tableInmueble.getColumnModel().getColumn(0).setPreferredWidth(35);
 			tableInmueble.getColumnModel().getColumn(0).setMinWidth(0);
@@ -1223,11 +1205,16 @@ public class Afectaciones extends PrincipalPanel {
 
 				@Override
 				public void tableChanged(TableModelEvent e) {
-					activarBotonBorrarTecho();
+					Auxiliary.activarBotonBorrar(btnBorrarTecho, techoModel, 0);
+					Auxiliary.activarBotonEditar(btnEditarTecho, techoModel, 0);
 
 				}
 			});
 			tableTecho.setModel(techoModel);
+			tableTecho.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Auxiliary.centrarColumnas(tableTecho, new int[] { 1 });
+			Auxiliary.quitarReordenamientoTabla(tableTecho);
+
 			tableTecho.getColumnModel().getColumn(0).setPreferredWidth(15);
 			tableTecho.getColumnModel().getColumn(0).setMinWidth(0);
 			tableTecho.getColumnModel().getColumn(1).setPreferredWidth(20);
@@ -1325,7 +1312,7 @@ public class Afectaciones extends PrincipalPanel {
 
 	private JButton getBtnCancelarInmueble() {
 		if (btnCancelarInmueble == null) {
-			btnCancelarInmueble = new JButton("Cancelar");
+			btnCancelarInmueble = new JButton(CANCEL);
 			btnCancelarInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					txtIDInmueble.setText("");
@@ -1377,7 +1364,7 @@ public class Afectaciones extends PrincipalPanel {
 
 	private JButton getBtnCancelarPared() {
 		if (btnCancelarPared == null) {
-			btnCancelarPared = new JButton("Cancelar");
+			btnCancelarPared = new JButton(CANCEL);
 			btnCancelarPared.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
@@ -1430,7 +1417,7 @@ public class Afectaciones extends PrincipalPanel {
 
 	private JButton getBtnCancelarTecho() {
 		if (btnCancelarTecho == null) {
-			btnCancelarTecho = new JButton("Cancelar");
+			btnCancelarTecho = new JButton(CANCEL);
 			btnCancelarTecho.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
