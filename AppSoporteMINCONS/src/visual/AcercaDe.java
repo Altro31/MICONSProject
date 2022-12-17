@@ -1,6 +1,7 @@
 package visual;
 
 import visual.util.PrincipalPanel;
+import java.awt.Color;
 
 public class AcercaDe extends PrincipalPanel {
 
@@ -13,6 +14,8 @@ public class AcercaDe extends PrincipalPanel {
 	 * Create the panel.
 	 */
 	public AcercaDe() {
+		
+		setBackground(new Color(0, 0, 0));
 		
 		setImagePath(null);
 		
