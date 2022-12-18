@@ -6,10 +6,11 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
 import clases.Inmueble;
+import interfaces.Actualizable;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class InmuebleTableModel extends DefaultTableModel {
+public class InmuebleTableModel extends DefaultTableModel implements Actualizable {
 
 	/**
 	 * 
@@ -32,15 +33,6 @@ public class InmuebleTableModel extends DefaultTableModel {
 		return columnEditables[column];
 	}
 
-	public void actualizar(ArrayList<Inmueble> lista) {
-		int index = 1;
-		limpiar();
-		for (Inmueble inmueble : lista) {
-			addRow(new Object[] { false, "" + index++, inmueble.getID(), inmueble.getNombre(),
-					inmueble.getCantidad() });
-		}
-	}
-
 	public void limpiar() {
 		Auxiliary.limpiar(this);
 	}
@@ -52,21 +44,15 @@ public class InmuebleTableModel extends DefaultTableModel {
 
 	}
 
-	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
-		ArrayList<Inmueble> lista = new ArrayList<Inmueble>(afectacion.getListaInmuebles());
-		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		int i = 0;
-		int size = afectacion.getListaInmuebles().size();
-		while (i < size) {
-			Inmueble inmueble = afectacion.getListaInmuebles().get(i);
-			if (!lista.contains(inmueble)) {
-				afectacion.eliminarInmueble(i);
-				size--;
-			} else {
-				i++;
-			}
+	@Override
+	public <T> void actualizar(ArrayList<T> lista) {
+		int index = 1;
+		limpiar();
+		for (T inmueble : lista) {
+			addRow(new Object[] { false, "" + index++, ((Inmueble)inmueble).getID(), ((Inmueble)inmueble).getNombre(),
+					((Inmueble)inmueble).getCantidad() });
 		}
-		actualizar(lista);
+		
 	}
+
 }

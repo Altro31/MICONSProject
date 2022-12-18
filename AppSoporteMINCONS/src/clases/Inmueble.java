@@ -5,7 +5,7 @@ import util.Auxiliary;
 public class Inmueble extends Material {
 
 	public Inmueble() {
-		super(Auxiliary.random(8), "desconocido", 0, 0);
+		super(Auxiliary.random(8), "desconocido", 1, 1);
 
 	}
 

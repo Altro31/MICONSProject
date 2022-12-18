@@ -6,10 +6,11 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
 import clases.Techo;
+import interfaces.Actualizable;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class TechoTableModel extends DefaultTableModel {
+public class TechoTableModel extends DefaultTableModel implements Actualizable {
 
 	/**
 	 * 
@@ -33,11 +34,13 @@ public class TechoTableModel extends DefaultTableModel {
 		return columnEditables[column];
 	}
 
-	public void actualizar(ArrayList<Techo> lista) {
+	@Override
+	public <T> void actualizar(ArrayList<T> lista) {
 		int index = 1;
 		limpiar();
-		for (Techo techo : lista) {
-			addRow(new Object[] { false, index + "", techo.getID(), techo.getTipoDerrumbe().name() });
+		for (T techo : lista) {
+			addRow(new Object[] { false, index + "", ((Techo) techo).getID(),
+					((Techo) techo).getTipoDerrumbe().name() });
 			index++;
 		}
 	}
@@ -51,24 +54,6 @@ public class TechoTableModel extends DefaultTableModel {
 		actualizar(lista);
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
-	}
-
-	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
-		ArrayList<Techo> lista = new ArrayList<Techo>(afectacion.getListaTechos());
-		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		int i = 0;
-		int size = afectacion.getListaTechos().size();
-		while (i < size) {
-			Techo techo = afectacion.getListaTechos().get(i);
-			if (!lista.contains(techo)) {
-				afectacion.eliminarTecho(i);
-				size--;
-			} else {
-				i++;
-			}
-		}
-		actualizar(lista);
 	}
 
 }

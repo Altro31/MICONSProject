@@ -61,7 +61,7 @@ public class Frame extends JFrame {
 			Frame.addRuta(new Eventos(), evento);
 			Frame.addRuta(new FichasTecnicas(), evento);
 			Frame.addRuta(new Object[] {viviendas, afectaciones, asignarMateriales}, new Object[] {new Vivienda(), new Afectacion(), new Cubicacion()});
-			frame.setContentPane((Container) ((Object[])Frame.getPosicionActual()[0])[2]);
+			frame.setContentPane((Container) ((Object[])Frame.getPosicionActual()[0])[1]);
 //			frame.setContentPanes((Container)Frame.getPosicionActual()[0]);
 		}
 		return frame;

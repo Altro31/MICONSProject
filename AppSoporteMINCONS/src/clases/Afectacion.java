@@ -23,19 +23,8 @@ public class Afectacion {
 	}
 	
 	//Getters and Setters
-	
 	public ArrayList<Inmueble> getListaInmuebles() {
-		return new ArrayList<Inmueble>(listaInmuebles);
-	}
-	public void addInmueble(Inmueble inmueble) {
-		if(inmueble==null)
-			throw new IllegalArgumentException("Inmueble tiene valor null");
-		listaInmuebles.add(inmueble);
-	}
-	public void eliminarInmueble(int pos) {
-		if(pos<0)
-			throw new IllegalArgumentException("Pos debe tener valor negativo");
-		listaInmuebles.remove(pos);
+		return listaInmuebles;
 	}
 	
 	public void setInmueble(int pos, Inmueble inmueble) throws IndexOutOfBoundsException, IllegalArgumentException{

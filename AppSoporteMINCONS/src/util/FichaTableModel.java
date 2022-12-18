@@ -6,10 +6,11 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Evento;
 import clases.FichaTecnica;
+import interfaces.Actualizable;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class FichaTableModel extends DefaultTableModel {
+public class FichaTableModel extends DefaultTableModel implements Actualizable{
 
 	/**
 	 * 
@@ -34,11 +35,12 @@ public class FichaTableModel extends DefaultTableModel {
 		return columnEditables[column];
 	}
 
-	public void actualizar(ArrayList<FichaTecnica> lista) {
+	@Override
+	public <T> void actualizar(ArrayList<T> lista) {
 		int index = 1;
 		limpiar();
-		for (FichaTecnica ficha : lista) {
-			addRow(new Object[] { null, index + "", ficha.getVivienda().getDireccion(), "" });
+		for (T ficha : lista) {
+			addRow(new Object[] { null, index + "", ((FichaTecnica)ficha).getVivienda().getDireccion(), "" });
 			index++;
 		}
 	}
@@ -52,27 +54,6 @@ public class FichaTableModel extends DefaultTableModel {
 		actualizar(lista);
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
-	}
-
-	public void borrarSeleccion() {
-
-		Evento evento = ((Evento) Frame.getPosicionActual()[1]);
-		ArrayList<FichaTecnica> lista = new ArrayList<FichaTecnica>(evento.getListaFichasTecnicas());
-		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		
-		int i = 0;
-		int size = evento.getListaFichasTecnicas().size();
-		while (i < size) {
-			FichaTecnica ficha = evento.getListaFichasTecnicas().get(i);
-			if (!lista.contains(ficha)) {
-				evento.eliminarFichaTecnica(i);
-				size--;
-			} else {
-				i++;
-			}
-		}
-		
-		actualizar(lista);
 	}
 
 }

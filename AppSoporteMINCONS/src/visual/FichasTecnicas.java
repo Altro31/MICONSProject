@@ -21,11 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 import clases.Afectacion;
 import clases.Cubicacion;
@@ -34,6 +31,7 @@ import clases.Sistema;
 import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
+import visual.util.CustomTable;
 import visual.util.PrincipalPanel;
 
 public class FichasTecnicas extends PrincipalPanel {
@@ -42,7 +40,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -2837587028329428263L;
-	private JScrollPane scrollPane;
+	private CustomTable cTable;
 	private JTable table;
 	private FichaTableModel tableModel;
 	private JPanel panelTitulo;
@@ -78,50 +76,23 @@ public class FichasTecnicas extends PrincipalPanel {
 		});
 		add(getPanelTitulo());
 		add(getPanelButton2());
-		add(getScrollPane());
 		add(getPanelButton());
 		add(getFiltroNumero());
 		add(getFiltroDireccion());
 		add(getFiltroFecha());
 		add(getCBoxSelectInmuebles());
+		add(getcTable());
 	}
 
 	// Componentes
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setBounds(20, 115, 742, 311);
-			scrollPane.setViewportView(getTable());
-		}
-		return scrollPane;
-	}
-
-	private JTable getTable() {
-		if (table == null) {
-			table = new JTable();
+	private JScrollPane getcTable() {
+		if (cTable == null) {
 			tableModel = new FichaTableModel();
-			table.setModel(tableModel);
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			tableModel.addTableModelListener(new TableModelListener() {
-				@Override
-				public void tableChanged(TableModelEvent e) {
-					Auxiliary.activarBotonBorrar(btnBorrar, tableModel, 0);
-					Auxiliary.activarBotonEditar(btnEditar, tableModel, 0);
-				}
-			});
-			Auxiliary.centrarColumnas(table, new int[] {1});
-			Auxiliary.quitarReordenamientoTabla(table);
-			tableModel.actualizar(((Evento) Frame.get(1)[1]).getListaFichasTecnicas());
-			table.getColumnModel().getColumn(0).setResizable(false);
-			table.getColumnModel().getColumn(0).setPreferredWidth(15);
-			table.getColumnModel().getColumn(0).setMinWidth(0);
-			table.getColumnModel().getColumn(1).setResizable(false);
-			table.getColumnModel().getColumn(1).setPreferredWidth(15);
-			table.getColumnModel().getColumn(1).setMinWidth(0);
-			table.getColumnModel().getColumn(2).setPreferredWidth(236);
-			table.getColumnModel().getColumn(3).setPreferredWidth(137);
+			cTable = new CustomTable(tableModel, btnBorrar, btnEditar, new int[] {});
+			cTable.setBounds(20, 115, 742, 311);
+			table = cTable.getTable();
 		}
-		return table;
+		return cTable;
 	}
 
 	private JPanel getPanelTitulo() {
@@ -254,11 +225,6 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnBorrar() {
 		if (btnBorrar == null) {
 			btnBorrar = new JButton("Borrar");
-			btnBorrar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					tableModel.borrarSeleccion();
-				}
-			});
 			btnBorrar.setEnabled(false);
 		}
 		return btnBorrar;

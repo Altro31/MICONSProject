@@ -9,19 +9,23 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import clases.Inmueble;
 
 //Modificador final para que no se pueda heredar de esta clase
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class Auxiliary {
 
 	public static final DefaultTableCellRenderer CellRenderCenter = getCellRenderCenter();
-	
+
 	// Constructor privado para que no se pueda instanciar la Clase
 	private Auxiliary() {
 	}
-	
+
 	private static DefaultTableCellRenderer getCellRenderCenter() {
 		DefaultTableCellRenderer cellRender = new DefaultTableCellRenderer();
 		cellRender.setHorizontalAlignment(SwingConstants.CENTER);
@@ -135,28 +139,15 @@ public final class Auxiliary {
 		}
 	}
 
-	/**
-	 * Borra los elementos de una tabla que tengan la casilla se selección marcada
-	 * 
-	 * @param tableModel       TableModel de la Tabla
-	 * @param listaFichas      Lista que contiene los datos de la tabla
-	 * @param columnSelection  Número de la columna de la tabla que contiene las
-	 *                         casillas de selección
-	 * @param columnNumeracion Número de la columna de la tabla que contiene las
-	 *                         casillas de numeración
-	 */
-	public static <E> void borrarSeleccion(DefaultTableModel tableModel, ArrayList<E> listaFichas, int columnSelection,
-			final int columnNumeracion) {
-		ArrayList<Object> selected = getSelected(tableModel, columnSelection);
-		if (!selected.isEmpty()) {
-			ArrayList<Object> lista2 = new ArrayList<Object>();
-			for (Object object : selected) {
-				int fila = Integer.parseInt(((Object[]) object)[columnNumeracion].toString()) - 1;
-				lista2.add(listaFichas.get(fila));
+	public static <T extends Object> void borrarSeleccion(JTable table, ArrayList<T> lista) {
+		
+		ArrayList<T> lista2 = new ArrayList<T>();
+		if(table!=null && lista!=null) {
+			for (int i : table.getSelectedRows()) {
+				lista2.add(lista.get(i));
 			}
-			listaFichas.removeAll(lista2);
+			lista.removeAll(lista2);
 		}
-
 	}
 
 	/**
@@ -177,58 +168,58 @@ public final class Auxiliary {
 	}
 
 	/**
-	 * Activa el botón Borrar
-	 * 
-	 * @param borrar     Botón borrar
-	 * @param tableModel TableModel de la Tabla
-	 * @param column     columna que contiene los campos que indican la selección
+	 * Activa el botón Borrar cuando hay una o más filas seleccionadas en la tabla
 	 */
-	public static void activarBotonBorrar(JButton borrar, DefaultTableModel tableModel, int column) {
-		if (borrar != null) {
-			int filas = tableModel.getRowCount();
-			boolean check = false;
-			for (int i = 0; i < filas && !check; i++) {
-				if (Auxiliary.isSelected(i, column, tableModel))
-					check = true;
-			}
-			borrar.setEnabled(check);
+	public static void activarBotonBorrar(final JButton borrar, final JTable table) {
+		if (borrar != null && table != null) {
+
+			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					boolean check = false;
+					if (table.getSelectedRowCount() > 0) {
+						check = true;
+					}
+					borrar.setEnabled(check);
+				}
+
+			});
 		}
 	}
 
 	/**
-	 * Activa el botón Editar
-	 * 
-	 * @param editar     Botón Editar
-	 * @param tableModel TableModel de la Tabla
-	 * @param column     columna que contiene los campos que indican la selección
+	 * Activa el botón Editar cuando hay solo una fila seleccionada en la tabla
 	 */
-	public static void activarBotonEditar(JButton editar, DefaultTableModel tableModel, int column) {
-		if (editar != null) {
-			int filas = tableModel.getRowCount();
-			int ct = 0;
-			for (int i = 0; i < filas && ct <= 1; i++) {
-				if (Auxiliary.isSelected(i, column, tableModel))
-					ct++;
-			}
-			boolean check = false;
+	public static void activarBotonEditar(final JButton editar, final JTable table) {
+		if (editar != null && table != null) {
+			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-			if (ct == 1)
-				check = true;
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					boolean check = false;
+					if (table.getSelectedRowCount() == 1) {
+						check = true;
+					}
+					editar.setEnabled(check);
+				}
 
-			editar.setEnabled(check);
+			});
 		}
 	}
-	
+
 	/**
 	 * Centra las columnas de una tabla
-	 * @param listaColumnas Lista de los números de las columnas que van a ser centradas
+	 * 
+	 * @param listaColumnas Lista de los números de las columnas que van a ser
+	 *                      centradas
 	 */
 	public static void centrarColumnas(JTable table, int[] listaColumnas) {
 		for (int i : listaColumnas) {
 			table.getColumnModel().getColumn(i).setCellRenderer(CellRenderCenter);
 		}
 	}
-	
+
 	public static void quitarReordenamientoTabla(JTable table) {
 		table.getTableHeader().setReorderingAllowed(false);
 	}

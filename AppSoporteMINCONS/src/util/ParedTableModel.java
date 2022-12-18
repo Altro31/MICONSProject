@@ -6,10 +6,11 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.Afectacion;
 import clases.Pared;
+import interfaces.Actualizable;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class ParedTableModel extends DefaultTableModel {
+public class ParedTableModel extends DefaultTableModel implements Actualizable {
 
 	/**
 	 * 
@@ -33,12 +34,13 @@ public class ParedTableModel extends DefaultTableModel {
 		return columnEditables[column];
 	}
 
-	public void actualizar(ArrayList<Pared> lista) {
+	@Override
+	public <T> void actualizar(ArrayList<T> lista) {
 		int index = 1;
 		limpiar();
-		for (Pared pared : lista) {
-			addRow(new Object[] { null, index + "", pared.getID(), pared.getTipoDerrumbe().toString(),
-					pared.isEsParedCarga() ? "Si" : "No" });
+		for (T pared : lista) {
+			addRow(new Object[] { null, index + "", ((Pared)pared).getID(), ((Pared)pared).getTipoDerrumbe().toString(),
+					((Pared)pared).isEsParedCarga() ? "Si" : "No" });
 			index++;
 		}
 	}
@@ -52,24 +54,6 @@ public class ParedTableModel extends DefaultTableModel {
 		actualizar(lista);
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
-	}
-
-	public void borrarSeleccion() {
-		Afectacion afectacion = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]);
-		ArrayList<Pared> lista = new ArrayList<Pared>(afectacion.getListaParedes());
-		Auxiliary.borrarSeleccion(this, lista, 0, 1);
-		int i = 0;
-		int size = afectacion.getListaParedes().size();
-		while (i < size) {
-			Pared pared = afectacion.getListaParedes().get(i);
-			if (!lista.contains(pared)) {
-				afectacion.eliminarPared(i);
-				size--;
-			} else {
-				i++;
-			}
-		}
-		actualizar(lista);
 	}
 
 }
