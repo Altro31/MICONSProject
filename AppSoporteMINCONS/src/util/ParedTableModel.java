@@ -17,11 +17,11 @@ public class ParedTableModel extends DefaultTableModel implements Actualizable {
 	 */
 	private static final long serialVersionUID = -8515650816743836254L;
 
-	private Class[] columnTypes = new Class[] { Boolean.class, String.class, String.class, String.class, String.class };
-	boolean[] columnEditables = new boolean[] { true, false, false, false, false };
+	private Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class };
+	boolean[] columnEditables = new boolean[] { false, false, false, false };
 
 	public ParedTableModel() {
-		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe", "Pared de Carga" });
+		super(new Object[][] {}, new String[] { "#", "Identificador", "Tipo de Derrumbe", "Pared de Carga" });
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class ParedTableModel extends DefaultTableModel implements Actualizable {
 		int index = 1;
 		limpiar();
 		for (T pared : lista) {
-			addRow(new Object[] { null, index + "", ((Pared)pared).getID(), ((Pared)pared).getTipoDerrumbe().toString(),
+			addRow(new Object[] { index + "", ((Pared)pared).getID(), ((Pared)pared).getTipoDerrumbe().toString(),
 					((Pared)pared).isEsParedCarga() ? "Si" : "No" });
 			index++;
 		}

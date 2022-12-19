@@ -15,7 +15,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,7 +25,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import clases.Afectacion;
@@ -35,7 +33,6 @@ import clases.Material;
 import clases.Sistema;
 import clases.Techo;
 import enums.TipoDerrumbe;
-import util.Auxiliary;
 import util.TechoTableModel;
 import util.Validaciones;
 import visual.Frame;
@@ -54,7 +51,7 @@ public class PanelTecho extends JPanel {
 	private static final String CANCEL = "Cancelar";
 
 	private JPanel panelInsertar;
-	private JTextField filtroIdentificador;
+	private JTextField filtroID;
 	private CustomTable cTable;
 	private JLabel lblIdentificadorTecho;
 	private JLabel lblMatPredTecho;
@@ -67,10 +64,8 @@ public class PanelTecho extends JPanel {
 	private JButton btnBorrarTecho;
 	private JButton btnEditarTecho;
 	private JTextField filtroNumero;
-	private JTextField filtroID;
 	private JComboBox filtroTipoDerrumbe;
-	private JTable tableTecho;
-	private JCheckBox cBoxSelectTecho;
+	private JTable table;
 	private TechoTableModel techoModel;
 	private JButton btnOKTecho;
 	private JButton btnCancelarTecho;
@@ -88,7 +83,6 @@ public class PanelTecho extends JPanel {
 		add(getFiltroNumero());
 		add(getFiltroID());
 		add(getFiltroTipoDerrumbe());
-		add(getCBoxSelectTecho());
 		add(getcTable());
 	}
 
@@ -97,7 +91,15 @@ public class PanelTecho extends JPanel {
 			techoModel = new TechoTableModel();
 			cTable = new CustomTable(techoModel, btnBorrarTecho, btnEditarTecho, new int[] {});
 			cTable.setBounds(10, 52, 417, 289);
-			tableTecho = cTable.getTable();
+			table = cTable.getTable();
+			table.getColumnModel().getColumn(0).setResizable(false);
+			table.getColumnModel().getColumn(0).setPreferredWidth(40);
+			table.getColumnModel().getColumn(0).setMaxWidth(40);
+			table.getColumnModel().getColumn(1).setResizable(false);
+			table.getColumnModel().getColumn(2).setResizable(false);
+			table.getColumnModel().getColumn(2).setPreferredWidth(120);
+			table.getColumnModel().getColumn(2).setMaxWidth(120);
+			
 		}
 		return cTable;
 	}
@@ -111,58 +113,53 @@ public class PanelTecho extends JPanel {
 			panelInsertar.setBounds(437, 25, 342, 263);
 			panelInsertar.setBounds(437, 25, 342, 263);
 			GroupLayout glPanelInsertar = new GroupLayout(panelInsertar);
-			glPanelInsertar.setHorizontalGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertar.createSequentialGroup().addContainerGap().addGroup(
-							glPanelInsertar.createParallelGroup(Alignment.LEADING).addGroup(glPanelInsertar
-									.createSequentialGroup()
+			glPanelInsertar.setHorizontalGroup(
+				glPanelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelInsertar.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+							.addGroup(glPanelInsertar.createSequentialGroup()
+								.addGroup(glPanelInsertar.createParallelGroup(Alignment.TRAILING)
+									.addComponent(getLblIdentificadorTecho(), GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
 									.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
-											.addComponent(getLblIdentificadorTecho(), GroupLayout.PREFERRED_SIZE, 77,
-													GroupLayout.PREFERRED_SIZE)
-											.addComponent(getLblMatPredTecho(), GroupLayout.PREFERRED_SIZE, 136,
-													GroupLayout.PREFERRED_SIZE)
-											.addComponent(getLblTipoDerrumbeTecho(), GroupLayout.PREFERRED_SIZE, 136,
-													GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
-											.addComponent(getTxtIdentificadorTecho(), GroupLayout.DEFAULT_SIZE, 170,
-													Short.MAX_VALUE)
-											.addComponent(getComboBoxMatPredTecho(), 0, 170, Short.MAX_VALUE)
-											.addComponent(getComboBoxTipoDerrumbeTecho(), 0, 170, Short.MAX_VALUE))
-									.addGap(10))
-									.addGroup(glPanelInsertar.createSequentialGroup()
-											.addComponent(getBtnOKTecho(), GroupLayout.PREFERRED_SIZE, 84,
-													GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(getBtnCancelarTecho(), GroupLayout.PREFERRED_SIZE, 91,
-													GroupLayout.PREFERRED_SIZE)
-											.addContainerGap()))));
-			glPanelInsertar.setVerticalGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertar.createSequentialGroup().addContainerGap()
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblIdentificadorTecho()).addComponent(getTxtIdentificadorTecho(),
-											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-							.addGap(38)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblMatPredTecho()).addComponent(getComboBoxMatPredTecho(),
-											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-							.addGap(39)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblTipoDerrumbeTecho())
-									.addComponent(getComboBoxTipoDerrumbeTecho(), GroupLayout.PREFERRED_SIZE,
-											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(42)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getBtnOKTecho())
-									.addComponent(getBtnCancelarTecho(), GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
-							.addGap(32)));
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblIdentificadorTecho(), getLblMatPredTecho(), getLblTipoDerrumbeTecho() });
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] { getTxtIdentificadorTecho(),
-					getComboBoxMatPredTecho(), getComboBoxTipoDerrumbeTecho() });
-			glPanelInsertar.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getBtnOKTecho(), getBtnCancelarTecho() });
+										.addComponent(getLblMatPredTecho(), GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+										.addComponent(getLblTipoDerrumbeTecho(), GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+									.addComponent(getTxtIdentificadorTecho(), GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+									.addComponent(getComboBoxMatPredTecho(), 0, 170, Short.MAX_VALUE)
+									.addComponent(getComboBoxTipoDerrumbeTecho(), 0, 170, Short.MAX_VALUE))
+								.addGap(10))
+							.addGroup(glPanelInsertar.createSequentialGroup()
+								.addComponent(getBtnOKTecho(), GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getBtnCancelarTecho(), GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())))
+			);
+			glPanelInsertar.setVerticalGroup(
+				glPanelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelInsertar.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getTxtIdentificadorTecho(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblIdentificadorTecho()))
+						.addGap(38)
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblMatPredTecho())
+							.addComponent(getComboBoxMatPredTecho(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(39)
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblTipoDerrumbeTecho())
+							.addComponent(getComboBoxTipoDerrumbeTecho(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(42)
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getBtnOKTecho())
+							.addComponent(getBtnCancelarTecho(), GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
+						.addGap(32))
+			);
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] {getTxtIdentificadorTecho(), getComboBoxMatPredTecho(), getComboBoxTipoDerrumbeTecho()});
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] {getLblIdentificadorTecho(), getLblMatPredTecho(), getLblTipoDerrumbeTecho()});
+			glPanelInsertar.linkSize(SwingConstants.HORIZONTAL, new Component[] {getBtnOKTecho(), getBtnCancelarTecho()});
 			panelInsertar.setLayout(glPanelInsertar);
 		}
 		return panelInsertar;
@@ -171,6 +168,7 @@ public class PanelTecho extends JPanel {
 	private JLabel getLblIdentificadorTecho() {
 		if (lblIdentificadorTecho == null) {
 			lblIdentificadorTecho = new JLabel("Identificador");
+			lblIdentificadorTecho.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblIdentificadorTecho;
 	}
@@ -178,6 +176,7 @@ public class PanelTecho extends JPanel {
 	private JLabel getLblMatPredTecho() {
 		if (lblMatPredTecho == null) {
 			lblMatPredTecho = new JLabel("Material Predominante");
+			lblMatPredTecho.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblMatPredTecho;
 	}
@@ -185,6 +184,7 @@ public class PanelTecho extends JPanel {
 	private JLabel getLblTipoDerrumbeTecho() {
 		if (lblTipoDerrumbeTecho == null) {
 			lblTipoDerrumbeTecho = new JLabel("Tipo de Derrumbe");
+			lblTipoDerrumbeTecho.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblTipoDerrumbeTecho;
 	}
@@ -274,9 +274,9 @@ public class PanelTecho extends JPanel {
 			btnEditarTecho.setEnabled(false);
 			btnEditarTecho.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (tableTecho.getSelectedRowCount() > 0) {
+					if (table.getSelectedRowCount() > 0) {
 						Techo techo = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaTechos()
-								.get(tableTecho.getSelectedRow());
+								.get(table.getSelectedRow());
 						txtIdentificadorTecho.setText(techo.getID());
 						comboBoxMatPredTecho.setSelectedItem(techo.getMaterialPredominante().getNombre());
 						comboBoxTipoDerrumbeTecho.setSelectedItem(techo.getTipoDerrumbe());
@@ -299,11 +299,11 @@ public class PanelTecho extends JPanel {
 			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					techoModel.filtrar(filtroNumero.getText(), 1);
+					techoModel.filtrar(filtroNumero.getText(), 0);
 				}
 			});
 			filtroNumero.setColumns(10);
-			filtroNumero.setBounds(76, 25, 67, 20);
+			filtroNumero.setBounds(10, 30, 41, 20);
 		}
 		return filtroNumero;
 	}
@@ -314,11 +314,11 @@ public class PanelTecho extends JPanel {
 			filtroID.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					techoModel.filtrar(filtroID.getText(), 2);
+					techoModel.filtrar(filtroID.getText(), 1);
 				}
 			});
 			filtroID.setColumns(10);
-			filtroID.setBounds(145, 25, 153, 20);
+			filtroID.setBounds(51, 30, 254, 20);
 		}
 		return filtroID;
 	}
@@ -328,41 +328,24 @@ public class PanelTecho extends JPanel {
 			filtroTipoDerrumbe = new JComboBox();
 			filtroTipoDerrumbe.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					techoModel.filtrar((String) filtroTipoDerrumbe.getSelectedItem(), 3);
+					techoModel.filtrar((String) filtroTipoDerrumbe.getSelectedItem(), 2);
 				}
 			});
 			filtroTipoDerrumbe.setModel(new DefaultComboBoxModel(new String[] { "", "Parcial", "Total" }));
-			filtroTipoDerrumbe.setBounds(300, 25, 127, 20);
+			filtroTipoDerrumbe.setBounds(304, 30, 123, 20);
 			filtroTipoDerrumbe.setSelectedItem("");
 		}
 		return filtroTipoDerrumbe;
 	}
 
-	private JCheckBox getCBoxSelectTecho() {
-		if (cBoxSelectTecho == null) {
-			cBoxSelectTecho = new JCheckBox("");
-			cBoxSelectTecho.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					Auxiliary.selectAll(techoModel, cBoxSelectTecho, 0);
-				}
-			});
-			cBoxSelectTecho.setBorderPainted(true);
-			cBoxSelectTecho.setBorder(new LineBorder(new Color(128, 128, 128)));
-			cBoxSelectTecho.setHorizontalAlignment(SwingConstants.CENTER);
-			cBoxSelectTecho.setBounds(10, 25, 64, 20);
-		}
-		return cBoxSelectTecho;
-	}
-
 	private void bloquearCamposTecho(boolean bloquear) {
 		bloquear = !bloquear;
-		tableTecho.setEnabled(bloquear);
+		table.setEnabled(bloquear);
 		btnAddTecho.setEnabled(bloquear);
 		btnBorrarTecho.setEnabled(bloquear);
 		btnEditarTecho.setEnabled(bloquear);
 		filtroNumero.setEnabled(bloquear);
-		cBoxSelectTecho.setEnabled(bloquear);
-		filtroIdentificador.setEnabled(bloquear);
+		filtroID.setEnabled(bloquear);
 		filtroID.setEnabled(bloquear);
 		filtroTipoDerrumbe.setEnabled(bloquear);
 	}
@@ -370,13 +353,14 @@ public class PanelTecho extends JPanel {
 	private JButton getBtnOKTecho() {
 		if (btnOKTecho == null) {
 			btnOKTecho = new JButton("OK");
+			btnOKTecho.setVisible(false);
 			btnOKTecho.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (((String) comboBoxMatPredTecho.getSelectedItem()) != null
 							&& comboBoxTipoDerrumbeTecho.getSelectedItem() != null
 							&& !(txtIdentificadorTecho.getText()).isEmpty()) {
 						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).setTecho(
-								tableTecho.getSelectedRow(),
+								table.getSelectedRow(),
 								new Techo((txtIdentificadorTecho.getText()),
 										(Construccion) Sistema
 												.getMaterial((String) comboBoxMatPredTecho.getSelectedItem()),
@@ -388,11 +372,13 @@ public class PanelTecho extends JPanel {
 						comboBoxTipoDerrumbeTecho.setSelectedItem(null);
 						txtIdentificadorTecho.setText("");
 
+						btnOKTecho.setVisible(false);
+						btnCancelarTecho.setVisible(false);
+						
 						bloquearCamposTecho(false);
 					}
 				}
 			});
-			btnOKTecho.setVisible(false);
 		}
 		return btnOKTecho;
 	}
@@ -400,6 +386,7 @@ public class PanelTecho extends JPanel {
 	private JButton getBtnCancelarTecho() {
 		if (btnCancelarTecho == null) {
 			btnCancelarTecho = new JButton(CANCEL);
+			btnCancelarTecho.setVisible(false);
 			btnCancelarTecho.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
@@ -413,7 +400,6 @@ public class PanelTecho extends JPanel {
 					bloquearCamposTecho(false);
 				}
 			});
-			btnCancelarTecho.setVisible(false);
 		}
 		return btnCancelarTecho;
 	}

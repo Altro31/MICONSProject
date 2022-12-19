@@ -17,11 +17,11 @@ public class TechoTableModel extends DefaultTableModel implements Actualizable {
 	 */
 	private static final long serialVersionUID = -8515650816743836254L;
 
-	Class[] columnTypes = new Class[] { Boolean.class, String.class, String.class, String.class };
-	boolean[] columnEditables = new boolean[] { true, false, false, false };
+	Class[] columnTypes = new Class[] { String.class, String.class, String.class };
+	boolean[] columnEditables = new boolean[] { false, false, false };
 
 	public TechoTableModel() {
-		super(new Object[][] {}, new String[] { "", "#", "Identificador", "Tipo de Derrumbe" });
+		super(new Object[][] {}, new String[] { "#", "Identificador", "Tipo de Derrumbe" });
 	}
 
 	@Override
@@ -39,8 +39,7 @@ public class TechoTableModel extends DefaultTableModel implements Actualizable {
 		int index = 1;
 		limpiar();
 		for (T techo : lista) {
-			addRow(new Object[] { false, index + "", ((Techo) techo).getID(),
-					((Techo) techo).getTipoDerrumbe().name() });
+			addRow(new Object[] { index + "", ((Techo) techo).getID(), ((Techo) techo).getTipoDerrumbe().name() });
 			index++;
 		}
 	}

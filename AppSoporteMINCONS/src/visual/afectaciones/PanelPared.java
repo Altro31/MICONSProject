@@ -19,14 +19,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import clases.Afectacion;
@@ -60,12 +58,11 @@ public class PanelPared extends JPanel {
 	private JButton btnAgnadirPared;
 	private JButton btnBorrarPared;
 	private JButton btnEditarPared;
-	private JTable tablePared;
+	private JTable table;
 	private ParedTableModel tableModel;
 	private JTextField filtroNumero;
 	private JTextField filtroIdentificador;
 	private JComboBox comboBoxParedCarga;
-	private JCheckBox cBoxSelectPared;
 	private JButton btnOKPared;
 	private JButton btnCancelarPared;
 	private JLabel lblIdentificadorPared;
@@ -91,7 +88,6 @@ public class PanelPared extends JPanel {
 		add(getFiltroIdentificador());
 		add(getComboBoxTipoDerrumbe());
 		add(getComboBoxParedCarga());
-		add(getCBoxSelectPared());
 		add(getcTable());
 	}
 	
@@ -100,7 +96,16 @@ public class PanelPared extends JPanel {
 			tableModel = new ParedTableModel();
 			cTable = new CustomTable(tableModel, btnBorrarPared, btnEditarPared, new int[] {});
 			cTable.setBounds(10, 52, 417, 289);
-			tablePared = cTable.getTable();
+			table = cTable.getTable();
+			table.getColumnModel().getColumn(0).setResizable(false);
+			table.getColumnModel().getColumn(0).setPreferredWidth(40);
+			table.getColumnModel().getColumn(0).setMaxWidth(40);
+			table.getColumnModel().getColumn(1).setResizable(false);
+			table.getColumnModel().getColumn(2).setResizable(false);
+			table.getColumnModel().getColumn(3).setResizable(false);
+			table.getColumnModel().getColumn(3).setPreferredWidth(100);
+			table.getColumnModel().getColumn(3).setMaxWidth(100);
+			
 		}
 		return cTable;
 	}
@@ -113,65 +118,62 @@ public class PanelPared extends JPanel {
 					"Insertar Pared", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			panelInsertar.setBounds(437, 25, 342, 263);
 			GroupLayout glPanelInsertar = new GroupLayout(panelInsertar);
-			glPanelInsertar.setHorizontalGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertar.createSequentialGroup().addContainerGap().addGroup(
-							glPanelInsertar.createParallelGroup(Alignment.LEADING).addGroup(glPanelInsertar
-									.createSequentialGroup()
-									.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING).addGroup(
-											glPanelInsertar.createSequentialGroup().addGroup(glPanelInsertar
-													.createParallelGroup(Alignment.LEADING, false)
-													.addComponent(getLblIdentificadorPared(), GroupLayout.DEFAULT_SIZE,
-															GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-													.addComponent(getLblMatPred(), GroupLayout.DEFAULT_SIZE,
-															GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-													.addComponent(getLblTipoDerrumbePared(), GroupLayout.DEFAULT_SIZE,
-															GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-													.addGap(26))
-											.addGroup(glPanelInsertar.createSequentialGroup()
-													.addComponent(getLblParedCarga(), GroupLayout.DEFAULT_SIZE, 133,
-															Short.MAX_VALUE)
-													.addPreferredGap(ComponentPlacement.RELATED)))
-									.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+			glPanelInsertar.setHorizontalGroup(
+				glPanelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelInsertar.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+							.addGroup(glPanelInsertar.createSequentialGroup()
+								.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+									.addComponent(getLblParedCarga(), GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+									.addComponent(getLblIdentificadorPared(), GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+									.addComponent(getLblMatPred(), GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+									.addComponent(getLblTipoDerrumbePared(), GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))
+								.addGap(13)
+								.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+									.addGroup(glPanelInsertar.createSequentialGroup()
+										.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
 											.addComponent(getComboBoxTipoDerrumbePared(), 0, 173, Short.MAX_VALUE)
 											.addComponent(getComboBoxMatPredPared(), 0, 173, Short.MAX_VALUE)
-											.addComponent(getTxtIdentificadorPared(), GroupLayout.DEFAULT_SIZE, 173,
-													Short.MAX_VALUE)
-											.addComponent(getCBoxParedCarga(), GroupLayout.PREFERRED_SIZE, 19,
-													GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED))
-									.addGroup(glPanelInsertar.createSequentialGroup()
-											.addComponent(getBtnOKPared(), GroupLayout.PREFERRED_SIZE, 75,
-													GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(getBtnCancelarPared())))
-							.addGap(10)));
-			glPanelInsertar.setVerticalGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertar.createSequentialGroup().addContainerGap()
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblIdentificadorPared()).addComponent(getTxtIdentificadorPared(),
-											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblMatPred())
-									.addComponent(getComboBoxMatPredPared(), GroupLayout.PREFERRED_SIZE,
-											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblTipoDerrumbePared())
-									.addComponent(getComboBoxTipoDerrumbePared(), GroupLayout.PREFERRED_SIZE,
-											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.TRAILING)
-									.addComponent(getCBoxParedCarga()).addComponent(getLblParedCarga()))
-							.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getBtnOKPared()).addComponent(getBtnCancelarPared()))
-							.addGap(23)));
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] { getComboBoxTipoDerrumbePared(),
-					getComboBoxMatPredPared(), getTxtIdentificadorPared() });
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblIdentificadorPared(), getLblMatPred(), getLblTipoDerrumbePared() });
+											.addComponent(getTxtIdentificadorPared(), GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+										.addPreferredGap(ComponentPlacement.RELATED))
+									.addComponent(getCBoxParedCarga(), GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(glPanelInsertar.createSequentialGroup()
+								.addComponent(getBtnOKPared(), GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(getBtnCancelarPared())))
+						.addGap(0))
+			);
+			glPanelInsertar.setVerticalGroup(
+				glPanelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelInsertar.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblIdentificadorPared())
+							.addComponent(getTxtIdentificadorPared(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblMatPred())
+							.addComponent(getComboBoxMatPredPared(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblTipoDerrumbePared())
+							.addComponent(getComboBoxTipoDerrumbePared(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+							.addGroup(glPanelInsertar.createSequentialGroup()
+								.addGap(25)
+								.addComponent(getLblParedCarga()))
+							.addGroup(glPanelInsertar.createSequentialGroup()
+								.addGap(18)
+								.addComponent(getCBoxParedCarga(), GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+						.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getBtnOKPared())
+							.addComponent(getBtnCancelarPared()))
+						.addGap(23))
+			);
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] {getLblIdentificadorPared(), getLblMatPred(), getLblTipoDerrumbePared()});
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] {getComboBoxTipoDerrumbePared(), getComboBoxMatPredPared(), getTxtIdentificadorPared()});
 			panelInsertar.setLayout(glPanelInsertar);
 		}
 		return panelInsertar;
@@ -180,6 +182,7 @@ public class PanelPared extends JPanel {
 	private JLabel getLblIdentificadorPared() {
 		if (lblIdentificadorPared == null) {
 			lblIdentificadorPared = new JLabel("Identificador");
+			lblIdentificadorPared.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblIdentificadorPared;
 	}
@@ -187,6 +190,7 @@ public class PanelPared extends JPanel {
 	private JLabel getLblMatPred() {
 		if (lblMatPred == null) {
 			lblMatPred = new JLabel("Material Predominante");
+			lblMatPred.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblMatPred;
 	}
@@ -194,6 +198,7 @@ public class PanelPared extends JPanel {
 	private JLabel getLblTipoDerrumbePared() {
 		if (lblTipoDerrumbePared == null) {
 			lblTipoDerrumbePared = new JLabel("Tipo de Derrumbe");
+			lblTipoDerrumbePared.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblTipoDerrumbePared;
 	}
@@ -201,6 +206,7 @@ public class PanelPared extends JPanel {
 	private JLabel getLblParedCarga() {
 		if (lblParedCarga == null) {
 			lblParedCarga = new JLabel("Pared de Carga");
+			lblParedCarga.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblParedCarga;
 	}
@@ -241,9 +247,8 @@ public class PanelPared extends JPanel {
 	private JCheckBox getCBoxParedCarga() {
 		if (cBoxParedCarga == null) {
 			cBoxParedCarga = new JCheckBox("");
-			cBoxParedCarga.setVerticalAlignment(SwingConstants.TOP);
-			cBoxParedCarga.setHorizontalTextPosition(SwingConstants.LEFT);
-			cBoxParedCarga.setHorizontalAlignment(SwingConstants.TRAILING);
+			cBoxParedCarga.setHorizontalAlignment(SwingConstants.RIGHT);
+			cBoxParedCarga.setHorizontalTextPosition(SwingConstants.RIGHT);
 		}
 		return cBoxParedCarga;
 	}
@@ -303,9 +308,9 @@ public class PanelPared extends JPanel {
 			btnEditarPared.setEnabled(false);
 			btnEditarPared.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (tablePared.getSelectedRowCount() > 0) {
+					if (table.getSelectedRowCount() > 0) {
 						Pared pared = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaParedes()
-								.get(tablePared.getSelectedRow());
+								.get(table.getSelectedRow());
 						txtIdentificadorPared.setText(pared.getID());
 						comboBoxMatPredPared.setSelectedItem(pared.getMaterialPredominante().getNombre());
 						comboBoxTipoDerrumbePared.setSelectedItem(pared.getTipoDerrumbe());
@@ -328,11 +333,11 @@ public class PanelPared extends JPanel {
 			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					tableModel.filtrar(filtroNumero.getText(), 1);
+					tableModel.filtrar(filtroNumero.getText(), 0);
 				}
 			});
 			filtroNumero.setColumns(10);
-			filtroNumero.setBounds(58, 25, 46, 20);
+			filtroNumero.setBounds(10, 30, 41, 20);
 		}
 		return filtroNumero;
 	}
@@ -342,11 +347,11 @@ public class PanelPared extends JPanel {
 			comboBoxParedCarga = new JComboBox();
 			comboBoxParedCarga.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					tableModel.filtrar((String) comboBoxParedCarga.getSelectedItem(), 4);
+					tableModel.filtrar((String) comboBoxParedCarga.getSelectedItem(), 3);
 				}
 			});
 			comboBoxParedCarga.setModel(new DefaultComboBoxModel(new String[] { "", "Si", "No" }));
-			comboBoxParedCarga.setBounds(332, 25, 95, 20);
+			comboBoxParedCarga.setBounds(324, 30, 103, 20);
 			comboBoxParedCarga.setSelectedItem("");
 		}
 		return comboBoxParedCarga;
@@ -361,7 +366,7 @@ public class PanelPared extends JPanel {
 							&& comboBoxTipoDerrumbePared.getSelectedItem() != null
 							&& !(txtIdentificadorPared.getText()).isEmpty()) {
 						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).setPared(
-								tablePared.getSelectedRow(),
+								table.getSelectedRow(),
 								new Pared((txtIdentificadorPared.getText()),
 										(Construccion) Sistema
 												.getMaterial((String) comboBoxMatPredPared.getSelectedItem()),
@@ -411,38 +416,27 @@ public class PanelPared extends JPanel {
 	
 	private void bloquearCamposPared(boolean bloquear) {
 		bloquear = !bloquear;
-		tablePared.setEnabled(bloquear);
+		table.setEnabled(bloquear);
 		btnAgnadirPared.setEnabled(bloquear);
 		btnBorrarPared.setEnabled(bloquear);
 		btnEditarPared.setEnabled(bloquear);
 		filtroNumero.setEnabled(bloquear);
-		cBoxSelectPared.setEnabled(bloquear);
 		comboBoxParedCarga.setEnabled(bloquear);
 		filtroIdentificador.setEnabled(bloquear);
 
 	}
 	
-	private JCheckBox getCBoxSelectPared() {
-		if (cBoxSelectPared == null) {
-			cBoxSelectPared = new JCheckBox("");
-			cBoxSelectPared.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					Auxiliary.selectAll(tableModel, cBoxSelectPared, 0);
-				}
-			});
-			cBoxSelectPared.setBorderPainted(true);
-			cBoxSelectPared.setBorder(new LineBorder(new Color(128, 128, 128)));
-			cBoxSelectPared.setHorizontalAlignment(SwingConstants.CENTER);
-			cBoxSelectPared.setBounds(10, 25, 46, 20);
-		}
-		return cBoxSelectPared;
-	}
-	
 	private JTextField getFiltroIdentificador() {
 		if (filtroIdentificador == null) {
 			filtroIdentificador = new JTextField();
+			filtroIdentificador.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					tableModel.filtrar(filtroIdentificador.getText(), 1);
+				}
+			});
 			filtroIdentificador.setColumns(10);
-			filtroIdentificador.setBounds(106, 25, 111, 20);
+			filtroIdentificador.setBounds(51, 30, 137, 20);
 		}
 		return filtroIdentificador;
 	}
@@ -452,11 +446,11 @@ public class PanelPared extends JPanel {
 			comboBoxTipoDerrumbe = new JComboBox();
 			comboBoxTipoDerrumbe.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					tableModel.filtrar((String) comboBoxTipoDerrumbe.getSelectedItem(), 3);
+					tableModel.filtrar((String) comboBoxTipoDerrumbe.getSelectedItem(), 2);
 				}
 			});
 			comboBoxTipoDerrumbe.setModel(new DefaultComboBoxModel(new String[] { "", "Parcial", "Total" }));
-			comboBoxTipoDerrumbe.setBounds(219, 25, 111, 20);
+			comboBoxTipoDerrumbe.setBounds(188, 30, 136, 20);
 			comboBoxTipoDerrumbe.setSelectedItem("");
 		}
 		return comboBoxTipoDerrumbe;

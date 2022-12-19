@@ -16,11 +16,11 @@ public class InmuebleTableModel extends DefaultTableModel implements Actualizabl
 	 * 
 	 */
 	private static final long serialVersionUID = 7853621716070275671L;
-	Class[] columnTypes = new Class[] { Boolean.class, String.class, String.class, String.class, String.class };
-	boolean[] columnEditables = new boolean[] { true, false, false, false, false };
+	Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class };
+	boolean[] columnEditables = new boolean[] { false, false, false, false };
 
 	public InmuebleTableModel() {
-		super(new Object[][] {}, new String[] { "", "#", "ID", "Nombre", "Cantidad" });
+		super(new Object[][] {}, new String[] { "#", "ID", "Nombre", "Cantidad" });
 	}
 
 	@Override
@@ -49,10 +49,10 @@ public class InmuebleTableModel extends DefaultTableModel implements Actualizabl
 		int index = 1;
 		limpiar();
 		for (T inmueble : lista) {
-			addRow(new Object[] { false, "" + index++, ((Inmueble)inmueble).getID(), ((Inmueble)inmueble).getNombre(),
-					((Inmueble)inmueble).getCantidad() });
+			addRow(new Object[] { "" + index++, ((Inmueble) inmueble).getID(), ((Inmueble) inmueble).getNombre(),
+					((Inmueble) inmueble).getCantidad() });
 		}
-		
+
 	}
 
 }
