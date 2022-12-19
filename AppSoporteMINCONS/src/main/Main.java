@@ -1,6 +1,6 @@
 package main;
 
-import visual.login.Login;
+import visual.Login;
 
 public class Main {
 

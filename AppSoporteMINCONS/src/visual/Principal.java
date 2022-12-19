@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
 import clases.Evento;
-import visual.login.Login;
 import visual.util.JImagen;
 
 public class Principal extends JImagen {

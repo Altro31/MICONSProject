@@ -1,4 +1,4 @@
-package visual.login;
+package visual;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -25,8 +25,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import visual.Frame;
 import visual.util.JImagen;
+import visual.util.JTextLoginPanel;
+
 import java.awt.Cursor;
 
 public class Login extends JFrame {
