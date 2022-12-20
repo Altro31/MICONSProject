@@ -1,12 +1,17 @@
 package clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import enums.TipoEvento;
 
-public class Evento {
+public class Evento implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3567095338747536417L;
 	private ArrayList<FichaTecnica> listaFichasTecnicas;
 	private String nombre;
 	private GregorianCalendar fechaInicio;
@@ -17,8 +22,7 @@ public class Evento {
 		listaFichasTecnicas = new ArrayList<FichaTecnica>();
 	}
 
-	public Evento(String nombre, GregorianCalendar fechaInicio, GregorianCalendar fechaFin,
-			TipoEvento tipoEvento) {
+	public Evento(String nombre, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, TipoEvento tipoEvento) {
 		this();
 
 		setFechaFin(fechaFin);
@@ -79,6 +83,17 @@ public class Evento {
 		if (pos < 0)
 			throw new IllegalArgumentException("Pos debe tener valor negativo");
 		listaFichasTecnicas.remove(pos);
+	}
+	
+	public FichaTecnica getFicha(String id) {
+		FichaTecnica ficha = null;
+		for (FichaTecnica fichaTecnica : listaFichasTecnicas) {
+			if (fichaTecnica.getID().equals(id)) {
+				ficha=fichaTecnica;
+			}
+		}
+		
+		return ficha;
 	}
 
 }

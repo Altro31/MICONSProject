@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -28,6 +26,8 @@ import javax.swing.border.BevelBorder;
 import com.toedter.calendar.JDateChooser;
 
 import clases.Evento;
+import enums.TipoEvento;
+import util.Manager;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
 
@@ -56,7 +56,7 @@ public class Eventos extends PrincipalPanel {
 	private JSpinner spinnerHoraFin;
 	private JSpinner spinnerMinFin;
 	private JLabel lblTipoEvento;
-	private JComboBox cBoxTipoEvento;
+	private JComboBox<TipoEvento> cBoxTipoEvento;
 	private JLabel lblDoblePuntoInicio;
 	private JLabel lblDoblePuntoFin;
 	private JLabel lblFechaError;
@@ -65,6 +65,12 @@ public class Eventos extends PrincipalPanel {
 	 * Create the panel.
 	 */
 	public Eventos() {
+		btnCerrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager.guardarDatos();
+				System.exit(0);
+			}
+		});
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Frame.removerRuta(Frame.getPosicionActual()[0]);
@@ -100,93 +106,103 @@ public class Eventos extends PrincipalPanel {
 			panelDatos.setBackground(new Color(255, 255, 255));
 			panelDatos.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelDatos.setBounds(27, 78, 839, 330);
-			GroupLayout gl_panelDatos = new GroupLayout(panelDatos);
-			gl_panelDatos.setHorizontalGroup(
-				gl_panelDatos.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelDatos.createSequentialGroup()
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.TRAILING)
-							.addGroup(gl_panelDatos.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(getLblHoraFin(), GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panelDatos.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_panelDatos.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(getLblFechaInicio()))
-								.addGroup(gl_panelDatos.createParallelGroup(Alignment.TRAILING)
-									.addGroup(gl_panelDatos.createSequentialGroup()
-										.addGap(194)
-										.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
-											.addComponent(getLblNombre(), GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-											.addComponent(getLblFechaFin(), GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-											.addComponent(getLblTipoEvento(), GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(gl_panelDatos.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(getLblHoraInicio(), GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)))))
-						.addGap(18)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
-							.addComponent(getLblFechaError(), GroupLayout.PREFERRED_SIZE, 422, GroupLayout.PREFERRED_SIZE)
+			GroupLayout glPanelDatos = new GroupLayout(panelDatos);
+			glPanelDatos.setHorizontalGroup(glPanelDatos.createParallelGroup(Alignment.LEADING).addGroup(glPanelDatos
+					.createSequentialGroup()
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.TRAILING)
+							.addGroup(glPanelDatos.createSequentialGroup().addContainerGap().addComponent(
+									getLblHoraFin(), GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
+							.addGroup(glPanelDatos.createParallelGroup(Alignment.TRAILING)
+									.addGroup(glPanelDatos.createSequentialGroup().addContainerGap()
+											.addComponent(getLblFechaInicio()))
+									.addGroup(glPanelDatos.createParallelGroup(Alignment.TRAILING).addGroup(glPanelDatos
+											.createSequentialGroup().addGap(194)
+											.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
+													.addComponent(getLblNombre(), GroupLayout.DEFAULT_SIZE, 150,
+															Short.MAX_VALUE)
+													.addComponent(getLblFechaFin(), GroupLayout.PREFERRED_SIZE, 117,
+															GroupLayout.PREFERRED_SIZE)
+													.addComponent(getLblTipoEvento(), GroupLayout.PREFERRED_SIZE, 109,
+															GroupLayout.PREFERRED_SIZE)))
+											.addGroup(glPanelDatos.createSequentialGroup().addContainerGap()
+													.addComponent(getLblHoraInicio(), GroupLayout.PREFERRED_SIZE, 109,
+															GroupLayout.PREFERRED_SIZE)))))
+					.addGap(18)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
+							.addComponent(getLblFechaError(), GroupLayout.PREFERRED_SIZE, 422,
+									GroupLayout.PREFERRED_SIZE)
 							.addComponent(getTextNombre(), GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panelDatos.createSequentialGroup()
-								.addComponent(getSpinnerHoraInicio(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getLblDoblePuntoInicio())
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getSpinnerMinInicio(), GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
+							.addGroup(glPanelDatos.createSequentialGroup()
+									.addComponent(getSpinnerHoraInicio(), GroupLayout.PREFERRED_SIZE,
+											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED).addComponent(getLblDoblePuntoInicio())
+									.addPreferredGap(ComponentPlacement.RELATED).addComponent(getSpinnerMinInicio(),
+											GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
 							.addComponent(getDChFechaFin(), GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE)
-							.addComponent(getDChFechaInicio(), GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE)
-							.addComponent(getCBoxTipoEvento(), GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panelDatos.createSequentialGroup()
-								.addComponent(getSpinnerHoraFin(), GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getLblDoblePuntoFin(), GroupLayout.PREFERRED_SIZE, 4, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getSpinnerMinFin(), GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(51, Short.MAX_VALUE))
-			);
-			gl_panelDatos.setVerticalGroup(
-				gl_panelDatos.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelDatos.createSequentialGroup()
-						.addGap(28)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.BASELINE, false)
-							.addComponent(getTextNombre(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getDChFechaInicio(), GroupLayout.PREFERRED_SIZE, 239,
+									GroupLayout.PREFERRED_SIZE)
+							.addComponent(getCBoxTipoEvento(), GroupLayout.PREFERRED_SIZE, 239,
+									GroupLayout.PREFERRED_SIZE)
+							.addGroup(
+									glPanelDatos.createSequentialGroup()
+											.addComponent(getSpinnerHoraFin(), GroupLayout.PREFERRED_SIZE, 52,
+													GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(getLblDoblePuntoFin(), GroupLayout.PREFERRED_SIZE, 4,
+													GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(getSpinnerMinFin(), GroupLayout.PREFERRED_SIZE, 52,
+													GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(51, Short.MAX_VALUE)));
+			glPanelDatos.setVerticalGroup(glPanelDatos.createParallelGroup(Alignment.LEADING).addGroup(glPanelDatos
+					.createSequentialGroup().addGap(28)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.BASELINE, false)
+							.addComponent(getTextNombre(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+									GroupLayout.PREFERRED_SIZE)
 							.addComponent(getLblNombre()))
-						.addGap(24)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.TRAILING)
-							.addComponent(getLblFechaInicio())
-							.addComponent(getDChFechaInicio(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-						.addGap(26)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getLblHoraInicio())
-							.addComponent(getSpinnerHoraInicio(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(getLblDoblePuntoInicio())
-							.addComponent(getSpinnerMinInicio(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(29)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING, false)
+					.addGap(24)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.TRAILING).addComponent(getLblFechaInicio())
+							.addComponent(getDChFechaInicio(), GroupLayout.PREFERRED_SIZE, 21,
+									GroupLayout.PREFERRED_SIZE))
+					.addGap(26)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.BASELINE).addComponent(getLblHoraInicio())
+							.addComponent(getSpinnerHoraInicio(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblDoblePuntoInicio()).addComponent(getSpinnerMinInicio(),
+									GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(29)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING, false)
 							.addComponent(getDChFechaFin(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panelDatos.createSequentialGroup()
-								.addGap(7)
-								.addComponent(getLblFechaFin())))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(getLblFechaError(), GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getSpinnerHoraFin(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(getLblDoblePuntoFin())
-							.addComponent(getSpinnerMinFin(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(getLblHoraFin()))
-						.addGap(18)
-						.addGroup(gl_panelDatos.createParallelGroup(Alignment.BASELINE, false)
-							.addComponent(getLblTipoEvento())
-							.addComponent(getCBoxTipoEvento(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-						.addGap(15))
-			);
-			gl_panelDatos.linkSize(SwingConstants.VERTICAL, new Component[] {getLblFechaInicio(), getLblNombre(), getLblFechaFin(), getLblHoraFin(), getLblTipoEvento(), getLblHoraInicio()});
-			gl_panelDatos.linkSize(SwingConstants.VERTICAL, new Component[] {getSpinnerHoraFin(), getSpinnerHoraInicio()});
-			gl_panelDatos.linkSize(SwingConstants.VERTICAL, new Component[] {getSpinnerMinFin(), getSpinnerMinInicio()});
-			gl_panelDatos.linkSize(SwingConstants.HORIZONTAL, new Component[] {getSpinnerHoraFin(), getSpinnerHoraInicio()});
-			gl_panelDatos.linkSize(SwingConstants.HORIZONTAL, new Component[] {getLblFechaInicio(), getLblNombre(), getLblFechaFin(), getLblHoraFin(), getLblTipoEvento(), getLblHoraInicio()});
-			gl_panelDatos.linkSize(SwingConstants.HORIZONTAL, new Component[] {getSpinnerMinFin(), getSpinnerMinInicio()});
-			panelDatos.setLayout(gl_panelDatos);
+							.addGroup(glPanelDatos.createSequentialGroup().addGap(7).addComponent(getLblFechaFin())))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(getLblFechaError(), GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(
+							glPanelDatos.createParallelGroup(Alignment.BASELINE)
+									.addComponent(getSpinnerHoraFin(), GroupLayout.PREFERRED_SIZE,
+											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblDoblePuntoFin())
+									.addComponent(getSpinnerMinFin(), GroupLayout.PREFERRED_SIZE,
+											GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblHoraFin()))
+					.addGap(18)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.BASELINE, false)
+							.addComponent(getLblTipoEvento()).addComponent(getCBoxTipoEvento(),
+									GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+					.addGap(15)));
+			glPanelDatos.linkSize(SwingConstants.VERTICAL, new Component[] { getLblFechaInicio(), getLblNombre(),
+					getLblFechaFin(), getLblHoraFin(), getLblTipoEvento(), getLblHoraInicio() });
+			glPanelDatos.linkSize(SwingConstants.VERTICAL,
+					new Component[] { getSpinnerHoraFin(), getSpinnerHoraInicio() });
+			glPanelDatos.linkSize(SwingConstants.VERTICAL,
+					new Component[] { getSpinnerMinFin(), getSpinnerMinInicio() });
+			glPanelDatos.linkSize(SwingConstants.HORIZONTAL,
+					new Component[] { getSpinnerHoraFin(), getSpinnerHoraInicio() });
+			glPanelDatos.linkSize(SwingConstants.HORIZONTAL, new Component[] { getLblFechaInicio(), getLblNombre(),
+					getLblFechaFin(), getLblHoraFin(), getLblTipoEvento(), getLblHoraInicio() });
+			glPanelDatos.linkSize(SwingConstants.HORIZONTAL,
+					new Component[] { getSpinnerMinFin(), getSpinnerMinInicio() });
+			panelDatos.setLayout(glPanelDatos);
 		}
 		return panelDatos;
 	}
@@ -270,7 +286,7 @@ public class Eventos extends PrincipalPanel {
 					 * Fin
 					 */
 					if (fechaInicio != null && fechaFin != null) {
-						if(fechaInicio.compareTo(fechaFin) >= 0) {
+						if (fechaInicio.compareTo(fechaFin) >= 0) {
 							lblFechaError.setVisible(true);
 							lblFechaFin.setForeground(Color.RED);
 							siguiente = false;
@@ -278,8 +294,8 @@ public class Eventos extends PrincipalPanel {
 							lblFechaError.setVisible(false);
 							lblFechaFin.setForeground(Color.BLACK);
 						}
-						
-				}
+
+					}
 
 					/**
 					 * Sólo ocurre si todas la condiciones anteriores suceden de forma correcta
@@ -295,7 +311,7 @@ public class Eventos extends PrincipalPanel {
 						evento.setFechaFin(fechaFin);
 						evento.setTipoEvento((enums.TipoEvento) getCBoxTipoEvento().getSelectedItem());
 
-						Frame.addRuta(fichasTecnicas, null);
+						Frame.addRuta(fichasTecnicas, evento);
 						Frame.setContentPanes(fichasTecnicas);
 
 					}
@@ -332,17 +348,8 @@ public class Eventos extends PrincipalPanel {
 	private JTextField getTextNombre() {
 		if (textNombre == null) {
 			textNombre = new JTextField();
-			textNombre.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyTyped(KeyEvent e) {
-					Character c = e.getKeyChar();
-
-					// Sólo letras y espacios Límite 30
-					if (!(Character.isLetter(c) || c == KeyEvent.VK_SPACE) || textNombre.getText().length() >= 30) {
-						e.consume();
-					}
-				}
-			});
+			Validaciones.soloLetras(textNombre, true);
+			Validaciones.limitar(textNombre, 30);
 
 			textNombre.setColumns(10);
 		}
@@ -360,10 +367,6 @@ public class Eventos extends PrincipalPanel {
 	private JDateChooser getDChFechaInicio() {
 		if (dChFechaInicio == null) {
 			dChFechaInicio = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
-			dChFechaInicio.getCalendarButton().addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
 			Validaciones.noDatos((JTextField) dChFechaInicio.getComponent(1));
 		}
 		return dChFechaInicio;
@@ -442,11 +445,11 @@ public class Eventos extends PrincipalPanel {
 		return lblTipoEvento;
 	}
 
-	private JComboBox getCBoxTipoEvento() {
+	private JComboBox<TipoEvento> getCBoxTipoEvento() {
 		if (cBoxTipoEvento == null) {
-			cBoxTipoEvento = new JComboBox();
+			cBoxTipoEvento = new JComboBox<TipoEvento>();
 			cBoxTipoEvento.setBackground(new Color(255, 255, 255));
-			cBoxTipoEvento.setModel(new DefaultComboBoxModel(enums.TipoEvento.values()));
+			cBoxTipoEvento.setModel(new DefaultComboBoxModel<TipoEvento>(enums.TipoEvento.values()));
 			cBoxTipoEvento.setSelectedItem(null);
 		}
 		return cBoxTipoEvento;

@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.Afectacion;
+import clases.FichaTecnica;
 import clases.Techo;
-import interfaces.Actualizable;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class TechoTableModel extends DefaultTableModel implements Actualizable {
+public class TechoTableModel extends DefaultTableModel {
 
 	/**
 	 * 
@@ -34,12 +33,15 @@ public class TechoTableModel extends DefaultTableModel implements Actualizable {
 		return columnEditables[column];
 	}
 
-	@Override
-	public <T> void actualizar(ArrayList<T> lista) {
+	public void actualizar() {
+		actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos());
+	}
+
+	public void actualizar(ArrayList<?> lista) {
 		int index = 1;
 		limpiar();
-		for (T techo : lista) {
-			addRow(new Object[] { index + "", ((Techo) techo).getID(), ((Techo) techo).getTipoDerrumbe().name() });
+		for (Object techo : lista) {
+			addRow(new Object[] { index + "", ((Techo) techo).getNombre(), ((Techo) techo).getTipoDerrumbe().name() });
 			index++;
 		}
 	}
@@ -49,8 +51,8 @@ public class TechoTableModel extends DefaultTableModel implements Actualizable {
 	}
 
 	public void filtrar(String textFilter, int column) {
-		ArrayList<Techo> lista = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaTechos();
-		actualizar(lista);
+		ArrayList<Techo> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos();
+		actualizar();
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
 	}

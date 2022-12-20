@@ -1,13 +1,19 @@
 package clases;
 
+import java.io.Serializable;
+
 import util.Auxiliary;
 
-public class Construccion extends Material {
+public class Construccion extends Material implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1499762410174505030L;
 	String unidadMedida;
 
 	public Construccion() {
-		super(Auxiliary.random(8), "desconocido", 0, 0);
+		super(Auxiliary.random(8), "desconocido", 1, 1);
 		unidadMedida = "metros";
 
 	}
@@ -17,11 +23,11 @@ public class Construccion extends Material {
 		this.unidadMedida = unidadMedida;
 
 	}
+
 	public Construccion(String id, String nombre, float precioUnitario, int cantidad, String unidadMedida) {
 		super(id, nombre, precioUnitario, cantidad);
 		this.unidadMedida = unidadMedida;
 	}
-	
 
 	public String getUnidadMedida() {
 		return unidadMedida.intern();

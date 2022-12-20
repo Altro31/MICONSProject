@@ -1,20 +1,11 @@
 package visual.util;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import clases.Afectacion;
-import clases.Inmueble;
-import interfaces.Actualizable;
 import util.Auxiliary;
-import util.CustomTableModel;
-import visual.Frame;
 
 public class CustomTable extends JScrollPane {
 
@@ -35,9 +26,9 @@ public class CustomTable extends JScrollPane {
 		setViewportView(getTable());
 	}
 
-	public CustomTable(Actualizable tableModel, JButton btnBorrar, JButton btnEditar, int[] columnCenter) {
+	public CustomTable(DefaultTableModel tableModel, JButton btnBorrar, JButton btnEditar, int[] columnCenter) {
 		super();
-		this.tableModel = (DefaultTableModel)tableModel;
+		this.tableModel = tableModel;
 		this.btnBorrar = btnBorrar;
 		this.btnEditar = btnEditar;
 		this.columnCenter = columnCenter;
@@ -51,16 +42,6 @@ public class CustomTable extends JScrollPane {
 			Auxiliary.quitarReordenamientoTabla(table);
 			Auxiliary.activarBotonBorrar(btnBorrar, table);
 			Auxiliary.activarBotonEditar(btnEditar, table);
-			btnBorrar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					Auxiliary.borrarSeleccion(table,
-							((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles());
-					
-					((Actualizable)tableModel).actualizar(
-							((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles());
-				}
-			});
 		}
 		return table;
 	}

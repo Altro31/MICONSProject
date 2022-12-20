@@ -1,33 +1,24 @@
 package clases;
 
-import enums.TipoDerrumbe;
-import interfaces.Identificador;
+import java.io.Serializable;
 
-public class Fachada extends Afectacion implements Identificador{
-	
-	protected String id;
+import enums.TipoDerrumbe;
+
+public class Fachada extends Afectacion implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6296330157150703523L;
 	protected String nombre;
 	protected Construccion materialPredominante;
 	protected TipoDerrumbe tipoDerrumbe;
-	
-	public Fachada(String id, String nombre, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe) {
-		setId(id);
+
+	public Fachada(String nombre, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe) {
 		setNombre(nombre);
 		setMaterialPredominante(materialPredominante);
 		setTipoDerrumbe(tipoDerrumbe);
-	
-	}
 
-	private void setId(String id) {
-		if (id.length() != 8)
-			throw new IllegalArgumentException("Identificador debe terner tamaño 8");
-		if (!id.matches("[0-9]*"))
-			throw new IllegalArgumentException("Identificador sólo puede contener numeros");
-		else{
-			this.id = id;
-		}
-		
-	
 	}
 
 	public Construccion getMaterialPredominante() {
@@ -38,29 +29,19 @@ public class Fachada extends Afectacion implements Identificador{
 		if (materialPredominante == null)
 			throw new IllegalArgumentException(" El material no debe tomar valor null");
 
-			
 		this.materialPredominante = materialPredominante;
 	}
-
 
 	public void setTipoDerrumbe(TipoDerrumbe tipoDerrumbe) {
 		if (tipoDerrumbe == null)
 			throw new IllegalArgumentException(" El tipo de derrumbe no debe tomar valor null");
 
-			
 		this.tipoDerrumbe = tipoDerrumbe;
 	}
-		
-	
-	
+
 	public TipoDerrumbe getTipoDerrumbe() {
 		return tipoDerrumbe;
 
-		
-	}
-	@Override
-	public String getID() {
-		return id.intern();
 	}
 
 	public String getNombre() {
@@ -68,6 +49,10 @@ public class Fachada extends Afectacion implements Identificador{
 	}
 
 	public void setNombre(String nombre) {
+		if (nombre == null)
+			throw new IllegalArgumentException("nombre es null");
+		if (nombre.isEmpty())
+			throw new IllegalArgumentException("nombre de contener almenos 1 caracter");
 		this.nombre = nombre;
 	}
 }

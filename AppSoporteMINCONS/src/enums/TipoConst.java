@@ -1,23 +1,19 @@
 package enums;
 
 public enum TipoConst {
-	
-	I("1"),
-	II("2"),
-	III("3"),
-	IV("4"),
-	V("5");
-	
+
+	I("1"), II("2"), III("3"), IV("4"), V("5");
+
 	String abrev;
-	
+
 	private TipoConst(String abrev) {
-		this.abrev=abrev;
+		this.abrev = abrev;
 	}
-	
+
 	public String getAbrev() {
 		return abrev;
 	}
-	
+
 	public static TipoConst getValue(String string) {
 		TipoConst tipo;
 		switch (string.toUpperCase()) {

@@ -7,22 +7,20 @@ import org.junit.Test;
 import util.Auxiliary;
 
 public class RandomTestCase {
-	
-	@Test 
+
+	@Test
 	public void testRandomPara1() {
 		assertEquals(1, Auxiliary.random(1).length());
 	}
-	
-	@Test 
+
+	@Test
 	public void testRandomPara5() {
 		assertEquals(5, Auxiliary.random(5).length());
 	}
-	
-	@Test 
+
+	@Test
 	public void testRandomPara30() {
 		assertEquals(30, Auxiliary.random(30).length());
 	}
-	
-	
-	
+
 }

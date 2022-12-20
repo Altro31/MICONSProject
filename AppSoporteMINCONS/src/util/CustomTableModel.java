@@ -10,7 +10,7 @@ public abstract class CustomTableModel extends DefaultTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = 6941451106780645342L;
-	
+
 	public CustomTableModel(Object[][] objects, String[] strings) {
 		super(objects, strings);
 	}

@@ -5,17 +5,12 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,10 +22,12 @@ import javax.swing.border.BevelBorder;
 import clases.Afectacion;
 import clases.Cubicacion;
 import clases.Evento;
+import clases.FichaTecnica;
 import clases.Sistema;
 import clases.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
+import util.Manager;
 import visual.util.CustomTable;
 import visual.util.PrincipalPanel;
 
@@ -52,20 +49,18 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton btnInsertar;
 	private JButton btnEditar;
 	private JButton btnBorrar;
-	private JButton btnInfo;
 	private JTextField filtroNumero;
 	private JTextField filtroDireccion;
 	private JTextField filtroFecha;
-	private JCheckBox cBoxSelectInmuebles;
 
 	/**
 	 * Create the panel.
 	 */
 	public FichasTecnicas() {
-		addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				System.out.println("a");
+		btnCerrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager.guardarDatos();
+				System.exit(0);
 			}
 		});
 		btnAtras.addActionListener(new ActionListener() {
@@ -80,7 +75,6 @@ public class FichasTecnicas extends PrincipalPanel {
 		add(getFiltroNumero());
 		add(getFiltroDireccion());
 		add(getFiltroFecha());
-		add(getCBoxSelectInmuebles());
 		add(getcTable());
 	}
 
@@ -89,6 +83,9 @@ public class FichasTecnicas extends PrincipalPanel {
 		if (cTable == null) {
 			tableModel = new FichaTableModel();
 			cTable = new CustomTable(tableModel, btnBorrar, btnEditar, new int[] {});
+			cTable.getTable().getColumnModel().getColumn(0).setResizable(false);
+			cTable.getTable().getColumnModel().getColumn(0).setPreferredWidth(40);
+			cTable.getTable().getColumnModel().getColumn(0).setMinWidth(40);
 			cTable.setBounds(20, 115, 742, 311);
 			table = cTable.getTable();
 		}
@@ -128,6 +125,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Cancelar");
+			btnSalir.setFocusable(false);
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Frame.removerRuta(Frame.get(1)[0]);
@@ -143,6 +141,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
+			btnAceptar.setFocusable(false);
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Sistema.addEventos((Evento) (Frame.get(1))[1]);
@@ -168,8 +167,7 @@ public class FichasTecnicas extends PrincipalPanel {
 						.addGroup(glPanelButton.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(getBtnInsertar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(getBtnEditar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnBorrar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnInfo(), Alignment.LEADING, 0, 0, Short.MAX_VALUE))
+							.addComponent(getBtnBorrar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addContainerGap(15, Short.MAX_VALUE))
 			);
 			glPanelButton.setVerticalGroup(
@@ -181,9 +179,7 @@ public class FichasTecnicas extends PrincipalPanel {
 						.addComponent(getBtnEditar())
 						.addGap(18)
 						.addComponent(getBtnBorrar())
-						.addGap(18)
-						.addComponent(getBtnInfo())
-						.addContainerGap(173, Short.MAX_VALUE))
+						.addContainerGap(214, Short.MAX_VALUE))
 			);
 			glPanelButton.linkSize(SwingConstants.HORIZONTAL, new Component[] {getBtnInsertar(), getBtnEditar(), getBtnBorrar()});
 			panelButton.setLayout(glPanelButton);
@@ -194,6 +190,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnInsertar() {
 		if (btnInsertar == null) {
 			btnInsertar = new JButton("Insertar");
+			btnInsertar.setFocusable(false);
 			btnInsertar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
@@ -201,7 +198,7 @@ public class FichasTecnicas extends PrincipalPanel {
 					Afectaciones afectaciones = new Afectaciones();
 					AsignarMateriales asignarMateriales = new AsignarMateriales();
 					Frame.addRuta(new Object[] { viviendas, afectaciones, asignarMateriales },
-							new Object[] { new Vivienda(), new Afectacion(), new Cubicacion() });
+							new FichaTecnica());
 					Frame.setContentPanes(viviendas);
 				}
 			});
@@ -212,9 +209,30 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnEditar() {
 		if (btnEditar == null) {
 			btnEditar = new JButton("Editar");
+			btnEditar.setFocusable(false);
 			btnEditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO
+
+					Evento evento = ((Evento)Frame.getPosicionActual()[1]);
+					FichaTecnica ficha = evento.getListaFichasTecnicas().get(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())-1 );
+					
+					Viviendas viviendas = new Viviendas();
+					Afectaciones afectaciones = new Afectaciones();
+					AsignarMateriales asignar = new AsignarMateriales();
+
+					Vivienda vivienda = ficha.getVivienda();
+					Afectacion afectacion = ficha.getAfect();
+					Cubicacion cubicacion = ficha.getCubicacion();
+
+					Frame.addRuta(new Object[] { viviendas, afectaciones, asignar },
+							ficha);
+
+					viviendas.actualizarCampos(vivienda);
+					afectaciones.actualizarCampos(afectacion);
+					asignar.actualizarCampos(cubicacion);
+
+					Frame.setContentPanes(viviendas);
+
 				}
 			});
 			btnEditar.setEnabled(false);
@@ -225,16 +243,16 @@ public class FichasTecnicas extends PrincipalPanel {
 	private JButton getBtnBorrar() {
 		if (btnBorrar == null) {
 			btnBorrar = new JButton("Borrar");
+			btnBorrar.setFocusable(false);
+			btnBorrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Auxiliary.borrarSeleccion(table, ((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas());
+					tableModel.actualizar(((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas());
+				}
+			});
 			btnBorrar.setEnabled(false);
 		}
 		return btnBorrar;
-	}
-
-	private JButton getBtnInfo() {
-		if (btnInfo == null) {
-			btnInfo = new JButton("Info");
-		}
-		return btnInfo;
 	}
 
 	private JTextField getFiltroNumero() {
@@ -249,7 +267,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			});
 
 			filtroNumero.setColumns(10);
-			filtroNumero.setBounds(121, 92, 97, 20);
+			filtroNumero.setBounds(20, 93, 222, 20);
 		}
 		return filtroNumero;
 	}
@@ -265,7 +283,7 @@ public class FichasTecnicas extends PrincipalPanel {
 				}
 			});
 			filtroDireccion.setColumns(10);
-			filtroDireccion.setBounds(220, 92, 317, 20);
+			filtroDireccion.setBounds(243, 93, 259, 20);
 		}
 		return filtroDireccion;
 	}
@@ -281,23 +299,12 @@ public class FichasTecnicas extends PrincipalPanel {
 			});
 			filtroFecha.setBorder(null);
 			filtroFecha.setColumns(10);
-			filtroFecha.setBounds(539, 92, 223, 20);
+			filtroFecha.setBounds(503, 93, 259, 20);
 		}
 		return filtroFecha;
 	}
-	private JCheckBox getCBoxSelectInmuebles() {
-		if (cBoxSelectInmuebles == null) {
-			cBoxSelectInmuebles = new JCheckBox("");
-			cBoxSelectInmuebles.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					Auxiliary.selectAll(tableModel, cBoxSelectInmuebles, 0);
-				}
-			});
-			cBoxSelectInmuebles.setBorder(null);
-			cBoxSelectInmuebles.setHorizontalAlignment(SwingConstants.CENTER);
-			cBoxSelectInmuebles.setBorderPainted(true);
-			cBoxSelectInmuebles.setBounds(20, 92, 99, 20);
-		}
-		return cBoxSelectInmuebles;
+
+	public FichaTableModel getTableModel() {
+		return tableModel;
 	}
 }

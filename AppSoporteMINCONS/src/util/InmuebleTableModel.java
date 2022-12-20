@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.Afectacion;
+import clases.FichaTecnica;
 import clases.Inmueble;
-import interfaces.Actualizable;
+import clases.Material;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class InmuebleTableModel extends DefaultTableModel implements Actualizable {
+public class InmuebleTableModel extends DefaultTableModel {
 
 	/**
 	 * 
@@ -38,19 +38,22 @@ public class InmuebleTableModel extends DefaultTableModel implements Actualizabl
 	}
 
 	public void filtrar(String textFilter, int column) {
-		ArrayList<Inmueble> lista = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles();
+		ArrayList<Inmueble> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaInmuebles();
 		actualizar(lista);
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
 	}
 
-	@Override
-	public <T> void actualizar(ArrayList<T> lista) {
+	public void actualizar() {
+		actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaInmuebles());
+	}
+
+	public void actualizar(ArrayList<?> lista) {
 		int index = 1;
 		limpiar();
-		for (T inmueble : lista) {
-			addRow(new Object[] { "" + index++, ((Inmueble) inmueble).getID(), ((Inmueble) inmueble).getNombre(),
-					((Inmueble) inmueble).getCantidad() });
+		for (Object inmueble : lista) {
+			addRow(new Object[] { "" + index++, ((Material) inmueble).getID(), ((Material) inmueble).getNombre(),
+					((Material) inmueble).getCantidad() });
 		}
 
 	}

@@ -1,16 +1,15 @@
 package clases;
 
 import enums.TipoDerrumbe;
-import util.Auxiliary;
 
-public class Techo extends Fachada{
+public class Techo extends Fachada {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8528196489430907386L;
 
 	public Techo(String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe) {
-		super(Auxiliary.random(8), identidicador, materialPredominante, tipoDerrumbe);
+		super(identidicador, materialPredominante, tipoDerrumbe);
 	}
-	
-	public Techo(String id, String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe) {
-		super(id, identidicador, materialPredominante, tipoDerrumbe);
-	}
-	
 }

@@ -1,15 +1,20 @@
 package clases;
 
+import java.io.Serializable;
+
 import interfaces.Identificador;
 import util.Auxiliary;
 
-public class FichaTecnica implements Identificador{
-	
+public class FichaTecnica implements Serializable, Identificador {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7260472950220116082L;
 	private String id;
 	private Vivienda vivienda;
 	private Afectacion afect;
 	private Cubicacion cubicacion;
-	
 
 	public FichaTecnica() {
 		id = Auxiliary.random(8);
@@ -17,7 +22,7 @@ public class FichaTecnica implements Identificador{
 		afect = new Afectacion();
 		cubicacion = new Cubicacion();
 	}
-	
+
 	public Vivienda getVivienda() {
 		return vivienda;
 	}
@@ -43,9 +48,9 @@ public class FichaTecnica implements Identificador{
 	public Cubicacion getCubicacion() {
 		return cubicacion;
 	}
-	
+
 	public void setCubicacion(Cubicacion cubicacion) {
-		if(cubicacion==null)
+		if (cubicacion == null)
 			throw new IllegalArgumentException("La cubicacion no puede ser null");
 		this.cubicacion = cubicacion;
 	}

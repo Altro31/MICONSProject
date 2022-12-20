@@ -41,12 +41,16 @@ public final class Validaciones {
 	}
 
 	// Sólo se pueden introducir letras
-	public static void soloLetras(final JTextField c) {
+	public static void soloLetras(final JTextField c, final boolean espacios) {
 		c.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (!Character.isDigit(e.getKeyChar()))
+				Character c = e.getKeyChar();
+
+				// Sólo letras y espacios
+				if (!(Character.isLetter(c) || (espacios && c == KeyEvent.VK_SPACE))) {
 					e.consume();
+				}
 			}
 		});
 	}
@@ -107,6 +111,20 @@ public final class Validaciones {
 		});
 	}
 
+	public static void soloLetrasYNumeros(final JTextField c, final boolean espacios) {
+		c.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				Character c = e.getKeyChar();
+
+				// Sólo letras y espacios
+				if (!(Character.isLetter(c) || (espacios && c == KeyEvent.VK_SPACE) || Character.isDigit(c))) {
+					e.consume();
+				}
+			}
+		});
+	}
+
 	public static void limitar(final JTextField t, final int limite) {
 		t.addKeyListener(new KeyAdapter() {
 			@Override
@@ -130,6 +148,7 @@ public final class Validaciones {
 
 	/**
 	 * El Spinner receptor cambia su valor segun lo hace el Spinner accionador
+	 * 
 	 * @param accionador JSpinner que desencadena la acción
 	 * @param receptor   JSpinner que cambia en consecuencia de la accion
 	 * @param check      Variable que controla el último valor del JSpinner
@@ -138,8 +157,7 @@ public final class Validaciones {
 	 *      valor de retorno de éste método, de otro modo, no funciona
 	 */
 
-	public static void relacionarSpinners(final JSpinner accionador, final JSpinner receptor,
-			final Value check) {
+	public static void relacionarSpinners(final JSpinner accionador, final JSpinner receptor, final Value check) {
 		accionador.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				final int value = (int) accionador.getValue();
@@ -151,7 +169,7 @@ public final class Validaciones {
 				} else {
 					receptor.setValue((int) receptor.getValue() - 1);
 				}
-				check.val=value;
+				check.val = value;
 			}
 		});
 	}

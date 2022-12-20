@@ -1,38 +1,36 @@
 package visual;
 
-import visual.util.PrincipalPanel;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.util.ArrayList;
 import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import javax.swing.border.TitledBorder;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
-import clases.Afectacion;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+import clases.Construccion;
 import clases.Cubicacion;
 import clases.Evento;
 import clases.FichaTecnica;
 import clases.Material;
 import clases.Sistema;
-import clases.Vivienda;
 import util.AsignarTableModel;
-import util.Auxiliary;
 import util.ExistenteTableModel;
-import util.FichaTableModel;
-
-import javax.swing.ListSelectionModel;
-import javax.swing.border.EtchedBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import util.Manager;
+import visual.util.CustomTable;
+import visual.util.PrincipalPanel;
 
 public class AsignarMateriales extends PrincipalPanel {
 
@@ -46,8 +44,8 @@ public class AsignarMateriales extends PrincipalPanel {
 	private JLabel lblTitulo;
 	private JTable tableExistentes;
 	private JTable tableAsignar;
-	private JScrollPane scrollExistentes;
-	private JScrollPane scrollAsignar;
+	private CustomTable cTableExistentes;
+	private CustomTable cTableAsignar;
 	private JPanel panelCantidad;
 	private JLabel lblCantidad;
 	private JButton btnOK;
@@ -58,20 +56,43 @@ public class AsignarMateriales extends PrincipalPanel {
 	private ExistenteTableModel modelExistentes;
 	private AsignarTableModel modelAsignar;
 	private JSpinner spinnerCantidad;
+	private ArrayList<Construccion> lista;
+
 	/**
 	 * Create the panel.
 	 */
 	public AsignarMateriales() {
+		btnCerrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager.guardarDatos();
+				System.exit(0);
+			}
+		});
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Frame.setContentPanes((Afectaciones) ((Object[]) Frame.getPosicionActual()[0])[1]);
 			}
 		});
+		lista = getListaMateriales();
 		add(getPanel());
 		add(getLblTitulo());
 		add(getPanelButton2());
 
 	}
+
+	private ArrayList<Construccion> getListaMateriales() {
+
+		ArrayList<Construccion> listaMateriales = new ArrayList<Construccion>();
+		for (Material m : Sistema.getListaMateriales()) {
+			if (m instanceof Construccion) {
+				listaMateriales.add((Construccion) m);
+			}
+		}
+
+		return listaMateriales;
+
+	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -79,36 +100,52 @@ public class AsignarMateriales extends PrincipalPanel {
 			panel.setLayout(null);
 			panel.add(getBtnRemove());
 			panel.add(getBtnAdd());
-			panel.add(getScrollExistentes());
-			panel.add(getScrollAsignar());
+			panel.add(getCTableExistentes());
+			panel.add(getCTableAsignar());
 			panel.add(getPanelCantidad());
 		}
 		return panel;
 	}
+
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
-			btnRemove = new JButton("<-");
+			btnRemove = new JButton("");
+			btnRemove.setEnabled(false);
+			btnRemove.setIcon(new ImageIcon(AsignarMateriales.class.getResource("/imagenes/Left.png")));
+			btnRemove.setFocusable(false);
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(tableAsignar.getSelectedRowCount()>0) {
-						int index = tableAsignar.getSelectedRow();
-						Cubicacion cubicacion = ((Cubicacion)((Object[])Frame.getPosicionActual()[1])[2]);
-						cubicacion.eliminarMaterial(index);
-						modelAsignar.actualizar(cubicacion.getListaMateriales());
+					if (tableAsignar.getSelectedRowCount() > 0) {
+
+						ArrayList<Material> lista = ((FichaTecnica) Frame.getPosicionActual()[1]).getCubicacion()
+								.getListaMateriales();
+						ArrayList<Material> lista2 = new ArrayList<Material>();
+						for (int i : tableAsignar.getSelectedRows()) {
+							lista2.add(lista.get(i));
+						}
+						lista.removeAll(lista2);
+
+						modelAsignar.actualizar(lista);
+
 					}
 				}
 			});
-			btnRemove.setBounds(382, 228, 59, 29);
+			btnRemove.setBounds(382, 237, 59, 29);
 		}
 		return btnRemove;
 	}
+
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
-			btnAdd = new JButton("->");
+			btnAdd = new JButton("");
+			btnAdd.setEnabled(false);
+			btnAdd.setIcon(new ImageIcon(AsignarMateriales.class.getResource("/imagenes/Right.png")));
+			btnAdd.setFocusable(false);
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(tableExistentes.getSelectedRowCount()>0) {
-						panelCantidad.setVisible(true);
+					if (tableExistentes.getSelectedRowCount() > 0) {
+						spinnerCantidad.setValue(0);
+						bloquearCampos(true);
 					}
 				}
 			});
@@ -116,6 +153,7 @@ public class AsignarMateriales extends PrincipalPanel {
 		}
 		return btnAdd;
 	}
+
 	private JLabel getLblTitulo() {
 		if (lblTitulo == null) {
 			lblTitulo = new JLabel("Asignacion de Materiales para la Construcción");
@@ -128,53 +166,53 @@ public class AsignarMateriales extends PrincipalPanel {
 		}
 		return lblTitulo;
 	}
-	private JTable getTableExistentes() {
-		if (tableExistentes == null) {
-			tableExistentes = new JTable();
-			tableExistentes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+	private CustomTable getCTableExistentes() {
+		if (cTableExistentes == null) {
 			modelExistentes = new ExistenteTableModel();
-			tableExistentes.setModel(modelExistentes);
-			modelExistentes.actualizar(Sistema.getListaMateriales());
-			tableExistentes.getColumnModel().getColumn(0).setResizable(false);
-			tableExistentes.getColumnModel().getColumn(1).setPreferredWidth(98);
+			cTableExistentes = new CustomTable(modelExistentes, btnAdd, null, new int[] { 1 });
+			cTableExistentes.getTable().getColumnModel().getColumn(0).setResizable(false);
+			cTableExistentes.getTable().getColumnModel().getColumn(1).setResizable(false);
+			cTableExistentes.getTable().getColumnModel().getColumn(1).setPreferredWidth(100);
+			cTableExistentes.getTable().getColumnModel().getColumn(1).setMaxWidth(100);
+			cTableExistentes.setBorder(new TitledBorder(
+					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+					"Materiales Existentes", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			cTableExistentes.setBounds(10, 11, 359, 328);
+			tableExistentes = cTableExistentes.getTable();
+			modelExistentes.actualizar(lista);
+			tableExistentes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
-		return tableExistentes;
+		return cTableExistentes;
 	}
-	private JTable getTableAsignar() {
-		if (tableAsignar == null) {
-			tableAsignar = new JTable();
-			tableAsignar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+	private CustomTable getCTableAsignar() {
+		if (cTableAsignar == null) {
 			modelAsignar = new AsignarTableModel();
-			tableAsignar.setModel(modelAsignar);
-			tableAsignar.getColumnModel().getColumn(0).setResizable(false);
-			tableAsignar.getColumnModel().getColumn(1).setResizable(false);
-			tableAsignar.getColumnModel().getColumn(2).setResizable(false);
+			cTableAsignar = new CustomTable(modelAsignar, btnRemove, null, new int[] { 1, 2 });
+			cTableAsignar.getTable().getColumnModel().getColumn(0).setResizable(false);
+			cTableAsignar.getTable().getColumnModel().getColumn(1).setResizable(false);
+			cTableAsignar.getTable().getColumnModel().getColumn(1).setPreferredWidth(100);
+			cTableAsignar.getTable().getColumnModel().getColumn(1).setMaxWidth(100);
+			cTableAsignar.getTable().getColumnModel().getColumn(2).setResizable(false);
+			cTableAsignar.getTable().getColumnModel().getColumn(2).setPreferredWidth(80);
+			cTableAsignar.getTable().getColumnModel().getColumn(2).setMaxWidth(80);
+			cTableAsignar.setBorder(new TitledBorder(
+					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+					"Materiales a Asignar para la Reparación", TitledBorder.LEADING, TitledBorder.TOP, null,
+					new Color(0, 0, 0)));
+			cTableAsignar.setBounds(457, 11, 359, 328);
+			tableAsignar = cTableAsignar.getTable();
 		}
-		return tableAsignar;
+		return cTableAsignar;
 	}
-	private JScrollPane getScrollExistentes() {
-		if (scrollExistentes == null) {
-			scrollExistentes = new JScrollPane();
-			scrollExistentes.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Materiales Existentes", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			scrollExistentes.setBounds(10, 11, 359, 328);
-			scrollExistentes.setViewportView(getTableExistentes());
-		}
-		return scrollExistentes;
-	}
-	private JScrollPane getScrollAsignar() {
-		if (scrollAsignar == null) {
-			scrollAsignar = new JScrollPane();
-			scrollAsignar.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Materiales a Asignar", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			scrollAsignar.setBounds(457, 11, 359, 328);
-			scrollAsignar.setViewportView(getTableAsignar());
-		}
-		return scrollAsignar;
-	}
+
 	private JPanel getPanelCantidad() {
 		if (panelCantidad == null) {
 			panelCantidad = new JPanel();
+			panelCantidad.setBorder(null);
 			panelCantidad.setVisible(false);
-			panelCantidad.setBounds(372, 134, 82, 83);
+			panelCantidad.setBounds(372, 134, 82, 92);
 			panelCantidad.setLayout(null);
 			panelCantidad.add(getLblCantidad());
 			panelCantidad.add(getBtnOK());
@@ -183,6 +221,7 @@ public class AsignarMateriales extends PrincipalPanel {
 		}
 		return panelCantidad;
 	}
+
 	private JLabel getLblCantidad() {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("Cantidad");
@@ -191,66 +230,104 @@ public class AsignarMateriales extends PrincipalPanel {
 		}
 		return lblCantidad;
 	}
+
 	private JButton getBtnOK() {
 		if (btnOK == null) {
 			btnOK = new JButton("");
+			btnOK.setFocusable(false);
+			btnOK.setIcon(new ImageIcon(AsignarMateriales.class.getResource("/imagenes/OK.png")));
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int index = tableExistentes.getSelectedRow();
-					Material material = Sistema.getListaMateriales().get(index);
-					material.setCantidad(((Integer)spinnerCantidad.getValue()).intValue());
-					Cubicacion cubicacion = ((Cubicacion)((Object[])Frame.getPosicionActual()[1])[2]);
-					cubicacion.addMaterial(material);
-					
-					modelAsignar.actualizar(cubicacion.getListaMateriales());
-					
-					panelCantidad.setVisible(false);
+					Material material = lista.get(index);
+					int cantidad = ((Integer) spinnerCantidad.getValue()).intValue();
+					if (cantidad > 0) {
+						Material m = null;
+
+						try {
+							m = (Material) material.clone();
+						} catch (CloneNotSupportedException e1) {
+							e1.printStackTrace();
+						}
+
+						m.setCantidad(cantidad);
+						Cubicacion cubicacion = ((FichaTecnica) Frame.getPosicionActual()[1]).getCubicacion();
+						cubicacion.getListaMateriales().add(m);
+
+						modelAsignar.actualizar(cubicacion.getListaMateriales());
+
+						bloquearCampos(false);
+					}
 				}
 			});
 			btnOK.setBounds(9, 53, 26, 23);
 		}
 		return btnOK;
 	}
+
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton("");
+			btnCancel.setFocusable(false);
+			btnCancel.setIcon(new ImageIcon(AsignarMateriales.class.getResource("/imagenes/Cancel.png")));
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					panelCantidad.setVisible(false);
+
+					bloquearCampos(false);
 				}
 			});
 			btnCancel.setBounds(45, 53, 26, 23);
 		}
 		return btnCancel;
 	}
+
 	private JPanel getPanelButton2() {
 		if (panelButton2 == null) {
 			panelButton2 = new JPanel();
-			panelButton2.setBounds(32, 433, 826, 36);
+			panelButton2.setBounds(32, 431, 826, 46);
+			panelButton2.setLayout(null);
 			panelButton2.add(getBtnSiguiente());
 			panelButton2.add(getBtnCancelar());
 		}
 		return panelButton2;
 	}
+
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					FichaTecnica ficha = new FichaTecnica();
-					ficha.setVivienda(((Vivienda)((Object[])Frame.getPosicionActual()[1])[0]));
-					ficha.setAfect(((Afectacion)((Object[])Frame.getPosicionActual()[1])[1]));
-					ficha.setCubicacion(((Cubicacion)((Object[])Frame.getPosicionActual()[1])[2]));
-					Evento evento = (Evento)Frame.get(1)[1];
+
+					Evento evento = (Evento) Frame.get(1)[1];
+					FichaTecnica ficha = (FichaTecnica) Frame.getPosicionActual()[1];
+					try {
+						for (FichaTecnica fichaTecnica : evento.getListaFichasTecnicas()) {
+							if (fichaTecnica.getID().equals(ficha.getID())) {
+								evento.getListaFichasTecnicas().remove(evento.getFicha(fichaTecnica.getID()));
+							}
+						}
+					} catch (ConcurrentModificationException e1) {
+					}
+
+					ficha.setVivienda(((FichaTecnica) Frame.getPosicionActual()[1]).getVivienda());
+					ficha.setAfect(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect());
+					ficha.setCubicacion(((FichaTecnica) Frame.getPosicionActual()[1]).getCubicacion());
+
 					evento.addFichaTecnica(ficha);
+
 					Frame.removerRuta(Frame.get(3)[0]);
 					Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
-					
+					((FichasTecnicas) Frame.getPosicionActual()[0]).getTableModel()
+							.actualizar(((Evento) Frame.get(1)[1]).getListaFichasTecnicas());
+
 				}
 			});
+
+			btnSiguiente.setBounds(246, 11, 89, 23);
 		}
 		return btnSiguiente;
 	}
+
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
@@ -260,15 +337,33 @@ public class AsignarMateriales extends PrincipalPanel {
 					Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
 				}
 			});
+			btnCancelar.setBounds(482, 11, 89, 23);
 		}
 		return btnCancelar;
 	}
+
 	private JSpinner getSpinnerCantidad() {
 		if (spinnerCantidad == null) {
 			spinnerCantidad = new JSpinner();
-			spinnerCantidad.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+			spinnerCantidad
+					.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 			spinnerCantidad.setBounds(10, 27, 62, 23);
 		}
 		return spinnerCantidad;
+	}
+
+	private void bloquearCampos(boolean bloquear) {
+		bloquear = !bloquear;
+		panelCantidad.setVisible(!bloquear);
+		tableExistentes.setEnabled(bloquear);
+		btnAdd.setEnabled(bloquear);
+		btnRemove.setEnabled(bloquear);
+		tableAsignar.setEnabled(bloquear);
+		btnSiguiente.setEnabled(bloquear);
+		btnCancelar.setEnabled(bloquear);
+	}
+
+	public void actualizarCampos(Cubicacion cubicacion) {
+		modelAsignar.actualizar(cubicacion.getListaMateriales());
 	}
 }

@@ -1,10 +1,13 @@
 
 package clases;
 
+import java.io.Serializable;
+
 import interfaces.Identificador;
 
-public abstract class Material implements Identificador {
+public abstract class Material implements Identificador, Serializable, Cloneable {
 
+	private static final long serialVersionUID = 1540851799326861293L;
 	protected String id;
 	protected String nombre;
 	protected float precioUnitario;
@@ -18,6 +21,17 @@ public abstract class Material implements Identificador {
 		setCantidad(cant);
 	}
 
+	// Métodos
+	
+	public float calcularPrecioFinal() {
+		return precioUnitario*cantidad;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
 	// Setters y Getters
 
 	public String getNombre() {
@@ -40,8 +54,6 @@ public abstract class Material implements Identificador {
 	public void setPrecioUnitario(float precioUnitario) throws IllegalArgumentException {
 		if (precioUnitario <= 0)
 			throw new IllegalArgumentException("El precio debe ser mayor que cero");
-		if (precioUnitario > 1000)
-			throw new IllegalArgumentException("El precio unitario no puede ser mayor que 1000 ");
 
 		this.precioUnitario = precioUnitario;
 	}

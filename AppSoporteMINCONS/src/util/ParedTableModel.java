@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.Afectacion;
+import clases.FichaTecnica;
 import clases.Pared;
-import interfaces.Actualizable;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class ParedTableModel extends DefaultTableModel implements Actualizable {
+public class ParedTableModel extends DefaultTableModel {
 
 	/**
 	 * 
@@ -34,13 +33,16 @@ public class ParedTableModel extends DefaultTableModel implements Actualizable {
 		return columnEditables[column];
 	}
 
-	@Override
-	public <T> void actualizar(ArrayList<T> lista) {
+	public void actualizar() {
+		actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes());
+	}
+
+	public void actualizar(ArrayList<?> lista) {
 		int index = 1;
 		limpiar();
-		for (T pared : lista) {
-			addRow(new Object[] { index + "", ((Pared)pared).getID(), ((Pared)pared).getTipoDerrumbe().toString(),
-					((Pared)pared).isEsParedCarga() ? "Si" : "No" });
+		for (Object pared : lista) {
+			addRow(new Object[] { index + "", ((Pared) pared).getNombre(), ((Pared) pared).getTipoDerrumbe().toString(),
+					((Pared) pared).isEsParedCarga() ? "Si" : "No" });
 			index++;
 		}
 	}
@@ -50,8 +52,8 @@ public class ParedTableModel extends DefaultTableModel implements Actualizable {
 	}
 
 	public void filtrar(String textFilter, int column) {
-		ArrayList<Pared> lista = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaParedes();
-		actualizar(lista);
+		ArrayList<Pared> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes();
+		actualizar();
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
 	}

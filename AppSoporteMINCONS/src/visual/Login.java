@@ -23,12 +23,17 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import util.Manager;
 import visual.util.JImagen;
 import visual.util.JTextLoginPanel;
 
 import java.awt.Cursor;
+import javax.swing.JProgressBar;
 
 public class Login extends JFrame {
 
@@ -42,6 +47,7 @@ public class Login extends JFrame {
 	private JImagen fondo;
 	private JLabel lblinfo;
 	private JLabel lblContactarnos;
+	private JProgressBar progressBar;
 
 	/** Constructor */
 	public Login() {
@@ -112,10 +118,38 @@ public class Login extends JFrame {
 
 					boolean isValid = validUser(user, password);
 					if (isValid) {
-						dispose();
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
-								Frame.setVisibles();
+								
+								Manager.cargarDatos();
+								
+								final Timer timer = new Timer(3, null);
+
+								progressBar.addChangeListener(new ChangeListener() {
+
+									@Override
+									public void stateChanged(ChangeEvent e) {
+										if (progressBar.getValue() == 100) {
+											dispose();
+											Frame.setVisibles();
+										}
+
+									}
+								});
+
+								timer.addActionListener(new ActionListener() {
+
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										if (progressBar.getValue() < 100) {
+											progressBar.setValue(progressBar.getValue() + 1);
+										} else {
+											timer.stop();
+										}
+									}
+								});
+								progressBar.setVisible(true);
+								timer.start();
 							}
 						});
 
@@ -140,6 +174,7 @@ public class Login extends JFrame {
 	private JImagen getFondo() {
 		if (fondo == null) {
 			fondo = new JImagen();
+			fondo.add(getProgressBar());
 			fondo.add(getLblinfo());
 			fondo.add(getLblContactarnos());
 		}
@@ -151,7 +186,7 @@ public class Login extends JFrame {
 			textPassword = new JTextLoginPanel(true);
 			textPassword.setBorder(new LineBorder(new Color(0, 0, 0), 0, true));
 			textPassword.setText("Contraseña");
-			textPassword.setBounds(132, 273, 349, 51);
+			textPassword.setBounds(132, 239, 349, 51);
 			textPassword.moveEyeLocation(0, 5);
 			textPassword.getTextField().addKeyListener(new KeyAdapter() {
 				@Override
@@ -170,7 +205,7 @@ public class Login extends JFrame {
 			textUsuario = new JTextLoginPanel(false);
 			textUsuario.setBorder(new LineBorder(new Color(0, 0, 0), 0, true));
 			textUsuario.setText("Usuario");
-			textUsuario.setBounds(132, 211, 349, 51);
+			textUsuario.setBounds(132, 177, 349, 51);
 			textUsuario.getTextField().addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyPressed(KeyEvent e) {
@@ -188,7 +223,7 @@ public class Login extends JFrame {
 			lblLogo = new JLabel("MICONS");
 			lblLogo.setForeground(new Color(255, 255, 255));
 			lblLogo.setFont(new Font("Stencil", Font.BOLD | Font.ITALIC, 60));
-			lblLogo.setBounds(181, 95, 251, 61);
+			lblLogo.setBounds(181, 61, 251, 61);
 		}
 		return lblLogo;
 	}
@@ -202,7 +237,7 @@ public class Login extends JFrame {
 			lblError.setBorder(new LineBorder(new Color(255, 0, 0), 2, true));
 			lblError.setOpaque(true);
 			lblError.setBackground(new Color(255, 128, 128));
-			lblError.setBounds(132, 164, 349, 36);
+			lblError.setBounds(132, 130, 349, 36);
 			lblError.setVisible(false);
 		}
 		return lblError;
@@ -240,7 +275,7 @@ public class Login extends JFrame {
 	private JLabel getLblinfo() {
 		if (lblinfo == null) {
 			lblinfo = new JLabel("No tiene una cuenta? Contacte con el administrador de ésta app para solicitar una");
-			lblinfo.setBounds(74, 410, 465, 14);
+			lblinfo.setBounds(72, 392, 465, 14);
 			lblinfo.setForeground(new Color(206, 209, 219));
 		}
 		return lblinfo;
@@ -278,8 +313,18 @@ public class Login extends JFrame {
 				}
 			});
 			lblContactarnos.setForeground(new Color(35, 216, 254));
-			lblContactarnos.setBounds(268, 425, 77, 14);
+			lblContactarnos.setBounds(266, 407, 77, 14);
 		}
 		return lblContactarnos;
+	}
+
+	private JProgressBar getProgressBar() {
+		if (progressBar == null) {
+			progressBar = new JProgressBar();
+			progressBar.setValue(10);
+			progressBar.setVisible(false);
+			progressBar.setBounds(0, 430, 614, 17);
+		}
+		return progressBar;
 	}
 }

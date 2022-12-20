@@ -1,4 +1,5 @@
 package visual.util;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -20,10 +21,11 @@ public class PrincipalPanel extends JImagen {
 	 * Create the panel.
 	 */
 	public PrincipalPanel() {
-		setBounds(0,0,891, 491);
+		setBounds(0, 0, 891, 491);
 		add(getBtnCerrar());
 		add(getBtnAtras());
 	}
+
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
 			btnCerrar = new JButton("");
@@ -44,6 +46,7 @@ public class PrincipalPanel extends JImagen {
 		}
 		return btnCerrar;
 	}
+
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("");

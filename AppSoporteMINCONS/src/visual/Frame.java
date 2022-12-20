@@ -2,15 +2,14 @@ package visual;
 
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import clases.Afectacion;
-import clases.Cubicacion;
 import clases.Evento;
-import clases.Vivienda;
 
 public class Frame extends JFrame {
 
@@ -20,7 +19,7 @@ public class Frame extends JFrame {
 	private static final long serialVersionUID = 2638223278346798429L;
 	private static Frame frame;
 	private static ArrayList<Object[]> ruta = new ArrayList<Object[]>();
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -44,25 +43,34 @@ public class Frame extends JFrame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(891, 491);
 		setLocationRelativeTo(null);
-		ruta.add(new Object[] {new Principal(), null});
+		ruta.add(new Object[] { new Principal(), null });
 	}
 
 	public static Frame getInstance() {
 		if (frame == null) {
 			frame = new Frame();
-			
-			Evento evento = new Evento();
-			
-			Viviendas viviendas = new Viviendas();
-			Afectaciones afectaciones = new Afectaciones();
-			AsignarMateriales asignarMateriales = new AsignarMateriales();
-			
-//			Frame.addRuta(new Object[] {viviendas, afectaciones}, new Object[] {new Vivienda(), new Afectacion()});
-			Frame.addRuta(new Eventos(), evento);
-			Frame.addRuta(new FichasTecnicas(), evento);
-			Frame.addRuta(new Object[] {viviendas, afectaciones, asignarMateriales}, new Object[] {new Vivienda(), new Afectacion(), new Cubicacion()});
-			frame.setContentPane((Container) ((Object[])Frame.getPosicionActual()[0])[1]);
-//			frame.setContentPanes((Container)Frame.getPosicionActual()[0]);
+
+			frame.addWindowListener(new WindowAdapter() {
+
+				@Override
+				public void windowClosed(WindowEvent e) {
+					System.out.println("a");
+				}
+			});
+
+//			Evento evento = new Evento();
+
+//			Viviendas viviendas = new Viviendas();
+//			Afectaciones afectaciones = new Afectaciones();
+//			AsignarMateriales asignarMateriales = new AsignarMateriales();
+
+//			addRuta(new Object[] { viviendas, afectaciones }, new Object[] { new Vivienda(), new Afectacion() });
+//			addRuta(new Eventos(), evento);
+//			addRuta(new FichasTecnicas(), evento);
+//			addRuta(new Object[] { viviendas, afectaciones, asignarMateriales },
+//					new Object[] { new Vivienda(), new Afectacion(), new Cubicacion() });
+//			frame.setContentPane((Container) ((Object[]) Frame.getPosicionActual()[0])[1]);
+			setContentPanes((Container)Frame.getPosicionActual()[0]);
 		}
 		return frame;
 	}
@@ -98,11 +106,11 @@ public class Frame extends JFrame {
 		getInstance();
 		return ruta.get(pos);
 	}
-	
+
 	public static Principal getPrincipal() {
-		return (Principal)get(0)[1];
+		return (Principal) get(0)[1];
 	}
-	
+
 	public static void setOnPrincipal() {
 		removerRuta(get(1)[0]);
 		setContentPanes(getPrincipal());

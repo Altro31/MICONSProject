@@ -14,13 +14,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import clases.Inmueble;
-
 //Modificador final para que no se pueda heredar de esta clase
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class Auxiliary {
 
 	public static final DefaultTableCellRenderer CellRenderCenter = getCellRenderCenter();
+	private static final Random RAND = new Random();
 
 	// Constructor privado para que no se pueda instanciar la Clase
 	private Auxiliary() {
@@ -67,15 +66,16 @@ public final class Auxiliary {
 	 * @param column     columna que se va a filtrar
 	 * @param arrayLimit tamaño de la lista con la cual se actualiza la tabla
 	 */
+
 	public static void filtro(String filterText, DefaultTableModel tableModel, int column, int arrayLimit) {
-		Vector<Object> vectorObjectDuplicado = new Vector<Object>(tableModel.getDataVector());
+		Vector<Vector> vectorObjectDuplicado = new Vector<Vector>(tableModel.getDataVector());
 		// Da una lista duplicada
-		List<Object> listaObject = vectorObjectDuplicado.subList(0, arrayLimit);
+		List<Vector> listaObject = vectorObjectDuplicado.subList(0, arrayLimit);
 		// Arregla la lista duplicada
-		List<Object> subList = new ArrayList<Object>();
+		List<Vector<Object>> subList = new ArrayList<Vector<Object>>();
 		// Filtra los datos
-		for (Object vector : listaObject) {
-			String field = ((Vector) vector).get(column).toString();
+		for (Vector<Object> vector : listaObject) {
+			String field = vector.get(column).toString();
 			if (field.toLowerCase().contains(filterText.toLowerCase())) {
 				subList.add(vector);
 			}
@@ -83,8 +83,8 @@ public final class Auxiliary {
 		limpiar(tableModel);
 		// Muestra en la tabla los datos filtrados
 		if (!subList.isEmpty()) {
-			for (Object object : subList) {
-				Vector v = (Vector) object;
+			for (Vector<Object> object : subList) {
+				Vector<Object> v = object;
 				ArrayList<Object> lista = new ArrayList<Object>();
 				for (int j = 0; j < v.size(); j++) {
 					lista.add(v.get(j));
@@ -139,12 +139,12 @@ public final class Auxiliary {
 		}
 	}
 
-	public static <T extends Object> void borrarSeleccion(JTable table, ArrayList<T> lista) {
-		
-		ArrayList<T> lista2 = new ArrayList<T>();
-		if(table!=null && lista!=null) {
+	public static void borrarSeleccion(JTable table, ArrayList<?> lista) {
+
+		ArrayList<Object> lista2 = new ArrayList<Object>();
+		if (table != null && lista != null) {
 			for (int i : table.getSelectedRows()) {
-				lista2.add(lista.get(i));
+				lista2.add(lista.get(Integer.parseInt(table.getValueAt(i, 0).toString()) - 1));
 			}
 			lista.removeAll(lista2);
 		}
@@ -158,10 +158,9 @@ public final class Auxiliary {
 	 */
 	public static String random(int size) throws IllegalArgumentException {
 		StringBuilder code = new StringBuilder();
-		Random random = new Random();
 		if (size > 0) {
 			for (int i = 0; i < size; i++) {
-				code.append(random.nextInt(10));
+				code.append(RAND.nextInt(10));
 			}
 		}
 		return code.toString();

@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -29,16 +31,15 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import clases.Afectacion;
+import clases.FichaTecnica;
 import clases.Inmueble;
 import clases.Material;
 import clases.Sistema;
+import util.Auxiliary;
 import util.InmuebleTableModel;
-import util.Validaciones;
 import visual.Frame;
 import visual.util.CustomTable;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class PanelInmueble extends JPanel {
 
 	private static final long serialVersionUID = -5730976666092226455L;
@@ -47,75 +48,104 @@ public class PanelInmueble extends JPanel {
 	private static final String ADD = "Añadir";
 	private static final String CANCEL = "Cancelar";
 
-	private CustomTable cTableInmueble;
-	private JPanel panelButtonInmueble;
+	private CustomTable cTable;
+	private JPanel panelButton;
 	private JButton btnAgnadirInmueble;
 	private JButton btnBorrarInmueble;
 	private JButton btnEditarInmueble;
-	private JTextField filtroNumeroInmueble;
-	private JPanel panelInsertarInmueble;
+	private JTextField filtroNumero;
+	private JPanel panelInsertar;
 	private JLabel lblInmueble;
-	private JComboBox comboBoxInmueble;
+	private JComboBox<String> comboBoxInmueble;
 	private JLabel lblCantidad;
 	private JSpinner spinnerCantidad;
 	private JTable table;
-	private JTextField filtroIDInmueble;
-	private JTextField filtroNombreInmueble;
-	private JTextField filtroCantidadInmueble;
-	private JLabel lblIdInmueble;
-	private JTextField txtIDInmueble;
+	private JTextField filtroID;
+	private JTextField filtroNombre;
+	private JTextField filtroCantidad;
+	private JLabel lblID;
+	private JTextField txtID;
 	private InmuebleTableModel inmuebleModel;
-	private JButton btnOKInmueble;
-	private JButton btnCancelarInmueble;
+	private JButton btnOK;
+	private JButton btnCancelar;
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelInmueble() {
+		super();
 		setLayout(null);
 		setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Inmuebles Afectados", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		add(getPanelButton());
 		add(getFiltroNumero());
-		add(getPanelInsertarInmueble());
-		add(getFiltroIDInmueble());
-		add(getFiltroNombreInmueble());
-		add(getFiltroCantidadInmueble());
-		add(getcTableInmueble());
+		add(getPanelInsertar());
+		add(getFiltroID());
+		add(getFiltroNombre());
+		add(getFiltroCantidad());
+		add(getcTable());
+
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				inmuebleModel.actualizar();
+			}
+		});
+
 	}
 
 	private JPanel getPanelButton() {
-		if (panelButtonInmueble == null) {
-			panelButtonInmueble = new JPanel();
-			FlowLayout flPanelButtonPared = (FlowLayout) panelButtonInmueble.getLayout();
-			flPanelButtonPared.setVgap(8);
-			flPanelButtonPared.setHgap(20);
-			panelButtonInmueble.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			panelButtonInmueble.setBounds(437, 299, 342, 41);
-			panelButtonInmueble.add(getBtnAgnadir());
-			panelButtonInmueble.add(getBtnBorrar());
-			panelButtonInmueble.add(getBtnEditar());
+		if (panelButton == null) {
+			panelButton = new JPanel();
+			FlowLayout flPanelButton = (FlowLayout) panelButton.getLayout();
+			flPanelButton.setVgap(8);
+			flPanelButton.setHgap(20);
+			panelButton.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			panelButton.setBounds(437, 299, 342, 41);
+			panelButton.add(getBtnAgnadir());
+			panelButton.add(getBtnBorrar());
+			panelButton.add(getBtnEditar());
 		}
-		return panelButtonInmueble;
+		return panelButton;
 	}
 
 	private JButton getBtnAgnadir() {
 		if (btnAgnadirInmueble == null) {
 			btnAgnadirInmueble = new JButton(ADD);
+			btnAgnadirInmueble.setFocusable(false);
 			btnAgnadirInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					final ArrayList<Inmueble> listaInmuebles = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
+							.getListaInmuebles();
 					if (((String) comboBoxInmueble.getSelectedItem()) != null
 							&& ((Integer) spinnerCantidad.getValue()).intValue() > 0) {
-						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles()
-								.add(new Inmueble(txtIDInmueble.getText(), (String) comboBoxInmueble.getSelectedItem(),
-										((Inmueble) Sistema.getMaterial(txtIDInmueble.getText())).getPrecioUnitario(),
-										((Integer) spinnerCantidad.getValue()).intValue()));
-						inmuebleModel.actualizar(
-								((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles());
+
+						String id = txtID.getText();
+						Inmueble inmueble = null;
+
+						boolean check = false;
+						for (Inmueble i : listaInmuebles) {
+							if (i.getID().equals(id)) {
+								check = true;
+								inmueble = i;
+							}
+						}
+
+						if (check) {
+							inmueble.setCantidad(
+									inmueble.getCantidad() + ((Integer) spinnerCantidad.getValue()).intValue());
+						} else {
+
+							listaInmuebles
+									.add(new Inmueble(txtID.getText(), (String) comboBoxInmueble.getSelectedItem(),
+											((Inmueble) Sistema.getMaterial(txtID.getText())).getPrecioUnitario(),
+											((Integer) spinnerCantidad.getValue()).intValue()));
+						}
+						inmuebleModel.actualizar();
 						comboBoxInmueble.setSelectedItem(null);
 						spinnerCantidad.setValue(0);
-						txtIDInmueble.setText("");
+						txtID.setText("");
 					}
 				}
 			});
@@ -126,6 +156,7 @@ public class PanelInmueble extends JPanel {
 	private JButton getBtnBorrar() {
 		if (btnBorrarInmueble == null) {
 			btnBorrarInmueble = new JButton(BORRAR);
+			btnBorrarInmueble.setFocusable(false);
 			btnBorrarInmueble.setEnabled(false);
 		}
 		return btnBorrarInmueble;
@@ -134,18 +165,19 @@ public class PanelInmueble extends JPanel {
 	private JButton getBtnEditar() {
 		if (btnEditarInmueble == null) {
 			btnEditarInmueble = new JButton(EDITAR);
+			btnEditarInmueble.setFocusable(false);
 			btnEditarInmueble.setEnabled(false);
 			btnEditarInmueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (table.getSelectedRowCount() > 0) {
-						Inmueble inmueble = ((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1])
-								.getListaInmuebles().get(table.getSelectedRow());
-						txtIDInmueble.setText(inmueble.getID());
+						final ArrayList<Inmueble> listaInmuebles = ((FichaTecnica) Frame.getPosicionActual()[1])
+								.getAfect().getListaInmuebles();
+						Inmueble inmueble = listaInmuebles.get(
+								Integer.parseInt((String) inmuebleModel.getValueAt(table.getSelectedRow(), 0)) - 1);
+
+						txtID.setText(inmueble.getID());
 						comboBoxInmueble.setSelectedItem(inmueble.getNombre());
 						spinnerCantidad.setValue(inmueble.getCantidad());
-
-						btnOKInmueble.setVisible(true);
-						btnCancelarInmueble.setVisible(true);
 
 						bloquearCampos(true);
 
@@ -162,94 +194,93 @@ public class PanelInmueble extends JPanel {
 		btnAgnadirInmueble.setEnabled(bloquear);
 		btnBorrarInmueble.setEnabled(bloquear);
 		btnEditarInmueble.setEnabled(bloquear);
-		filtroCantidadInmueble.setEnabled(bloquear);
-		filtroIDInmueble.setEnabled(bloquear);
-		filtroNumeroInmueble.setEnabled(bloquear);
-		filtroNombreInmueble.setEnabled(bloquear);
+		filtroCantidad.setEnabled(bloquear);
+		filtroID.setEnabled(bloquear);
+		filtroNumero.setEnabled(bloquear);
+		filtroNombre.setEnabled(bloquear);
+		comboBoxInmueble.setEnabled(bloquear);
+		btnOK.setVisible(!bloquear);
+		btnCancelar.setVisible(!bloquear);
 
 	}
 
 	private JTextField getFiltroNumero() {
-		if (filtroNumeroInmueble == null) {
-			filtroNumeroInmueble = new JTextField();
-			filtroNumeroInmueble.addKeyListener(new KeyAdapter() {
+		if (filtroNumero == null) {
+			filtroNumero = new JTextField();
+			filtroNumero.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					inmuebleModel.filtrar(filtroNumeroInmueble.getText(), 0);
+					inmuebleModel.filtrar(filtroNumero.getText(), 0);
 				}
 			});
-			filtroNumeroInmueble.setColumns(10);
-			filtroNumeroInmueble.setBounds(10, 30, 41, 20);
+			filtroNumero.setColumns(10);
+			filtroNumero.setBounds(10, 30, 41, 20);
 		}
-		return filtroNumeroInmueble;
+		return filtroNumero;
 	}
 
-	private JPanel getPanelInsertarInmueble() {
-		if (panelInsertarInmueble == null) {
-			panelInsertarInmueble = new JPanel();
-			panelInsertarInmueble.setBorder(new TitledBorder(
+	private JPanel getPanelInsertar() {
+		if (panelInsertar == null) {
+			panelInsertar = new JPanel();
+			panelInsertar.setBorder(new TitledBorder(
 					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 					"Insertar Inmueble", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			panelInsertarInmueble.setBounds(437, 25, 342, 263);
-			GroupLayout glPanelInsertarInmueble = new GroupLayout(panelInsertarInmueble);
-			glPanelInsertarInmueble.setHorizontalGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertarInmueble.createSequentialGroup().addContainerGap()
-							.addGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.LEADING)
-									.addGroup(glPanelInsertarInmueble.createSequentialGroup()
-											.addComponent(getLblIdInmueble(), GroupLayout.PREFERRED_SIZE, 82,
+			panelInsertar.setBounds(437, 25, 342, 263);
+			GroupLayout gl_panelInsertar = new GroupLayout(panelInsertar);
+			gl_panelInsertar.setHorizontalGroup(gl_panelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelInsertar.createSequentialGroup().addContainerGap()
+							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_panelInsertar.createSequentialGroup()
+											.addComponent(getLblID(), GroupLayout.PREFERRED_SIZE, 82,
 													GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(getTxtIDInmueble(), GroupLayout.PREFERRED_SIZE, 199,
-													GroupLayout.PREFERRED_SIZE))
-									.addGroup(glPanelInsertarInmueble.createSequentialGroup()
+											.addPreferredGap(ComponentPlacement.RELATED).addComponent(getTxtID(),
+													GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
+									.addGroup(gl_panelInsertar.createSequentialGroup()
 											.addComponent(getLblInmueble(), GroupLayout.PREFERRED_SIZE, 82,
 													GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addComponent(getComboBoxInmueble(), GroupLayout.PREFERRED_SIZE, 200,
 													GroupLayout.PREFERRED_SIZE))
-									.addGroup(glPanelInsertarInmueble.createSequentialGroup()
+									.addGroup(gl_panelInsertar.createSequentialGroup()
 											.addComponent(getLblCantidad(), GroupLayout.PREFERRED_SIZE, 82,
 													GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(getSpinnerCantidad(), GroupLayout.PREFERRED_SIZE, 55,
+											.addPreferredGap(ComponentPlacement.RELATED).addComponent(
+													getSpinnerCantidad(), GroupLayout.PREFERRED_SIZE, 55,
 													GroupLayout.PREFERRED_SIZE))
-									.addGroup(glPanelInsertarInmueble.createSequentialGroup()
-											.addComponent(getBtnOKInmueble())
+									.addGroup(gl_panelInsertar.createSequentialGroup().addComponent(getBtnOK())
 											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(getBtnCancelarInmueble())))
+											.addComponent(getBtnCancelar())))
 							.addContainerGap(24, Short.MAX_VALUE)));
-			glPanelInsertarInmueble.setVerticalGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelInsertarInmueble.createSequentialGroup().addGap(19)
-							.addGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblIdInmueble(), GroupLayout.PREFERRED_SIZE, 27,
+			gl_panelInsertar.setVerticalGroup(gl_panelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelInsertar.createSequentialGroup().addGap(19)
+							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE)
+									.addComponent(getLblID(), GroupLayout.PREFERRED_SIZE, 27,
 											GroupLayout.PREFERRED_SIZE)
-									.addComponent(getTxtIDInmueble(), GroupLayout.PREFERRED_SIZE, 22,
+									.addComponent(getTxtID(), GroupLayout.PREFERRED_SIZE, 22,
 											GroupLayout.PREFERRED_SIZE))
 							.addGap(20)
-							.addGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.BASELINE)
+							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblInmueble(), GroupLayout.PREFERRED_SIZE, 27,
 											GroupLayout.PREFERRED_SIZE)
 									.addComponent(getComboBoxInmueble(), GroupLayout.PREFERRED_SIZE, 23,
 											GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
-							.addGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.BASELINE)
+							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblCantidad(), GroupLayout.PREFERRED_SIZE, 27,
 											GroupLayout.PREFERRED_SIZE)
 									.addComponent(getSpinnerCantidad(), GroupLayout.PREFERRED_SIZE, 24,
 											GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-							.addGroup(glPanelInsertarInmueble.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getBtnOKInmueble()).addComponent(getBtnCancelarInmueble()))
+							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE).addComponent(getBtnOK())
+									.addComponent(getBtnCancelar()))
 							.addContainerGap()));
-			glPanelInsertarInmueble.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getTxtIDInmueble(), getComboBoxInmueble(), getSpinnerCantidad() });
-			glPanelInsertarInmueble.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getTxtIDInmueble(), getComboBoxInmueble() });
-			glPanelInsertarInmueble.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getBtnOKInmueble(), getBtnCancelarInmueble() });
-			panelInsertarInmueble.setLayout(glPanelInsertarInmueble);
+			gl_panelInsertar.linkSize(SwingConstants.VERTICAL,
+					new Component[] { getTxtID(), getComboBoxInmueble(), getSpinnerCantidad() });
+			gl_panelInsertar.linkSize(SwingConstants.HORIZONTAL, new Component[] { getTxtID(), getComboBoxInmueble() });
+			gl_panelInsertar.linkSize(SwingConstants.HORIZONTAL, new Component[] { getBtnOK(), getBtnCancelar() });
+			panelInsertar.setLayout(gl_panelInsertar);
 		}
-		return panelInsertarInmueble;
+		return panelInsertar;
 	}
 
 	private JLabel getLblInmueble() {
@@ -260,7 +291,7 @@ public class PanelInmueble extends JPanel {
 		return lblInmueble;
 	}
 
-	private JComboBox getComboBoxInmueble() {
+	private JComboBox<String> getComboBoxInmueble() {
 		if (comboBoxInmueble == null) {
 			ArrayList<String> names = new ArrayList<String>();
 			for (Material mat : Sistema.getListaMateriales()) {
@@ -268,12 +299,12 @@ public class PanelInmueble extends JPanel {
 					names.add(mat.getNombre());
 				}
 			}
-			comboBoxInmueble = new JComboBox(new DefaultComboBoxModel(names.toArray()));
+			comboBoxInmueble = new JComboBox<String>(new DefaultComboBoxModel<String>(names.toArray(new String[0])));
 			comboBoxInmueble.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					Material mat = Sistema.getMaterial((String) comboBoxInmueble.getSelectedItem());
 					if (mat != null) {
-						txtIDInmueble.setText(mat.getID());
+						txtID.setText(mat.getID());
 					}
 				}
 			});
@@ -283,135 +314,143 @@ public class PanelInmueble extends JPanel {
 		return comboBoxInmueble;
 	}
 
-	private JTextField getFiltroIDInmueble() {
-		if (filtroIDInmueble == null) {
-			filtroIDInmueble = new JTextField();
-			filtroIDInmueble.addKeyListener(new KeyAdapter() {
+	private JTextField getFiltroID() {
+		if (filtroID == null) {
+			filtroID = new JTextField();
+			filtroID.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					inmuebleModel.filtrar(filtroIDInmueble.getText(), 1);
+					inmuebleModel.filtrar(filtroID.getText(), 1);
 				}
 			});
-			filtroIDInmueble.setColumns(10);
-			filtroIDInmueble.setBounds(51, 30, 147, 20);
+			filtroID.setColumns(10);
+			filtroID.setBounds(51, 30, 147, 20);
 		}
-		return filtroIDInmueble;
+		return filtroID;
 	}
 
-	private JTextField getFiltroNombreInmueble() {
-		if (filtroNombreInmueble == null) {
-			filtroNombreInmueble = new JTextField();
-			filtroNombreInmueble.addKeyListener(new KeyAdapter() {
+	private JTextField getFiltroNombre() {
+		if (filtroNombre == null) {
+			filtroNombre = new JTextField();
+			filtroNombre.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					inmuebleModel.filtrar(filtroNombreInmueble.getText(), 2);
+					inmuebleModel.filtrar(filtroNombre.getText(), 2);
 				}
 			});
-			filtroNombreInmueble.setColumns(10);
-			filtroNombreInmueble.setBounds(198, 30, 147, 20);
+			filtroNombre.setColumns(10);
+			filtroNombre.setBounds(198, 30, 147, 20);
 		}
-		return filtroNombreInmueble;
+		return filtroNombre;
 	}
 
-	private JTextField getFiltroCantidadInmueble() {
-		if (filtroCantidadInmueble == null) {
-			filtroCantidadInmueble = new JTextField();
-			filtroCantidadInmueble.addKeyListener(new KeyAdapter() {
+	private JTextField getFiltroCantidad() {
+		if (filtroCantidad == null) {
+			filtroCantidad = new JTextField();
+			filtroCantidad.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					inmuebleModel.filtrar(filtroCantidadInmueble.getText(), 3);
+					inmuebleModel.filtrar(filtroCantidad.getText(), 3);
 				}
 			});
-			filtroCantidadInmueble.setColumns(10);
-			filtroCantidadInmueble.setBounds(345, 30, 82, 20);
+			filtroCantidad.setColumns(10);
+			filtroCantidad.setBounds(345, 30, 82, 20);
 		}
-		return filtroCantidadInmueble;
+		return filtroCantidad;
 	}
 
-	private JLabel getLblIdInmueble() {
-		if (lblIdInmueble == null) {
-			lblIdInmueble = new JLabel("ID");
-			lblIdInmueble.setHorizontalAlignment(SwingConstants.TRAILING);
+	private JLabel getLblID() {
+		if (lblID == null) {
+			lblID = new JLabel("ID");
+			lblID.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
-		return lblIdInmueble;
+		return lblID;
 	}
 
-	private JTextField getTxtIDInmueble() {
-		if (txtIDInmueble == null) {
-			txtIDInmueble = new JTextField();
-			txtIDInmueble.setEditable(false);
-			txtIDInmueble.setColumns(10);
-			Validaciones.soloNumeros(txtIDInmueble, false);
-			Validaciones.limitar(txtIDInmueble, 11);
+	private JTextField getTxtID() {
+		if (txtID == null) {
+			txtID = new JTextField();
+			txtID.setEditable(false);
+			txtID.setColumns(10);
 		}
-		return txtIDInmueble;
+		return txtID;
 	}
 
-	private JButton getBtnOKInmueble() {
-		if (btnOKInmueble == null) {
-			btnOKInmueble = new JButton("OK");
-			btnOKInmueble.addActionListener(new ActionListener() {
+	private JButton getBtnOK() {
+		if (btnOK == null) {
+			btnOK = new JButton("OK");
+			btnOK.setFocusable(false);
+			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					final ArrayList<Inmueble> listaInmuebles = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
+							.getListaInmuebles();
 					if (((String) comboBoxInmueble.getSelectedItem()) != null
 							&& ((Integer) spinnerCantidad.getValue()).intValue() > 0) {
-						((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).setInmueble(
-								table.getSelectedRow(),
-								new Inmueble(txtIDInmueble.getText(), (String) comboBoxInmueble.getSelectedItem(),
-										((Inmueble) Sistema.getMaterial(txtIDInmueble.getText())).getPrecioUnitario(),
+						listaInmuebles.set(
+								Integer.parseInt((String) inmuebleModel.getValueAt(table.getSelectedRow(), 0)) - 1,
+								new Inmueble(txtID.getText(), (String) comboBoxInmueble.getSelectedItem(),
+										((Inmueble) Sistema.getMaterial(txtID.getText())).getPrecioUnitario(),
 										((Integer) spinnerCantidad.getValue()).intValue()));
-						inmuebleModel.actualizar(
-								((Afectacion) ((Object[]) Frame.getPosicionActual()[1])[1]).getListaInmuebles());
+						inmuebleModel.actualizar();
 
 						comboBoxInmueble.setSelectedItem(null);
 						spinnerCantidad.setValue(0);
-						txtIDInmueble.setText("");
-
-						btnCancelarInmueble.setVisible(false);
-						btnOKInmueble.setVisible(false);
+						txtID.setText("");
 
 						bloquearCampos(false);
 					}
 				}
 			});
-			btnOKInmueble.setVisible(false);
+			btnOK.setVisible(false);
 		}
-		return btnOKInmueble;
+		return btnOK;
 	}
 
-	private JButton getBtnCancelarInmueble() {
-		if (btnCancelarInmueble == null) {
-			btnCancelarInmueble = new JButton(CANCEL);
-			btnCancelarInmueble.addActionListener(new ActionListener() {
+	private JButton getBtnCancelar() {
+		if (btnCancelar == null) {
+			btnCancelar = new JButton(CANCEL);
+			btnCancelar.setFocusable(false);
+			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					txtIDInmueble.setText("");
+					txtID.setText("");
 					comboBoxInmueble.setSelectedItem(null);
 					spinnerCantidad.setValue(0);
-					btnCancelarInmueble.setVisible(false);
-					btnOKInmueble.setVisible(false);
+
 					bloquearCampos(false);
 				}
 			});
-			btnCancelarInmueble.setVisible(false);
+			btnCancelar.setVisible(false);
 		}
-		return btnCancelarInmueble;
+		return btnCancelar;
 	}
 
-	private JScrollPane getcTableInmueble() {
-		if (cTableInmueble == null) {
+	private JScrollPane getcTable() {
+		if (cTable == null) {
 			inmuebleModel = new InmuebleTableModel();
-			cTableInmueble = new CustomTable(inmuebleModel, btnBorrarInmueble, btnEditarInmueble, new int[] {});
-			cTableInmueble.getTable().getColumnModel().getColumn(0).setResizable(false);
-			cTableInmueble.getTable().getColumnModel().getColumn(0).setPreferredWidth(40);
-			cTableInmueble.getTable().getColumnModel().getColumn(0).setMaxWidth(40);
-			cTableInmueble.getTable().getColumnModel().getColumn(1).setResizable(false);
-			cTableInmueble.getTable().getColumnModel().getColumn(2).setResizable(false);
-			cTableInmueble.getTable().getColumnModel().getColumn(3).setResizable(false);
-			cTableInmueble.getTable().getColumnModel().getColumn(3).setPreferredWidth(80);
-			cTableInmueble.getTable().getColumnModel().getColumn(3).setMaxWidth(80);
-			cTableInmueble.setBounds(10, 52, 417, 289);
-			table = cTableInmueble.getTable();
+			cTable = new CustomTable(inmuebleModel, btnBorrarInmueble, btnEditarInmueble, new int[] {});
+
+			cTable.getTable().getColumnModel().getColumn(0).setResizable(false);
+			cTable.getTable().getColumnModel().getColumn(0).setPreferredWidth(40);
+			cTable.getTable().getColumnModel().getColumn(0).setMaxWidth(40);
+			cTable.getTable().getColumnModel().getColumn(1).setResizable(false);
+			cTable.getTable().getColumnModel().getColumn(2).setResizable(false);
+			cTable.getTable().getColumnModel().getColumn(3).setResizable(false);
+			cTable.getTable().getColumnModel().getColumn(3).setPreferredWidth(80);
+			cTable.getTable().getColumnModel().getColumn(3).setMaxWidth(80);
+			cTable.setBounds(10, 52, 417, 289);
+			table = cTable.getTable();
+			btnBorrarInmueble.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					final ArrayList<Inmueble> listaInmuebles = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
+							.getListaInmuebles();
+					Auxiliary.borrarSeleccion(table, listaInmuebles);
+
+					inmuebleModel.actualizar();
+				}
+			});
+
 		}
-		return cTableInmueble;
+		return cTable;
 	}
 
 	private JLabel getLblCantidad() {
@@ -429,6 +468,10 @@ public class PanelInmueble extends JPanel {
 					.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		}
 		return spinnerCantidad;
+	}
+
+	public void actualizarTabla(ArrayList<Inmueble> lista) {
+		inmuebleModel.actualizar(lista);
 	}
 
 }

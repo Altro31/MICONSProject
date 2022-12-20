@@ -1,33 +1,31 @@
 package clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Cubicacion {
+public class Cubicacion implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2620032420950104908L;
 	
-	ArrayList<Material> materialesVenta;
-	
+	private ArrayList<Material> materialesVenta;
+
 	public Cubicacion() {
 		materialesVenta = new ArrayList<Material>();
 	}
-	
+
 	public ArrayList<Material> getListaMateriales() {
-		return new ArrayList<Material>(materialesVenta);
-	}
-	public void addMaterial(Material material) {
-		if(material==null)
-			throw new IllegalArgumentException("Material tiene valor null");
-		materialesVenta.add(material);
-	}
-	public void eliminarMaterial(int pos) {
-		if(pos<0)
-			throw new IllegalArgumentException("Pos debe tener valor negativo");
-		materialesVenta.remove(pos);
+		return materialesVenta;
 	}
 	
-	public void setMaterial(int pos, Material material) throws IndexOutOfBoundsException, IllegalArgumentException{
-		if(pos<0)
-			throw new IllegalArgumentException("Pos no debe tener valor negativo");
-		materialesVenta.set(pos, material);
+	public float calcularPrecioTotalReparacion() {
+		float total = 0;
+		for (Material material : materialesVenta) {
+			total+=material.calcularPrecioFinal();
+		}
+		return total;
 	}
-	
+
 }

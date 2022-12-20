@@ -13,8 +13,8 @@ public class AcercaDe extends PrincipalPanel {
 	 * Create the panel.
 	 */
 	public AcercaDe() {
-		
+
 		setImagePath("fondo.jpg");
-		
+
 	}
 }

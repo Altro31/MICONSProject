@@ -144,11 +144,12 @@ public class JTextLoginPanel extends JPanel {
 		}
 		return btnEye;
 	}
-	
+
 	public void moveEyeLocation(int x, int y) {
-		btnEye.setLocation(new Point(btnEye.getLocation().x+x,btnEye.getLocation().y+y));
+		btnEye.setLocation(new Point(btnEye.getLocation().x + x, btnEye.getLocation().y + y));
 	}
+
 	public void moveTextLocation(int x, int y) {
-		txtText.setLocation(new Point(txtText.getLocation().x+x,txtText.getLocation().y+y));
+		txtText.setLocation(new Point(txtText.getLocation().x + x, txtText.getLocation().y + y));
 	}
 }

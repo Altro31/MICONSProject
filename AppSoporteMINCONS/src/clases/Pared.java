@@ -1,19 +1,18 @@
 package clases;
 
 import enums.TipoDerrumbe;
-import util.Auxiliary;
 
-public class Pared extends Fachada{
-	
+public class Pared extends Fachada {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 944356326935622565L;
 	private boolean esParedCarga;
 
-	public Pared(String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe, boolean esParedCarga) {
-		super(Auxiliary.random(8), identidicador, materialPredominante, tipoDerrumbe);
-		this.setEsParedCarga(esParedCarga);
-	}
-	
-	public Pared(String id, String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe, boolean esParedCarga) {
-		super(id, identidicador, materialPredominante, tipoDerrumbe);
+	public Pared(String identidicador, Construccion materialPredominante, TipoDerrumbe tipoDerrumbe,
+			boolean esParedCarga) {
+		super(identidicador, materialPredominante, tipoDerrumbe);
 		this.setEsParedCarga(esParedCarga);
 	}
 
@@ -24,6 +23,5 @@ public class Pared extends Fachada{
 	public void setEsParedCarga(boolean esParedCarga) {
 		this.esParedCarga = esParedCarga;
 	}
-	
 
 }

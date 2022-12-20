@@ -7,8 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class JImagen extends JPanel{
-	
+public class JImagen extends JPanel {
+
 	private String path = "fondo.jpg";
 	/**
 	 * 
@@ -21,20 +21,20 @@ public class JImagen extends JPanel{
 		setOpaque(false);
 		setLayout(null);
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		if(path!=null) {
+		if (path != null) {
 			Dimension dimension = this.getSize();
-			ImageIcon image = new ImageIcon(getClass().getResource("/imagenes/"+path));
-			g.drawImage( image.getImage(), 0, 0, dimension.width, dimension.height, null);
+			ImageIcon image = new ImageIcon(getClass().getResource("/imagenes/" + path));
+			g.drawImage(image.getImage(), 0, 0, dimension.width, dimension.height, null);
 			this.setOpaque(true);
 			super.paintChildren(g);
 		}
 	}
-	
+
 	public void setImagePath(String imagePath) {
-		path=imagePath;
+		path = imagePath;
 	}
 
 }
