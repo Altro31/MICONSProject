@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import clases.Evento;
-
 public class Frame extends JFrame {
 
 	/**
@@ -58,18 +56,6 @@ public class Frame extends JFrame {
 				}
 			});
 
-//			Evento evento = new Evento();
-
-//			Viviendas viviendas = new Viviendas();
-//			Afectaciones afectaciones = new Afectaciones();
-//			AsignarMateriales asignarMateriales = new AsignarMateriales();
-
-//			addRuta(new Object[] { viviendas, afectaciones }, new Object[] { new Vivienda(), new Afectacion() });
-//			addRuta(new Eventos(), evento);
-//			addRuta(new FichasTecnicas(), evento);
-//			addRuta(new Object[] { viviendas, afectaciones, asignarMateriales },
-//					new Object[] { new Vivienda(), new Afectacion(), new Cubicacion() });
-//			frame.setContentPane((Container) ((Object[]) Frame.getPosicionActual()[0])[1]);
 			setContentPanes((Container)Frame.getPosicionActual()[0]);
 		}
 		return frame;
