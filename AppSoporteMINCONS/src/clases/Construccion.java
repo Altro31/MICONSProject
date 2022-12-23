@@ -18,6 +18,12 @@ public class Construccion extends Material implements Serializable {
 
 	}
 
+	public Construccion(String id, String nombre, float precioUnitario, int cantidad, String unidadMedida) {
+		super(id, nombre, precioUnitario, cantidad);
+		this.unidadMedida = unidadMedida;
+
+	}
+
 	public String getUnidadMedida() {
 		return unidadMedida.intern();
 	}
@@ -29,5 +35,10 @@ public class Construccion extends Material implements Serializable {
 			throw new IllegalArgumentException("Nombre no debe sobrepasar los 30 caracteres");
 
 		this.unidadMedida = unidadMedida;
+	}
+
+	@Override
+	public Construccion clones() {
+		return new Construccion(id, nombre, precioUnitario, cantidad, unidadMedida);
 	}
 }

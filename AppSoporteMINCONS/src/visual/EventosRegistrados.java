@@ -61,14 +61,13 @@ public class EventosRegistrados extends PrincipalPanel {
 	// Methods
 	private Dimension getPreferedSizes(int index) {
 		int height = (int) (index * (1.2 * SPACE + HEIGHT));
-		Dimension dim = new Dimension(10, height);
-		return dim;
+		return new Dimension(10, height);
 	}
 
 	public void addComponents() {
 
 		limpiar();
-		
+
 		ArrayList<Evento> eventos = sistema.getListaEventos();
 		int y = Y;
 		int index = 1;
@@ -82,17 +81,16 @@ public class EventosRegistrados extends PrincipalPanel {
 		}
 
 		panel.setPreferredSize(getPreferedSizes(index));
-		
+
 		updateUI();
 
 	}
-	
-	private void limpiar(){
+
+	private void limpiar() {
 		for (Component c : panel.getComponents()) {
 			panel.remove(c);
 		}
 	}
-	
 
 	// Getters and Setters
 

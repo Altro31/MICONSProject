@@ -16,4 +16,9 @@ public class Inmueble extends Material {
 	public Inmueble(String id, String nombre, float precioUnitario, int cantidad) {
 		super(id, nombre, precioUnitario, cantidad);
 	}
+
+	@Override
+	public Object clones() {
+		return new Inmueble(id, nombre, precioUnitario, cantidad);
+	}
 }

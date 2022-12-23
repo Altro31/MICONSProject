@@ -267,14 +267,7 @@ public class AsignarMateriales extends PrincipalPanel {
 					int cantidad = ((Integer) spinnerCantidad.getValue())
 							.intValue();
 					if (cantidad > 0) {
-						Material m = null;
-
-						try {
-							m = (Material) material.clone();
-						} catch (CloneNotSupportedException e1) {
-							e1.printStackTrace();
-						}
-
+						Material m = (Material) material.clones();
 						m.setCantidad(cantidad);
 						Cubicacion cubicacion = ((FichaTecnica) Frame
 								.getPosicionActual()[1]).getCubicacion();

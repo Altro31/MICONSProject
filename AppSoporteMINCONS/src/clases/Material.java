@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import interfaces.Identificador;
 
-public abstract class Material implements Identificador, Serializable, Cloneable {
+public abstract class Material implements Identificador, Serializable {
 
 	private static final long serialVersionUID = 1540851799326861293L;
 	protected String id;
@@ -27,10 +27,7 @@ public abstract class Material implements Identificador, Serializable, Cloneable
 		return precioUnitario*cantidad;
 	}
 	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+	public abstract Object clones() ;
 	
 	// Setters y Getters
 
