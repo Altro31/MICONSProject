@@ -73,8 +73,7 @@ public class Eventos extends PrincipalPanel {
 		});
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Frame.removerRuta(Frame.getPosicionActual()[0]);
-				Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
+				Frame.removerActual();
 			}
 		});
 		add(getPanelNuevoEvento());
@@ -328,8 +327,7 @@ public class Eventos extends PrincipalPanel {
 			btnCancel.setFocusable(false);
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Frame.removerRuta(Frame.getPosicionActual()[0]);
-					Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
+					Frame.anteriorPrincipal(1);
 				}
 			});
 			btnCancel.setBounds(539, 11, 103, 23);
@@ -348,8 +346,8 @@ public class Eventos extends PrincipalPanel {
 	private JTextField getTextNombre() {
 		if (textNombre == null) {
 			textNombre = new JTextField();
-			Validaciones.soloLetras(textNombre, true);
-			Validaciones.limitar(textNombre, 30);
+			Validaciones.onlyLetters(textNombre, true);
+			Validaciones.limite(textNombre, 30);
 
 			textNombre.setColumns(10);
 		}
@@ -367,7 +365,7 @@ public class Eventos extends PrincipalPanel {
 	private JDateChooser getDChFechaInicio() {
 		if (dChFechaInicio == null) {
 			dChFechaInicio = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
-			Validaciones.noDatos((JTextField) dChFechaInicio.getComponent(1));
+			Validaciones.noData((JTextField) dChFechaInicio.getComponent(1));
 		}
 		return dChFechaInicio;
 	}
@@ -407,7 +405,7 @@ public class Eventos extends PrincipalPanel {
 	private JDateChooser getDChFechaFin() {
 		if (dChFechaFin == null) {
 			dChFechaFin = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
-			Validaciones.noDatos((JTextField) dChFechaFin.getComponent(1));
+			Validaciones.noData((JTextField) dChFechaFin.getComponent(1));
 
 		}
 		return dChFechaFin;

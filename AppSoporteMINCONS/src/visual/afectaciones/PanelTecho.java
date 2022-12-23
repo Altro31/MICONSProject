@@ -72,6 +72,7 @@ public class PanelTecho extends JPanel {
 	private TechoTableModel techoModel;
 	private JButton btnOKTecho;
 	private JButton btnCancelarTecho;
+	private Sistema sistema = Sistema.getInstance();
 
 	/**
 	 * Create the panel.
@@ -218,8 +219,8 @@ public class PanelTecho extends JPanel {
 		if (txtIdentificadorTecho == null) {
 			txtIdentificadorTecho = new JTextField();
 			txtIdentificadorTecho.setColumns(10);
-			Validaciones.limitar(txtIdentificadorTecho, 20);
-			Validaciones.soloLetrasYNumeros(txtIdentificadorTecho, true);
+			Validaciones.limite(txtIdentificadorTecho, 20);
+			Validaciones.onlyLettersAndNumbers(txtIdentificadorTecho, true);
 		}
 		return txtIdentificadorTecho;
 	}
@@ -227,7 +228,7 @@ public class PanelTecho extends JPanel {
 	private JComboBox<String> getComboBoxMatPredTecho() {
 		if (comboBoxMatPredTecho == null) {
 			ArrayList<String> names = new ArrayList<String>();
-			for (Material mat : Sistema.getListaMateriales()) {
+			for (Material mat : sistema.getListaMateriales()) {
 				if (mat instanceof Construccion) {
 					names.add(mat.getNombre());
 				}
@@ -287,7 +288,7 @@ public class PanelTecho extends JPanel {
 						if (check) {
 							((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos()
 									.add(new Techo((txtIdentificadorTecho.getText()),
-											(Construccion) Sistema
+											(Construccion) sistema
 													.getMaterial((String) comboBoxMatPredTecho.getSelectedItem()),
 											(TipoDerrumbe) comboBoxTipoDerrumbeTecho.getSelectedItem()));
 							techoModel.actualizar(
@@ -411,7 +412,7 @@ public class PanelTecho extends JPanel {
 						((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos().set(
 								Integer.parseInt((String) techoModel.getValueAt(table.getSelectedRow(), 0)) - 1,
 								new Techo((txtIdentificadorTecho.getText()),
-										(Construccion) Sistema
+										(Construccion) sistema
 												.getMaterial((String) comboBoxMatPredTecho.getSelectedItem()),
 										(TipoDerrumbe) comboBoxTipoDerrumbeTecho.getSelectedItem()));
 						techoModel.actualizar(

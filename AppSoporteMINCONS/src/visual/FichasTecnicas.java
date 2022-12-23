@@ -1,12 +1,12 @@
 package visual;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -19,17 +19,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import util.Auxiliary;
+import util.FichaTableModel;
+import util.Manager;
+import visual.util.CustomTable;
+import visual.util.PrincipalPanel;
 import clases.Afectacion;
 import clases.Cubicacion;
 import clases.Evento;
 import clases.FichaTecnica;
 import clases.Sistema;
 import clases.Vivienda;
-import util.Auxiliary;
-import util.FichaTableModel;
-import util.Manager;
-import visual.util.CustomTable;
-import visual.util.PrincipalPanel;
 
 public class FichasTecnicas extends PrincipalPanel {
 
@@ -65,8 +65,7 @@ public class FichasTecnicas extends PrincipalPanel {
 		});
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Frame.removerRuta(Frame.getPosicionActual()[0]);
-				Frame.setContentPanes((Eventos) Frame.getPosicionActual()[0]);
+				Frame.removerActual();
 			}
 		});
 		add(getPanelTitulo());
@@ -128,8 +127,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnSalir.setFocusable(false);
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Frame.removerRuta(Frame.get(1)[0]);
-					Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
+					Frame.anteriorPrincipal(1);
 				}
 			});
 			btnSalir.setBounds(537, 11, 89, 23);
@@ -144,9 +142,8 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnAceptar.setFocusable(false);
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Sistema.addEventos((Evento) (Frame.get(1))[1]);
-					Frame.removerRuta(Frame.get(1)[1]);
-					Frame.setContentPanes((Container) (Frame.get(0)[0]));
+					Sistema.getInstance().addEvento((Evento)Frame.getPosicionActual()[1]);
+					Frame.anteriorPrincipal(1);
 				}
 			});
 			btnAceptar.setBounds(224, 11, 89, 23);
@@ -306,5 +303,8 @@ public class FichasTecnicas extends PrincipalPanel {
 
 	public FichaTableModel getTableModel() {
 		return tableModel;
+	}
+	public void actualizarTabla(ArrayList<FichaTecnica> lista) {
+		tableModel.actualizar(lista);
 	}
 }

@@ -68,6 +68,7 @@ public class PanelInmueble extends JPanel {
 	private InmuebleTableModel inmuebleModel;
 	private JButton btnOK;
 	private JButton btnCancelar;
+	private Sistema sistema = Sistema.getInstance();
 
 	/**
 	 * Create the panel.
@@ -139,7 +140,7 @@ public class PanelInmueble extends JPanel {
 
 							listaInmuebles
 									.add(new Inmueble(txtID.getText(), (String) comboBoxInmueble.getSelectedItem(),
-											((Inmueble) Sistema.getMaterial(txtID.getText())).getPrecioUnitario(),
+											((Inmueble) sistema.getMaterial(txtID.getText())).getPrecioUnitario(),
 											((Integer) spinnerCantidad.getValue()).intValue()));
 						}
 						inmuebleModel.actualizar();
@@ -294,7 +295,7 @@ public class PanelInmueble extends JPanel {
 	private JComboBox<String> getComboBoxInmueble() {
 		if (comboBoxInmueble == null) {
 			ArrayList<String> names = new ArrayList<String>();
-			for (Material mat : Sistema.getListaMateriales()) {
+			for (Material mat : sistema.getListaMateriales()) {
 				if (mat instanceof Inmueble) {
 					names.add(mat.getNombre());
 				}
@@ -302,7 +303,7 @@ public class PanelInmueble extends JPanel {
 			comboBoxInmueble = new JComboBox<String>(new DefaultComboBoxModel<String>(names.toArray(new String[0])));
 			comboBoxInmueble.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					Material mat = Sistema.getMaterial((String) comboBoxInmueble.getSelectedItem());
+					Material mat = sistema.getMaterial((String) comboBoxInmueble.getSelectedItem());
 					if (mat != null) {
 						txtID.setText(mat.getID());
 					}
@@ -389,7 +390,7 @@ public class PanelInmueble extends JPanel {
 						listaInmuebles.set(
 								Integer.parseInt((String) inmuebleModel.getValueAt(table.getSelectedRow(), 0)) - 1,
 								new Inmueble(txtID.getText(), (String) comboBoxInmueble.getSelectedItem(),
-										((Inmueble) Sistema.getMaterial(txtID.getText())).getPrecioUnitario(),
+										((Inmueble) sistema.getMaterial(txtID.getText())).getPrecioUnitario(),
 										((Integer) spinnerCantidad.getValue()).intValue()));
 						inmuebleModel.actualizar();
 
@@ -440,6 +441,7 @@ public class PanelInmueble extends JPanel {
 			cTable.setBounds(10, 52, 417, 289);
 			table = cTable.getTable();
 			btnBorrarInmueble.addActionListener(new ActionListener() {
+				
 				public void actionPerformed(ActionEvent e) {
 					final ArrayList<Inmueble> listaInmuebles = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
 							.getListaInmuebles();

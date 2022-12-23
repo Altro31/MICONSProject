@@ -3,6 +3,7 @@ package clases;
 import java.io.Serializable;
 
 import enums.*;
+import util.Auxiliary;
 
 public class Vivienda implements Serializable {
 	/**
@@ -14,9 +15,8 @@ public class Vivienda implements Serializable {
 	private Doc docLegal;
 	private TipoHab tipoHabitacional;
 	private TipoConst tipoConstructiva;
-	private double largo;
-	private double ancho;
-	private double area;
+	private float largo;
+	private float ancho;
 	private int totalPersonas;
 	private int totalInfantes;
 	private int totalAncianos;
@@ -30,7 +30,6 @@ public class Vivienda implements Serializable {
 		tipoConstructiva = null;
 		largo = 0;
 		ancho = 0;
-		area = 0;
 		totalPersonas = 0;
 		totalAncianos = 0;
 		totalInfantes = 0;
@@ -38,7 +37,7 @@ public class Vivienda implements Serializable {
 	}
 
 	public Vivienda(String direccion, String ciJefe, Doc docLegal, TipoHab tipoHabitacional, TipoConst tipoConstructiva,
-			double largo, double ancho, double area, int totalPersonas, int totalInfantes, int totalAncianos,
+			float largo, float ancho, int totalPersonas, int totalInfantes, int totalAncianos,
 			int totalEmbarazadas) {
 
 		this.setDireccion(direccion);
@@ -48,7 +47,6 @@ public class Vivienda implements Serializable {
 		this.setTipoConstructiva(tipoConstructiva);
 		this.setLargo(largo);
 		this.setAncho(ancho);
-		this.setArea(area);
 		this.setTotalPersonas(totalPersonas);
 		this.setTotalAncianos(totalAncianos);
 		this.setTotalInfantes(totalInfantes);
@@ -73,7 +71,7 @@ public class Vivienda implements Serializable {
 		return ciJefe;
 	}
 
-	public void setCiJefe(String ciJefe) { // FALTA ESTE TARECO ---> MIRA A VER SI TE GUSTA ASI :).dashiell
+	public void setCiJefe(String ciJefe) {
 		if (ciJefe.length() != 11 || ciJefe.trim().length() == 0 || !ciJefe.matches("[0-9]*")) {
 			throw new IllegalArgumentException("Se deben introducir once numeros");
 		} else {
@@ -120,7 +118,7 @@ public class Vivienda implements Serializable {
 		return largo;
 	}
 
-	public void setLargo(double largo) {
+	public void setLargo(float largo) {
 		if (largo <= 0)
 			throw new IllegalArgumentException(" El largo debe estar en el intervalo positivo");
 
@@ -131,22 +129,15 @@ public class Vivienda implements Serializable {
 		return ancho;
 	}
 
-	public void setAncho(double ancho) {
+	public void setAncho(float ancho) {
 		if (ancho <= 0)
 			throw new IllegalArgumentException(" El ancho debe estar en el intervalo positivo");
 
 		this.ancho = ancho;
 	}
 
-	public double getArea() {
-		return area;
-	}
-
-	public void setArea(double area) {
-		if (area <= 0)
-			throw new IllegalArgumentException(" El area debe estar en el intervalo de 0 a 2000");
-
-		this.area = area;
+	public float getArea() {
+		return Auxiliary.calcularArea(largo, ancho);
 	}
 
 	public int getTotalPersonas() {

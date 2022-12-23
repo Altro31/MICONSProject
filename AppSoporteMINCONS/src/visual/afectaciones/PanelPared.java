@@ -75,6 +75,7 @@ public class PanelPared extends JPanel {
 	private JPanel panelButton;
 	private JComboBox<String> comboBoxTipoDerrumbe;
 	private CustomTable cTable;
+	private Sistema sistema = Sistema.getInstance();
 
 	/**
 	 * Create the panel.
@@ -241,8 +242,8 @@ public class PanelPared extends JPanel {
 		if (txtIdentificadorPared == null) {
 			txtIdentificadorPared = new JTextField();
 			txtIdentificadorPared.setColumns(10);
-			Validaciones.soloLetrasYNumeros(txtIdentificadorPared, true);
-			Validaciones.limitar(txtIdentificadorPared, 20);
+			Validaciones.onlyLettersAndNumbers(txtIdentificadorPared, true);
+			Validaciones.limite(txtIdentificadorPared, 20);
 		}
 		return txtIdentificadorPared;
 	}
@@ -250,7 +251,7 @@ public class PanelPared extends JPanel {
 	private JComboBox<String> getComboBoxMatPred() {
 		if (comboBoxMatPred == null) {
 			ArrayList<String> names = new ArrayList<String>();
-			for (Material mat : Sistema.getListaMateriales()) {
+			for (Material mat : sistema.getListaMateriales()) {
 				if (mat instanceof Construccion) {
 					names.add(mat.getNombre());
 				}
@@ -318,7 +319,7 @@ public class PanelPared extends JPanel {
 						if (check) {
 							((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes()
 									.add(new Pared(txtIdentificadorPared.getText(),
-											(Construccion) Sistema
+											(Construccion) sistema
 													.getMaterial((String) comboBoxMatPred.getSelectedItem()),
 											(TipoDerrumbe) comboBoxTipoDerrumbePared.getSelectedItem(),
 											cBoxParedCarga.isSelected()));
@@ -414,7 +415,7 @@ public class PanelPared extends JPanel {
 						((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes().set(
 								Integer.parseInt((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - 1,
 								new Pared((txtIdentificadorPared.getText()),
-										(Construccion) Sistema.getMaterial((String) comboBoxMatPred.getSelectedItem()),
+										(Construccion) sistema.getMaterial((String) comboBoxMatPred.getSelectedItem()),
 										(TipoDerrumbe) comboBoxTipoDerrumbePared.getSelectedItem(),
 										cBoxParedCarga.isSelected()));
 						tableModel.actualizar(

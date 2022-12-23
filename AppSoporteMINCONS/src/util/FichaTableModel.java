@@ -6,9 +6,9 @@ import java.util.GregorianCalendar;
 
 import javax.swing.table.DefaultTableModel;
 
+import visual.Frame;
 import clases.Evento;
 import clases.FichaTecnica;
-import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class FichaTableModel extends DefaultTableModel {
@@ -49,7 +49,7 @@ public class FichaTableModel extends DefaultTableModel {
 
 		for (Object ficha : lista) {
 			addRow(new Object[] { index + "", ((FichaTecnica) ficha).getVivienda().getDireccion(),
-					fecha.get(Calendar.DATE) + "/" + fecha.get(Calendar.MONTH) + "/" + fecha.get(Calendar.YEAR) });
+					fecha.get(Calendar.DATE) + "/" + fecha.get(Calendar.MONTH)+1 + "/" + fecha.get(Calendar.YEAR) });
 			index++;
 		}
 	}
@@ -64,5 +64,7 @@ public class FichaTableModel extends DefaultTableModel {
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
 	}
+	
+	
 
 }

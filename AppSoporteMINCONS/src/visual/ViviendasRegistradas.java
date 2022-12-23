@@ -27,11 +27,10 @@ public class ViviendasRegistradas extends PrincipalPanel {
 		});
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Frame.removerRuta(Frame.getPosicionActual()[0]);
+				Frame.anteriorPrincipal(1);
 				Frame.setContentPanes((Principal) Frame.getPosicionActual()[0]);
 			}
 		});
-		
 	}
 
 }

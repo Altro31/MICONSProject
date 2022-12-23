@@ -2,8 +2,6 @@ package visual;
 
 import java.awt.Container;
 import java.awt.EventQueue;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -15,6 +13,9 @@ public class Frame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 2638223278346798429L;
+	private static final String[] PRINCIPALS = new String[] { "Principal",
+			"FichasTecnicas", "ViviendasRegistradas", "EventosRegistrados" };
+
 	private static Frame frame;
 	private static ArrayList<Object[]> ruta = new ArrayList<Object[]>();
 
@@ -41,22 +42,11 @@ public class Frame extends JFrame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(891, 491);
 		setLocationRelativeTo(null);
-		ruta.add(new Object[] { new Principal(), null });
 	}
 
 	public static Frame getInstance() {
 		if (frame == null) {
 			frame = new Frame();
-
-			frame.addWindowListener(new WindowAdapter() {
-
-				@Override
-				public void windowClosed(WindowEvent e) {
-					System.out.println("a");
-				}
-			});
-
-			setContentPanes((Container)Frame.getPosicionActual()[0]);
 		}
 		return frame;
 	}
@@ -73,19 +63,22 @@ public class Frame extends JFrame {
 		frame.setVisible(true);
 	}
 
-	public static void addRuta(Object visual, Object data) throws IllegalArgumentException {
+	public static void addRuta(Object visual, Object data)
+			throws IllegalArgumentException {
 		getInstance();
 		if (visual == null) {
 			throw new IllegalArgumentException("Visual no puede ser null");
 		}
-		if (!(visual instanceof Principal)) {
-			ruta.add(new Object[] { visual, data });
-		}
+		ruta.add(new Object[] { visual, data });
 	}
 
 	public static Object[] getPosicionActual() {
 		getInstance();
-		return ruta.get(ruta.size() - 1);
+		Object[] o = null;
+		if (!ruta.isEmpty()) {
+			o = ruta.get(ruta.size() - 1);
+		}
+		return o;
 	}
 
 	public static Object[] get(int pos) {
@@ -93,36 +86,60 @@ public class Frame extends JFrame {
 		return ruta.get(pos);
 	}
 
-	public static Principal getPrincipal() {
-		return (Principal) get(0)[1];
-	}
-
 	public static void setOnPrincipal() {
-		removerRuta(get(1)[0]);
-		setContentPanes(getPrincipal());
+		boolean check = true;
+		do {
+			anteriorPrincipal(1);
+			if (isPrincipal(getPosicionActual()[0])) {
+				check = false;
+			}
+		} while (check);
+		setContentPanes((Container) getPosicionActual()[0]);
 	}
 
-	public static void removerRuta(Object o) throws IllegalArgumentException {
-		getInstance();
-		if (o == null) {
-			throw new IllegalArgumentException("El objeto no puede ser null");
+	private static boolean isPrincipal(Object o) {
+		boolean check = false;
+		for (String clase : PRINCIPALS) {
+			if (o.getClass().getSimpleName().equals(clase)) {
+				check = true;
+			}
+			;
 		}
-		boolean borrar = false;
+		return check;
+	}
+
+	public static void anteriorPrincipal(int i) throws IllegalArgumentException {
+		getInstance();
+		if (i <= 0) {
+			throw new IllegalArgumentException("i debe ser mayor que 0");
+		}
+		boolean borrar = true;
 		int count = ruta.size();
+		int index = 0;
+		if (isPrincipal((ruta.get(count - 1)[0]))) {
+			i++;
+		}
+		while (count > index && borrar) {
 
-		int i = 0;
-		while (i < count) {
-			Object[] objects = ruta.get(i);
+			Object[] objects = ruta.get(count - 1);
 
-			if (objects[0].equals(o) || (objects[1] != null && objects[1].equals(o))) {
-				borrar = true;
+			if (isPrincipal(objects[0])) {
+				i--;
+			}
+			if (i == 0) {
+				borrar = false;
 			}
 			if (borrar) {
 				ruta.remove(objects);
 				count--;
-			} else {
-				i++;
 			}
 		}
+		Frame.setContentPanes((Container)getPosicionActual()[0]);
+	}
+
+	public static void removerActual() {
+
+		ruta.remove(getPosicionActual());
+		Frame.setContentPanes((Container) Frame.getPosicionActual()[0]);
 	}
 }

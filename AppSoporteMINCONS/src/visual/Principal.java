@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,9 +24,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
-import clases.Evento;
 import util.Manager;
 import visual.util.JImagen;
+import clases.Evento;
+import clases.User;
 
 public class Principal extends JImagen {
 
@@ -44,11 +47,13 @@ public class Principal extends JImagen {
 	private JImagen instagram;
 	private JImagen twitter;
 	private JButton btnCerrar;
+	private boolean userCheck;
 
 	/**
 	 * Constructor de la clase
 	 */
 	public Principal() {
+		userCheck = false;
 		llenarComponentes();
 		setAlignmentX(Component.RIGHT_ALIGNMENT);
 		setImagePath("fondo.jpg");
@@ -57,75 +62,169 @@ public class Principal extends JImagen {
 	/**
 	 * Métodos
 	 */
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Componentes
 	 */
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private void llenarComponentes() {
 		GroupLayout gl_fondo = new GroupLayout(this);
-		gl_fondo.setHorizontalGroup(gl_fondo.createParallelGroup(Alignment.TRAILING).addGroup(gl_fondo
-				.createSequentialGroup().addContainerGap()
-				.addComponent(getMicons(), GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-				.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING).addGroup(gl_fondo.createSequentialGroup()
-						.addGap(143)
-						.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING).addGroup(gl_fondo
-								.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.RELATED, 561, Short.MAX_VALUE)
-								.addComponent(getFacebook(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getInstagram(), GroupLayout.PREFERRED_SIZE, 46,
+		gl_fondo.setHorizontalGroup(gl_fondo
+				.createParallelGroup(Alignment.TRAILING)
+				.addGroup(
+						gl_fondo.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(getMicons(),
+										GroupLayout.PREFERRED_SIZE, 131,
 										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTwitter(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-								.addGap(10)).addComponent(getBtnCerrar(), Alignment.TRAILING,
-										GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_fondo.createSequentialGroup().addGap(134).addGroup(gl_fondo
-								.createParallelGroup(Alignment.TRAILING)
-								.addComponent(getLblLogo_1(), GroupLayout.PREFERRED_SIZE, 415,
-										GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_fondo.createSequentialGroup()
-										.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
-												.addComponent(getBtnViviendasRegistradas(), GroupLayout.PREFERRED_SIZE,
-														215, GroupLayout.PREFERRED_SIZE)
-												.addComponent(getBtnNuevoEvento(), GroupLayout.PREFERRED_SIZE, 215,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(getBtnOtrosEventos(), GroupLayout.PREFERRED_SIZE, 215,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(105)))
-								.addContainerGap()))));
-		gl_fondo.setVerticalGroup(gl_fondo.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_fondo.createSequentialGroup()
-						.addGroup(gl_fondo.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_fondo.createSequentialGroup().addContainerGap().addComponent(getMicons(),
-										GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE))
-								.addGroup(gl_fondo.createSequentialGroup()
-										.addComponent(getBtnCerrar(), GroupLayout.PREFERRED_SIZE, 29,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(79)
-										.addComponent(getLblLogo_1(), GroupLayout.PREFERRED_SIZE, 111,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(getBtnNuevoEvento(), GroupLayout.PREFERRED_SIZE, 33,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(getBtnViviendasRegistradas(), GroupLayout.PREFERRED_SIZE, 33,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(getBtnOtrosEventos(), GroupLayout.PREFERRED_SIZE, 33,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-										.addGroup(gl_fondo.createParallelGroup(Alignment.LEADING)
-												.addComponent(getInstagram(), GroupLayout.PREFERRED_SIZE, 45,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(getFacebook(), GroupLayout.PREFERRED_SIZE, 45,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(getTwitter(), GroupLayout.PREFERRED_SIZE, 45,
-														GroupLayout.PREFERRED_SIZE))))
-						.addContainerGap()));
-		gl_fondo.linkSize(SwingConstants.VERTICAL, new Component[] { getFacebook(), getInstagram(), getTwitter() });
-		gl_fondo.linkSize(SwingConstants.HORIZONTAL, new Component[] { getFacebook(), getInstagram(), getTwitter() });
+								.addGroup(
+										gl_fondo.createParallelGroup(
+												Alignment.LEADING)
+												.addGroup(
+														gl_fondo.createSequentialGroup()
+																.addGap(143)
+																.addGroup(
+																		gl_fondo.createParallelGroup(
+																				Alignment.LEADING)
+																				.addGroup(
+																						gl_fondo.createSequentialGroup()
+																								.addPreferredGap(
+																										ComponentPlacement.RELATED,
+																										561,
+																										Short.MAX_VALUE)
+																								.addComponent(
+																										getFacebook(),
+																										GroupLayout.PREFERRED_SIZE,
+																										46,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(
+																										ComponentPlacement.RELATED)
+																								.addComponent(
+																										getInstagram(),
+																										GroupLayout.PREFERRED_SIZE,
+																										46,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(
+																										ComponentPlacement.RELATED)
+																								.addComponent(
+																										getTwitter(),
+																										GroupLayout.PREFERRED_SIZE,
+																										46,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addGap(10))
+																				.addComponent(
+																						getBtnCerrar(),
+																						Alignment.TRAILING,
+																						GroupLayout.PREFERRED_SIZE,
+																						34,
+																						GroupLayout.PREFERRED_SIZE)))
+												.addGroup(
+														gl_fondo.createSequentialGroup()
+																.addGap(134)
+																.addGroup(
+																		gl_fondo.createParallelGroup(
+																				Alignment.TRAILING)
+																				.addComponent(
+																						getLblLogo(),
+																						GroupLayout.PREFERRED_SIZE,
+																						415,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addGroup(
+																						gl_fondo.createSequentialGroup()
+																								.addGroup(
+																										gl_fondo.createParallelGroup(
+																												Alignment.LEADING)
+																												.addComponent(
+																														getBtnViviendasRegistradas(),
+																														GroupLayout.PREFERRED_SIZE,
+																														215,
+																														GroupLayout.PREFERRED_SIZE)
+																												.addComponent(
+																														getBtnNuevoEvento(),
+																														GroupLayout.PREFERRED_SIZE,
+																														215,
+																														GroupLayout.PREFERRED_SIZE)
+																												.addComponent(
+																														getBtnOtrosEventos(),
+																														GroupLayout.PREFERRED_SIZE,
+																														215,
+																														GroupLayout.PREFERRED_SIZE))
+																								.addGap(105)))
+																.addContainerGap()))));
+		gl_fondo.setVerticalGroup(gl_fondo
+				.createParallelGroup(Alignment.TRAILING)
+				.addGroup(
+						gl_fondo.createSequentialGroup()
+								.addGroup(
+										gl_fondo.createParallelGroup(
+												Alignment.TRAILING)
+												.addGroup(
+														gl_fondo.createSequentialGroup()
+																.addContainerGap()
+																.addComponent(
+																		getMicons(),
+																		GroupLayout.DEFAULT_SIZE,
+																		454,
+																		Short.MAX_VALUE))
+												.addGroup(
+														gl_fondo.createSequentialGroup()
+																.addComponent(
+																		getBtnCerrar(),
+																		GroupLayout.PREFERRED_SIZE,
+																		29,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(79)
+																.addComponent(
+																		getLblLogo(),
+																		GroupLayout.PREFERRED_SIZE,
+																		111,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(18)
+																.addComponent(
+																		getBtnNuevoEvento(),
+																		GroupLayout.PREFERRED_SIZE,
+																		33,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(18)
+																.addComponent(
+																		getBtnViviendasRegistradas(),
+																		GroupLayout.PREFERRED_SIZE,
+																		33,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(18)
+																.addComponent(
+																		getBtnOtrosEventos(),
+																		GroupLayout.PREFERRED_SIZE,
+																		33,
+																		GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(
+																		ComponentPlacement.RELATED,
+																		48,
+																		Short.MAX_VALUE)
+																.addGroup(
+																		gl_fondo.createParallelGroup(
+																				Alignment.LEADING)
+																				.addComponent(
+																						getInstagram(),
+																						GroupLayout.PREFERRED_SIZE,
+																						45,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addComponent(
+																						getFacebook(),
+																						GroupLayout.PREFERRED_SIZE,
+																						45,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addComponent(
+																						getTwitter(),
+																						GroupLayout.PREFERRED_SIZE,
+																						45,
+																						GroupLayout.PREFERRED_SIZE))))
+								.addContainerGap()));
+		gl_fondo.linkSize(SwingConstants.VERTICAL, new Component[] {
+				getFacebook(), getInstagram(), getTwitter() });
+		gl_fondo.linkSize(SwingConstants.HORIZONTAL, new Component[] {
+				getFacebook(), getInstagram(), getTwitter() });
 		setLayout(gl_fondo);
 	}
 
@@ -136,21 +235,55 @@ public class Principal extends JImagen {
 			micons.setAlignmentY(1.0f);
 			micons.setAlignmentX(1.0f);
 			GroupLayout gl_micons = new GroupLayout(micons);
-			gl_micons.setHorizontalGroup(gl_micons.createParallelGroup(Alignment.LEADING).addGroup(gl_micons
-					.createSequentialGroup().addContainerGap()
-					.addGroup(gl_micons.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_micons.createSequentialGroup().addGap(18).addComponent(getImagenUsername(),
-									GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-							.addComponent(getLblUsername(), GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(19, Short.MAX_VALUE))
-					.addGroup(gl_micons.createSequentialGroup().addContainerGap(78, Short.MAX_VALUE)
-							.addComponent(getBtnLogout()).addContainerGap()));
-			gl_micons.setVerticalGroup(gl_micons.createParallelGroup(Alignment.LEADING).addGroup(gl_micons
-					.createSequentialGroup().addContainerGap()
-					.addComponent(getImagenUsername(), GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(getLblUsername(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 339, Short.MAX_VALUE).addComponent(getBtnLogout())));
+			gl_micons
+					.setHorizontalGroup(gl_micons
+							.createParallelGroup(Alignment.LEADING)
+							.addGroup(
+									gl_micons
+											.createSequentialGroup()
+											.addContainerGap()
+											.addGroup(
+													gl_micons
+															.createParallelGroup(
+																	Alignment.LEADING)
+															.addGroup(
+																	gl_micons
+																			.createSequentialGroup()
+																			.addGap(18)
+																			.addComponent(
+																					getImagenUsername(),
+																					GroupLayout.PREFERRED_SIZE,
+																					58,
+																					GroupLayout.PREFERRED_SIZE))
+															.addComponent(
+																	getLblUsername(),
+																	GroupLayout.PREFERRED_SIZE,
+																	92,
+																	GroupLayout.PREFERRED_SIZE))
+											.addContainerGap(19,
+													Short.MAX_VALUE))
+							.addGroup(
+									gl_micons
+											.createSequentialGroup()
+											.addContainerGap(78,
+													Short.MAX_VALUE)
+											.addComponent(getBtnLogout())
+											.addContainerGap()));
+			gl_micons.setVerticalGroup(gl_micons.createParallelGroup(
+					Alignment.LEADING).addGroup(
+					gl_micons
+							.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(getImagenUsername(),
+									GroupLayout.PREFERRED_SIZE, 50,
+									GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(getLblUsername(),
+									GroupLayout.PREFERRED_SIZE, 25,
+									GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 339,
+									Short.MAX_VALUE)
+							.addComponent(getBtnLogout())));
 			micons.setLayout(gl_micons);
 		}
 		return micons;
@@ -168,6 +301,20 @@ public class Principal extends JImagen {
 	private JLabel getLblUsername() {
 		if (lblUsername == null) {
 			lblUsername = new JLabel("Username");
+			lblUsername.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					Object[] o = Frame.getPosicionActual();
+					if (o != null) {
+						if (!userCheck) {
+							lblUsername.setText(((User) o[1]).getUsername());
+							userCheck = true;
+						}
+
+					}
+
+				}
+			});
+
 			lblUsername.setForeground(new Color(255, 255, 255));
 			lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
@@ -181,16 +328,19 @@ public class Principal extends JImagen {
 			btnLogout.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					btnLogout.setIcon(new ImageIcon(Login.class.getResource("/imagenes/Cerrar2.png")));
+					btnLogout.setIcon(new ImageIcon(Login.class
+							.getResource("/imagenes/Cerrar2.png")));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					btnLogout.setIcon(new ImageIcon(Login.class.getResource("/imagenes/Cerrar.png")));
+					btnLogout.setIcon(new ImageIcon(Login.class
+							.getResource("/imagenes/Cerrar.png")));
 				}
 			});
 			btnLogout.setContentAreaFilled(false);
-			btnLogout.setIcon(new ImageIcon(Login.class.getResource("/imagenes/Cerrar.png")));
+			btnLogout.setIcon(new ImageIcon(Login.class
+					.getResource("/imagenes/Cerrar.png")));
 			btnLogout.setBorder(null);
 			btnLogout.setFocusTraversalKeysEnabled(false);
 			btnLogout.setOpaque(false);
@@ -204,7 +354,7 @@ public class Principal extends JImagen {
 		return btnLogout;
 	}
 
-	private JLabel getLblLogo_1() {
+	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("MICONS");
 			lblLogo.setForeground(Color.WHITE);
@@ -216,6 +366,7 @@ public class Principal extends JImagen {
 	private JButton getBtnNuevoEvento() {
 		if (btnNuevoEvento == null) {
 			btnNuevoEvento = new JButton("Nuevo Evento");
+			btnNuevoEvento.setBackground(Color.WHITE);
 			btnNuevoEvento.setFocusable(false);
 			btnNuevoEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -231,6 +382,7 @@ public class Principal extends JImagen {
 	private JButton getBtnViviendasRegistradas() {
 		if (btnViviendasRegistradas == null) {
 			btnViviendasRegistradas = new JButton("Viviendas Registradas");
+			btnViviendasRegistradas.setBackground(Color.WHITE);
 			btnViviendasRegistradas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ViviendasRegistradas viviendas = new ViviendasRegistradas();
@@ -246,6 +398,7 @@ public class Principal extends JImagen {
 	private JButton getBtnOtrosEventos() {
 		if (btnOtrosEventos == null) {
 			btnOtrosEventos = new JButton("Eventos Registrados");
+			btnOtrosEventos.setBackground(Color.WHITE);
 			btnOtrosEventos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					EventosRegistrados eventos = new EventosRegistrados();
@@ -267,7 +420,8 @@ public class Principal extends JImagen {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					try {
-						Desktop.getDesktop().browse(new URI("https://facebook.org/"));
+						Desktop.getDesktop().browse(
+								new URI("https://facebook.org/"));
 					} catch (IOException | URISyntaxException e1) {
 						e1.printStackTrace();
 					}
@@ -287,7 +441,8 @@ public class Principal extends JImagen {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					try {
-						Desktop.getDesktop().browse(new URI("https://instagram.org/"));
+						Desktop.getDesktop().browse(
+								new URI("https://instagram.org/"));
 					} catch (IOException | URISyntaxException e1) {
 						e1.printStackTrace();
 					}
@@ -307,7 +462,8 @@ public class Principal extends JImagen {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					try {
-						Desktop.getDesktop().browse(new URI("https://twitter.org/"));
+						Desktop.getDesktop().browse(
+								new URI("https://twitter.org/"));
 					} catch (IOException | URISyntaxException e1) {
 						e1.printStackTrace();
 					}
@@ -321,7 +477,8 @@ public class Principal extends JImagen {
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
 			btnCerrar = new JButton("");
-			btnCerrar.setPressedIcon(new ImageIcon(Principal.class.getResource("/imagenes/Close2.png")));
+			btnCerrar.setPressedIcon(new ImageIcon(Principal.class
+					.getResource("/imagenes/Close2.png")));
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Manager.guardarDatos();
@@ -334,7 +491,8 @@ public class Principal extends JImagen {
 			btnCerrar.setFocusTraversalKeysEnabled(false);
 			btnCerrar.setFocusable(false);
 			btnCerrar.setOpaque(false);
-			btnCerrar.setIcon(new ImageIcon(Principal.class.getResource("/imagenes/Close.png")));
+			btnCerrar.setIcon(new ImageIcon(Principal.class
+					.getResource("/imagenes/Close.png")));
 			btnCerrar.setBounds(857, 0, 34, 29);
 		}
 		return btnCerrar;

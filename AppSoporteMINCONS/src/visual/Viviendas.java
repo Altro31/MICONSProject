@@ -23,17 +23,18 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import clases.FichaTecnica;
-import clases.Vivienda;
-import enums.Doc;
-import enums.TipoConst;
-import enums.TipoHab;
 import util.Auxiliary;
 import util.Manager;
 import util.Validaciones;
 import util.Value;
 import visual.util.PrincipalPanel;
+import clases.FichaTecnica;
+import clases.Vivienda;
+import enums.Doc;
+import enums.TipoConst;
+import enums.TipoHab;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public class Viviendas extends PrincipalPanel {
 
 	/**
@@ -94,8 +95,7 @@ public class Viviendas extends PrincipalPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Frame.removerRuta(Frame.getPosicionActual()[0]);
-				Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
+				Frame.removerActual();
 			}
 		});
 	}
@@ -156,9 +156,8 @@ public class Viviendas extends PrincipalPanel {
 						vivienda.setDocLegal(Doc.getValue(combDocLegal.getSelectedItem().toString()));
 						vivienda.setTipoHabitacional(TipoHab.getValue(combTipoHab.getSelectedItem().toString()));
 						vivienda.setTipoConstructiva(TipoConst.getValue(combTipoCons.getSelectedItem().toString()));
-						vivienda.setLargo(Double.parseDouble(getTxtLargo().getText()));
-						vivienda.setAncho(Double.parseDouble(getTxtAncho().getText()));
-						vivienda.setArea(Double.parseDouble(getTxtArea().getText()));
+						vivienda.setLargo(Float.parseFloat(getTxtLargo().getText()));
+						vivienda.setAncho(Float.parseFloat(getTxtAncho().getText()));
 						vivienda.setTotalPersonas(Integer.parseInt(getSpinnerPersonas().getValue().toString()));
 						vivienda.setTotalInfantes(Integer.parseInt(getSpinnerInfantes().getValue().toString()));
 						vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
@@ -205,8 +204,7 @@ public class Viviendas extends PrincipalPanel {
 			btnCancelar.setFocusable(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Frame.removerRuta(Frame.get(3)[0]);
-					Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
+					Frame.anteriorPrincipal(1);
 				}
 			});
 			btnCancelar.setBounds(537, 11, 89, 23);
@@ -281,8 +279,8 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtCI() {
 		if (txtCI == null) {
 			txtCI = new JTextField();
-			Validaciones.soloNumeros(txtCI, false);
-			Validaciones.limitar(txtCI, 11);
+			Validaciones.onlyNumbers(txtCI, false);
+			Validaciones.limite(txtCI, 11);
 			txtCI.setColumns(10);
 			txtCI.setBounds(205, 53, 226, 21);
 		}
@@ -376,7 +374,7 @@ public class Viviendas extends PrincipalPanel {
 					}
 				}
 			});
-			Validaciones.soloNumeros(txtLargo, true);
+			Validaciones.onlyNumbers(txtLargo, true);
 			txtLargo.setColumns(10);
 			txtLargo.setBounds(116, 252, 95, 23);
 		}
@@ -401,7 +399,7 @@ public class Viviendas extends PrincipalPanel {
 				}
 			});
 			txtAncho.setColumns(10);
-			Validaciones.soloNumeros(txtAncho, true);
+			Validaciones.onlyNumbers(txtAncho, true);
 			txtAncho.setBounds(114, 300, 95, 23);
 		}
 		return txtAncho;
@@ -430,7 +428,7 @@ public class Viviendas extends PrincipalPanel {
 			txtArea = new JTextField();
 			txtArea.setEditable(false);
 			txtArea.setColumns(10);
-			Validaciones.soloNumeros(txtArea, true);
+			Validaciones.onlyNumbers(txtArea, true);
 			txtArea.setBounds(303, 276, 95, 23);
 		}
 		return txtArea;
@@ -520,9 +518,9 @@ public class Viviendas extends PrincipalPanel {
 						spinnerPersonas.setValue(total);
 				}
 			});
-			Validaciones.relacionarSpinners(spinnerAncianos, spinnerPersonas, ancianosPreviuosValue);
-			Validaciones.relacionarSpinners(spinnerInfantes, spinnerPersonas, infantesPreviousValue);
-			Validaciones.relacionarSpinners(spinnerEmbarazadas, spinnerPersonas, embarazadasPreviousValue);
+			Validaciones.linkSpinners(spinnerAncianos, spinnerPersonas, ancianosPreviuosValue);
+			Validaciones.linkSpinners(spinnerInfantes, spinnerPersonas, infantesPreviousValue);
+			Validaciones.linkSpinners(spinnerEmbarazadas, spinnerPersonas, embarazadasPreviousValue);
 			spinnerPersonas.setBounds(698, 184, 44, 28);
 			((DefaultEditor) (spinnerPersonas.getEditor())).getTextField().setEditable(false);
 		}

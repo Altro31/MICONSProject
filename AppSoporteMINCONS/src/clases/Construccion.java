@@ -12,21 +12,10 @@ public class Construccion extends Material implements Serializable {
 	private static final long serialVersionUID = -1499762410174505030L;
 	String unidadMedida;
 
-	public Construccion() {
-		super(Auxiliary.random(8), "desconocido", 1, 1);
-		unidadMedida = "metros";
-
-	}
-
 	public Construccion(String nombre, float precioUnitario, int cantidad, String unidadMedida) {
 		super(Auxiliary.random(8), nombre, precioUnitario, cantidad);
 		this.unidadMedida = unidadMedida;
 
-	}
-
-	public Construccion(String id, String nombre, float precioUnitario, int cantidad, String unidadMedida) {
-		super(id, nombre, precioUnitario, cantidad);
-		this.unidadMedida = unidadMedida;
 	}
 
 	public String getUnidadMedida() {

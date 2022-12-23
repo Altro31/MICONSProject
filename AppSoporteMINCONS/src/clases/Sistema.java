@@ -1,89 +1,138 @@
 package clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Sistema {
+import util.Manager;
 
-	private static ArrayList<Evento> listaEventos = new ArrayList<Evento>();
-	private static ArrayList<Material> listaMateriales = new ArrayList<Material>();
+public class Sistema implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4250032788535040218L;
+	private final ArrayList<Evento> listaEventos;
+	private final ArrayList<Material> listaMateriales;
+	private final ArrayList<User> listaUsuarios;
+
 	private static Sistema sistema;
 
 	private Sistema() {
 
-//		listaMateriales.add(new Construccion("Cemento", 2000F, 1, "sacos"));
-//		listaMateriales.add(new Construccion("Ladrillo", 25F, 1, "unidades"));
-//		listaMateriales.add(new Construccion("Bloque", 40F, 1, "unidades"));
-//		listaMateriales.add(new Construccion("Gravilla", 180F, 1, "sacos"));
-//		listaMateriales.add(new Construccion("Arena", 180F, 1, "sacos"));
-//		listaMateriales.add(new Construccion("Tejas", 4500F, 1, "unidades"));
-//		listaMateriales.add(new Construccion("Yeso", 3000F, 1, "sacos"));
-//		listaMateriales.add(new Construccion("Cavilla", 250F, 1, "metros"));
-//		listaMateriales.add(new Inmueble( "Lavadora", 1, 11));
-//		listaMateriales.add(new Inmueble( "Lavamanos", 2, 12));
-//		listaMateriales.add(new Inmueble( "Refrigerador", 4, 13));
-//		listaMateriales.add(new Inmueble( "Fregadero", 4, 13));
-//		listaMateriales.add(new Inmueble( "Inodoro", 4, 13));
-//		listaMateriales.add(new Inmueble( "Televisor", 4, 13));
-//		listaMateriales.add(new Inmueble( "Mueble", 4, 13));
+		listaEventos = new ArrayList<Evento>();
+		listaMateriales = new ArrayList<Material>();
+		listaUsuarios = new ArrayList<User>();
+
+		// listaUsuarios.add(new User("Alberto", "Rodriguez", "Castro",
+		// "02053167320", "albe020531@gmail.com", "altro", "0205"));
+		// listaUsuarios.add(new User("Dashiell", "w", "r", "02032511457",
+		// "ggfgfhgfh", "dashi", "0304"));
+		//
+		// listaMateriales.add(new Construccion("Cemento", 2000F, 1, "sacos"));
+		// listaMateriales.add(new Construccion("Ladrillo", 25F, 1,
+		// "unidades"));
+		// listaMateriales.add(new Construccion("Bloque", 40F, 1, "unidades"));
+		// listaMateriales.add(new Construccion("Gravilla", 180F, 1, "sacos"));
+		// listaMateriales.add(new Construccion("Arena", 180F, 1, "sacos"));
+		// listaMateriales.add(new Construccion("Tejas", 4500F, 1, "unidades"));
+		// listaMateriales.add(new Construccion("Yeso", 3000F, 1, "sacos"));
+		// listaMateriales.add(new Construccion("Cavilla", 250F, 1, "metros"));
+		// listaMateriales.add(new Inmueble("Lavadora", 1, 11));
+		// listaMateriales.add(new Inmueble("Lavamanos", 2, 12));
+		// listaMateriales.add(new Inmueble("Refrigerador", 4, 13));
+		// listaMateriales.add(new Inmueble("Fregadero", 4, 13));
+		// listaMateriales.add(new Inmueble("Inodoro", 4, 13));
+		// listaMateriales.add(new Inmueble("Televisor", 4, 13));
+		// listaMateriales.add(new Inmueble("Mueble", 4, 13));
 
 	}
 
+	/**
+	 * Devuelve una única instancia de Sistema (Singleton)
+	 */
 	public static Sistema getInstance() {
-		if (sistema == null)
-			sistema = new Sistema();
+		if (sistema == null) {
+			sistema = Manager.cargarDatos();
+			if (sistema == null) {
+				sistema = new Sistema();
+			}
+		}
 		return sistema;
 	}
+
 	// Métodos
 
-	// Busca un material por su nombre o ID
-	public static Material getMaterial(String nombreOrID) {
-		getInstance();
+	public boolean checkUser(String username, String password) {
+
+		boolean check = false;
+
+		for (User user : listaUsuarios) {
+			if (user.checkUser(username, password)) {
+				check = true;
+			}
+		}
+		return check;
+	}
+
+	/**
+	 * Busca un material por su nombre o ID
+	 */
+	public Material getMaterial(String nombreOrID) {
 		Material material = null;
 		for (Material mat : listaMateriales) {
-			if (mat.getNombre().equalsIgnoreCase(nombreOrID) || mat.getID().equalsIgnoreCase(nombreOrID)) {
+			if (mat.getNombre().equalsIgnoreCase(nombreOrID)
+					|| mat.getID().equalsIgnoreCase(nombreOrID)) {
 				material = mat;
 			}
 		}
 		return material;
 	}
 
-	// Devuelve una única instancia de Sistema (Singleton)
-	public static ArrayList<Evento> getListaEventos() {
-		getInstance();
-		return new ArrayList<Evento>(listaEventos);
+	/**
+	 * Busca un evento por su nombre
+	 */
+	public Evento getEvento(String nombre) {
+		Evento evento = null;
+		for (Evento ev : listaEventos) {
+			if (ev.getNombre().equalsIgnoreCase(nombre)) {
+				evento = ev;
+			}
+		}
+		return evento;
 	}
 
-	// Getters y Setters
-	public static void addEventos(Evento evento) {
-		getInstance();
-		if (evento == null)
-			throw new IllegalArgumentException("TipoEvento tiene valor null");
-		listaEventos.add(evento);
+	/**
+	 * Busca un usuario por su username
+	 */
+	public User getUser(String username) {
+		User user = null;
+		for (User u : listaUsuarios) {
+			if (u.getUsername().equals(username)) {
+				user = u;
+			}
+		}
+		return user;
 	}
 
-	public static void eliminarEvento(int pos) {
-		getInstance();
-		if (pos < 0)
-			throw new IllegalArgumentException("Pos debe tener valor negativo");
-		listaEventos.remove(pos);
+	public ArrayList<Evento> getListaEventos() {
+		return listaEventos;
 	}
 
-	public static ArrayList<Material> getListaMateriales() {
-		getInstance();
-		return new ArrayList<Material>(listaMateriales);
+	public ArrayList<User> getListaUsuarios() {
+		return listaUsuarios;
 	}
 
-	public static void addMaterial(Material material) {
-		getInstance();
-		if (material == null)
-			throw new IllegalArgumentException("Material tiene valor null");
-		listaMateriales.add(material);
+	public ArrayList<Material> getListaMateriales() {
+		return listaMateriales;
 	}
 
-	public static void eliminarMaterial(int pos) {
-		getInstance();
-		if (pos < 0)
-			throw new IllegalArgumentException("Pos debe tener valor negativo");
-		listaMateriales.remove(pos);
+	public void addEvento(Evento evento) {
+		Evento evento1 = getEvento(evento.getNombre());
+		if (evento1 != null) {
+			listaEventos.set(listaEventos.indexOf(evento1), evento);
+		} else {
+			listaEventos.add(evento);
+		}
 	}
+
 }

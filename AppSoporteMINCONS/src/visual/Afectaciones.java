@@ -108,8 +108,7 @@ public class Afectaciones extends PrincipalPanel {
 			btnCancelar.setFocusable(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Frame.removerRuta(Frame.get(3)[0]);
-					Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
+					Frame.anteriorPrincipal(1);
 				}
 			});
 		}
@@ -135,8 +134,7 @@ public class Afectaciones extends PrincipalPanel {
 						ficha.setAfect(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect());
 						Evento evento = (Evento) Frame.get(1)[1];
 						evento.addFichaTecnica(ficha);
-						Frame.removerRuta(Frame.get(3)[0]);
-						Frame.setContentPanes((FichasTecnicas) Frame.getPosicionActual()[0]);
+						Frame.anteriorPrincipal(1);
 						((FichasTecnicas) Frame.getPosicionActual()[0]).getTableModel()
 								.actualizar(((Evento) Frame.get(1)[1]).getListaFichasTecnicas());
 						break;

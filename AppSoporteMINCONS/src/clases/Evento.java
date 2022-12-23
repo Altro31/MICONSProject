@@ -31,6 +31,15 @@ public class Evento implements Serializable {
 		setTipoEvento(tipoEvento);
 	}
 
+	public void addFichaTecnica(FichaTecnica ficha){
+		FichaTecnica fichaTecnica = getFicha(ficha.getID());
+		if (fichaTecnica!=null) {
+			listaFichasTecnicas.set(listaFichasTecnicas.indexOf(fichaTecnica), ficha);
+		} else {
+			listaFichasTecnicas.add(ficha);
+		}
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -71,12 +80,6 @@ public class Evento implements Serializable {
 
 	public ArrayList<FichaTecnica> getListaFichasTecnicas() {
 		return listaFichasTecnicas;
-	}
-
-	public void addFichaTecnica(FichaTecnica ficha) {
-		if (ficha == null)
-			throw new IllegalArgumentException("La ficha tiene valor null");
-		listaFichasTecnicas.add(ficha);
 	}
 
 	public void eliminarFichaTecnica(int pos) {

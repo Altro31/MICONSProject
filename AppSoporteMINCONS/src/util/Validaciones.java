@@ -1,6 +1,6 @@
 package util;
 
-// Validaciones
+// Validations
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -11,18 +11,18 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//Modificador final para que no se pueda heredar de esta clase
+// Cannot be inherited from this class
 public final class Validaciones {
 
-	// Constructor privado para que no se pueda instanciar la Clase
+	// private constructor so it can't be instantiated
 	private Validaciones() {
 	}
 
-	// Validaciones para JTextFields
+	// Validations for JTextFields
 	////////////////////////////////////////////////////////////////
 
-	// No se pueden introducir datos
-	public static void noDatos(final JTextField c) {
+	// unable to enter data
+	public static void noData(final JTextField c) {
 		// Oculta el cursor
 		c.addFocusListener(new FocusAdapter() {
 			@Override
@@ -31,7 +31,7 @@ public final class Validaciones {
 			}
 		});
 
-		// Evita la introducción manual de datos
+		// unable to enter data manually
 		c.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -40,8 +40,8 @@ public final class Validaciones {
 		});
 	}
 
-	// Sólo se pueden introducir letras
-	public static void soloLetras(final JTextField c, final boolean espacios) {
+	// Only Letters
+	public static void onlyLetters(final JTextField c, final boolean espacios) {
 		c.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -55,7 +55,8 @@ public final class Validaciones {
 		});
 	}
 
-	public static void soloNumeros(final JTextField t, final boolean decimal) {
+	// Only numbers
+	public static void onlyNumbers(final JTextField t, final boolean decimal) {
 		t.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -66,41 +67,41 @@ public final class Validaciones {
 				boolean isDigit = Character.isDigit(c);
 				boolean isDot = c == KeyEvent.VK_PERIOD;
 
-				// Comprueba si el textField tiene un punto
+				// Check if the JTextField has a dot
 				boolean haveDot = false;
-				for (char ch : string.toCharArray()) // para buscar q existe un punto
+				for (char ch : string.toCharArray()) // to find a dot
 					if (ch == KeyEvent.VK_PERIOD)
 						haveDot = true;
 
 				if (decimal) {
-					// Consume si lo primero que se introduce es un punto
+					// Consumes if the first character is a dot
 					if (string.isEmpty() && isDot) {
 						e.consume();
 					}
 
-					// Si el único caracter en el textField es un 0, y se inserta un número, borra
-					// el textField
+					// If the only character in the JTextField is a 0 and is inserted a number,
+					// clean the JTextField
 					if (string.length() == 1 && string.charAt(0) == KeyEvent.VK_0 && isDigit) {
 						t.setText("");
 
 					}
 				}
 
-				// Consume si se introduce algo que no sea un número o un punto
-				// En el caso del punto, decimal debe ser true
+				// Consumes if is inserted anything that is not a number or a dot
+				// In the case that is a dot, decimal must be True
 				if (!(isDigit || (decimal && isDot && !haveDot))) {
 					e.consume();
 
 				}
 			}
 
-			// Pequeño arreglo ya que si se selecciona el texto y se sobreescribe, puede
-			// romper alguna de las validaciones definidas anteriormente
+			// Small fix, because if the text is selected, copied and overwrited imself,
+			// codes can be break
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (decimal) {
 					String string = t.getText();
-					// Si se sobreescribe con punto, y es el primer caracter, lo borra
+					// If overwritted imself with a dot and is the first characted, it's deleted
 					if (string.length() > 0 && string.charAt(0) == KeyEvent.VK_PERIOD) {
 						string = string.substring(1);
 						t.setText(string);
@@ -111,13 +112,13 @@ public final class Validaciones {
 		});
 	}
 
-	public static void soloLetrasYNumeros(final JTextField c, final boolean espacios) {
+	// Only Letters and Spaces and Numbers
+	public static void onlyLettersAndNumbers(final JTextField c, final boolean espacios) {
 		c.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				Character c = e.getKeyChar();
 
-				// Sólo letras y espacios
 				if (!(Character.isLetter(c) || (espacios && c == KeyEvent.VK_SPACE) || Character.isDigit(c))) {
 					e.consume();
 				}
@@ -125,11 +126,12 @@ public final class Validaciones {
 		});
 	}
 
-	public static void limitar(final JTextField t, final int limite) {
+	// Set a limit to how character can be typed on this JTextField
+	public static void limite(final JTextField t, final int limit) {
 		t.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (t.getText().length() >= limite) {
+				if (t.getText().length() >= limit) {
 					e.consume();
 				}
 			}
@@ -137,40 +139,67 @@ public final class Validaciones {
 		t.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (t.getText().length() > limite)
-					t.setText(t.getText().substring(0, limite));
+				if (t.getText().length() > limit)
+					t.setText(t.getText().substring(0, limit));
 			}
 		});
 	}
 
-	// Validaciones para JSpinners
+	// Validations for JSpinners
 	////////////////////////////////////////////////////////////////
 
 	/**
-	 * El Spinner receptor cambia su valor segun lo hace el Spinner accionador
+	 * The listener spinner change its value according to the triggering spinner
 	 * 
-	 * @param accionador JSpinner que desencadena la acción
-	 * @param receptor   JSpinner que cambia en consecuencia de la accion
+	 * @param trigger JSpinner que desencadena la acción
+	 * @param listener   JSpinner que cambia en consecuencia de la accion
 	 * @param check      Variable que controla el último valor del JSpinner
 	 *                   accionador
-	 * @see Se recomienda que a la variable check fuera del método se le asigne el
-	 *      valor de retorno de éste método, de otro modo, no funciona
 	 */
 
-	public static void relacionarSpinners(final JSpinner accionador, final JSpinner receptor, final Value check) {
-		accionador.addChangeListener(new ChangeListener() {
+	public static void linkSpinners(final JSpinner trigger, final JSpinner listener, final Value check) {
+		trigger.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				final int value = (int) accionador.getValue();
-				if (accionador.getPreviousValue() != null) {
+				final int value = (int) trigger.getValue();
+				if (trigger.getPreviousValue() != null) {
 					if (check.val > value)
-						receptor.setValue((int) receptor.getValue() - 1);
+						listener.setValue((int) listener.getValue() - 1);
 					else
-						receptor.setValue((int) receptor.getValue() + 1);
+						listener.setValue((int) listener.getValue() + 1);
 				} else {
-					receptor.setValue((int) receptor.getValue() - 1);
+					listener.setValue((int) listener.getValue() - 1);
 				}
 				check.val = value;
 			}
 		});
 	}
+	
+//	public static void ciValidation(String cI) {
+//		
+//		if (cI==null) {
+//			throw new IllegalArgumentException("cI cannot be null");
+//		}
+//		if (cI.length()!=11) {
+//			throw new IllegalArgumentException("cI must to have 11 caracteres");
+//		}
+//		
+//		
+//		String date = cI.substring
+//				(4, 6);
+//		String month = cI.substring(2, 4);
+//		String century = cI.substring(7, 8);
+//		String year = cI.substring(0, 2);
+//		
+//		if (Integer.parseInt(month)<1 || Integer.parseInt(month)>12)
+//			throw new IllegalArgumentException("cI must be a value betwen 1 and 12");
+//		
+//		if(century)
+//		
+//		
+//		
+//		
+//		;
+//		
+//		
+//	}
 }
