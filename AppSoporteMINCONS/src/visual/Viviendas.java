@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,16 +20,22 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import classes.FichaTecnica;
 import classes.Vivienda;
 import classifications.Doc;
 import classifications.TipoConst;
 import classifications.TipoHab;
+import exceptions.ValidationException;
 import util.Auxiliary;
+import util.Limites;
 import util.Manager;
+import util.Validaciones;
 import util.Value;
 import visual.util.PrincipalPanel;
 
@@ -75,11 +81,22 @@ public class Viviendas extends PrincipalPanel {
 	private Value ancianosPreviuosValue = new Value(0);
 	private Value infantesPreviousValue = new Value(0);
 	private Value embarazadasPreviousValue = new Value(0);
+	private JLabel lblDireccionError;
+	private JLabel lblCIError;
+	private JLabel lblErrorTotalPersonas;
+	private boolean checkDireccion;
+	private boolean checkCI;
+	private boolean checkPersonas;
 
 	/**
 	 * Create the panel.
 	 */
 	public Viviendas() {
+
+		checkDireccion = false;
+		checkCI = false;
+		checkPersonas = false;
+
 		btnCerrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Manager.guardarDatos();
@@ -97,6 +114,53 @@ public class Viviendas extends PrincipalPanel {
 				Frame.removerActual();
 			}
 		});
+	}
+
+	private void checkFieldDireccion() {
+		try {
+			Validaciones.direccion(txtDireccion.getText());
+			lblDireccion.setForeground(Color.BLACK);
+			lblDireccionError.setText("");
+			checkDireccion = true;
+		} catch (ValidationException e) {
+			lblDireccion.setForeground(Color.RED);
+			checkDireccion = false;
+			if (e.getMessage().equals(ValidationException.OUT_OF_RANGE))
+				lblDireccionError.setText("La dirección debe tener entre 1 y " + Limites.direccion() + " caracteres");
+		}
+	}
+
+	private void checkFieldCI() {
+		try {
+			Validaciones.ci(txtCI.getText());
+			lblCI.setForeground(Color.BLACK);
+			lblCIError.setText("");
+			checkCI = true;
+		} catch (ValidationException e) {
+			lblCI.setForeground(Color.RED);
+			checkCI = false;
+			if (e.getMessage().equals(ValidationException.DATE_ERROR))
+				lblCIError.setText("Carnet no válido");
+			if (e.getMessage().equals(ValidationException.AGE_WRONG))
+				lblCIError.setText("La edad debe estar entre 18 y 100 años");
+		}
+	}
+
+	private void checkFieldTotalPersonas() {
+
+		try {
+			Validaciones.totalPresonas((int) spinnerPersonas.getValue(), ((int) spinnerAncianos.getValue())
+					+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue()));
+			lblErrorTotalPersonas.setVisible(false);
+			lblTotalPersonas.setForeground(Color.BLACK);
+			checkPersonas = true;
+
+		} catch (ValidationException e) {
+			lblTotalPersonas.setForeground(Color.RED);
+			checkPersonas = false;
+			if (e.getMessage().equals(ValidationException.OUT_OF_RANGE))
+				lblErrorTotalPersonas.setVisible(true);
+		}
 	}
 
 	private JPanel getPanelButton2() {
@@ -232,6 +296,9 @@ public class Viviendas extends PrincipalPanel {
 			panelProp.add(getLblTotalPersonas());
 			panelProp.add(getSpinnerPersonas());
 			panelProp.add(getSeparador());
+			panelProp.add(getLblDireccionError());
+			panelProp.add(getLblCIError());
+			panelProp.add(getLblErrorTotalPersonas());
 		}
 		return panelProp;
 	}
@@ -249,7 +316,27 @@ public class Viviendas extends PrincipalPanel {
 		if (txtDireccion == null) {
 			txtDireccion = new JTextField();
 			txtDireccion.setColumns(10);
+			Auxiliary.limite(txtDireccion, Limites.direccion());
 			txtDireccion.setBounds(206, 13, 226, 21);
+			txtDireccion.getDocument().addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					checkFieldDireccion();
+
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					checkFieldDireccion();
+
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					// Innesesario
+				}
+			});
 
 		}
 		return txtDireccion;
@@ -271,6 +358,25 @@ public class Viviendas extends PrincipalPanel {
 			Auxiliary.limite(txtCI, 11);
 			txtCI.setColumns(10);
 			txtCI.setBounds(205, 53, 226, 21);
+			txtCI.getDocument().addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					checkFieldCI();
+
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					checkFieldCI();
+
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					// Innesesario
+				}
+			});
 		}
 		return txtCI;
 	}
@@ -286,9 +392,7 @@ public class Viviendas extends PrincipalPanel {
 
 	private JComboBox<String> getCombDocLegal() {
 		if (combDocLegal == null) {
-			String[] items = { "Propiedad", "Usufructo", "Viviendas Vinculada", "Arrendamiento", "Providencia",
-					"Indocumentado" };
-			combDocLegal = new JComboBox(items);
+			combDocLegal = new JComboBox(Doc.names());
 			combDocLegal.setSelectedItem(null);
 			combDocLegal.setBounds(205, 95, 226, 21);
 		}
@@ -306,8 +410,7 @@ public class Viviendas extends PrincipalPanel {
 
 	private JComboBox<String> getCombTipoHab() {
 		if (combTipoHab == null) {
-			String[] items = { "Casa", "Apartamento", "Bohío", "Otro" };
-			combTipoHab = new JComboBox(items);
+			combTipoHab = new JComboBox(TipoHab.getValues().toArray());
 			combTipoHab.setSelectedItem(null);
 			combTipoHab.setBounds(205, 139, 226, 21);
 		}
@@ -325,8 +428,7 @@ public class Viviendas extends PrincipalPanel {
 
 	private JComboBox<String> getCombTipoCons() {
 		if (combTipoCons == null) {
-			String[] items = { "I", "II", "III", "IV", "V" };
-			combTipoCons = new JComboBox(items);
+			combTipoCons = new JComboBox(TipoConst.values());
 			combTipoCons.setSelectedItem(null);
 			combTipoCons.setBounds(205, 183, 226, 21);
 		}
@@ -335,18 +437,18 @@ public class Viviendas extends PrincipalPanel {
 
 	private JLabel getLblDimensiones() {
 		if (lblDimensiones == null) {
-			lblDimensiones = new JLabel("Dimensiones de la Viviendas:");
+			lblDimensiones = new JLabel("Dimensiones de la Viviendas (en metros):");
 			lblDimensiones.setFont(new Font("Tahoma", Font.BOLD, 11));
-			lblDimensiones.setBounds(144, 219, 198, 21);
+			lblDimensiones.setBounds(144, 219, 242, 21);
 		}
 		return lblDimensiones;
 	}
 
 	private JLabel getLblLargo() {
 		if (lblLargo == null) {
-			lblLargo = new JLabel("Largo:");
+			lblLargo = new JLabel("Largo (m):");
 			lblLargo.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblLargo.setBounds(60, 252, 44, 23);
+			lblLargo.setBounds(44, 252, 67, 23);
 		}
 		return lblLargo;
 	}
@@ -354,14 +456,33 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtLargo() {
 		if (txtLargo == null) {
 			txtLargo = new JFormattedTextField();
-			txtLargo.addKeyListener(new KeyAdapter() {
+			txtLargo.setHorizontalAlignment(SwingConstants.CENTER);
+			txtLargo.addFocusListener(new FocusAdapter() {
 				@Override
-				public void keyReleased(KeyEvent e) {
-					{
-						txtArea.setText(calcularArea(txtAncho.getText(), txtLargo.getText()) + "");
-					}
+				public void focusLost(FocusEvent e) {
+					reset(txtLargo);
 				}
 			});
+			txtLargo.getDocument().addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					calcularArea();
+
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					calcularArea();
+
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					// Innesesario
+				}
+			});
+
 			Auxiliary.onlyNumbers(txtLargo, true);
 			txtLargo.setColumns(10);
 			txtLargo.setBounds(116, 252, 95, 23);
@@ -369,44 +490,75 @@ public class Viviendas extends PrincipalPanel {
 		return txtLargo;
 	}
 
-	private float calcularArea(String ancho, String largo) {
-		float result = 0;
-		if (!ancho.isEmpty() && !largo.isEmpty()) {
-			result = Auxiliary.calcularArea(Float.parseFloat(txtLargo.getText()), Float.parseFloat(txtAncho.getText()));
+	private void reset(JTextField c) {
+		try {
+			if (Float.parseFloat(c.getText()) < Limites.dimensions())
+				c.setText(Limites.dimensions() + "");
+		} catch (NumberFormatException e) {
+			c.setText("");
 		}
-		return result;
 	}
 
 	private JTextField getTxtAncho() {
 		if (txtAncho == null) {
 			txtAncho = new JTextField();
-			txtAncho.addKeyListener(new KeyAdapter() {
+			txtAncho.setHorizontalAlignment(SwingConstants.CENTER);
+			txtAncho.addFocusListener(new FocusAdapter() {
 				@Override
-				public void keyReleased(KeyEvent e) {
-					txtArea.setText(calcularArea(txtAncho.getText(), txtLargo.getText()) + "");
+				public void focusLost(FocusEvent e) {
+					reset(txtAncho);
+				}
+			});
+			txtAncho.getDocument().addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					calcularArea();
+
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					calcularArea();
+
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					// Innesesario
 				}
 			});
 			txtAncho.setColumns(10);
 			Auxiliary.onlyNumbers(txtAncho, true);
-			txtAncho.setBounds(114, 300, 95, 23);
+			txtAncho.setBounds(116, 300, 95, 23);
 		}
 		return txtAncho;
 	}
 
+	private void calcularArea() {
+		float result = 0;
+		String ancho = txtAncho.getText();
+		String largo = txtLargo.getText();
+		if (!ancho.isEmpty() && !largo.isEmpty()) {
+			result = Float.parseFloat(txtLargo.getText()) * Float.parseFloat(txtAncho.getText());
+		}
+		txtArea.setText(result + "");
+	}
+
 	private JLabel getLblAncho() {
 		if (lblAncho == null) {
-			lblAncho = new JLabel("Ancho:");
+			lblAncho = new JLabel("Ancho (m):");
 			lblAncho.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblAncho.setBounds(60, 300, 44, 23);
+			lblAncho.setBounds(44, 300, 67, 23);
 		}
 		return lblAncho;
 	}
 
 	private JLabel getLblArea() {
 		if (lblArea == null) {
-			lblArea = new JLabel("Área:");
+			lblArea = new JLabel("Área (m²):");
 			lblArea.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblArea.setBounds(247, 276, 44, 23);
+			lblArea.setBounds(241, 276, 60, 23);
 		}
 		return lblArea;
 	}
@@ -414,6 +566,7 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtArea() {
 		if (txtArea == null) {
 			txtArea = new JTextField();
+			txtArea.setHorizontalAlignment(SwingConstants.CENTER);
 			txtArea.setEditable(false);
 			txtArea.setColumns(10);
 			Auxiliary.onlyNumbers(txtArea, true);
@@ -426,7 +579,7 @@ public class Viviendas extends PrincipalPanel {
 		if (lblSenso == null) {
 			lblSenso = new JLabel("Cantidad de Habitantes:");
 			lblSenso.setFont(new Font("Tahoma", Font.BOLD, 11));
-			lblSenso.setBounds(522, 16, 152, 14);
+			lblSenso.setBounds(571, 16, 152, 14);
 		}
 		return lblSenso;
 	}
@@ -435,15 +588,16 @@ public class Viviendas extends PrincipalPanel {
 		if (lblAncianos == null) {
 			lblAncianos = new JLabel("Ancianos:");
 			lblAncianos.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblAncianos.setBounds(545, 46, 143, 28);
+			lblAncianos.setBounds(507, 49, 143, 28);
 		}
 		return lblAncianos;
 	}
 
 	private JSpinner getSpinnerAncianos() {
 		if (spinnerAncianos == null) {
-			spinnerAncianos = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
-			spinnerAncianos.setBounds(698, 46, 44, 28);
+			spinnerAncianos = new JSpinner(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0),
+					Limites.ancianos(), Integer.valueOf(1)));
+			spinnerAncianos.setBounds(660, 49, 44, 28);
 			((DefaultEditor) (spinnerAncianos.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerAncianos;
@@ -453,15 +607,16 @@ public class Viviendas extends PrincipalPanel {
 		if (lblInfantes == null) {
 			lblInfantes = new JLabel("Infantes:");
 			lblInfantes.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblInfantes.setBounds(545, 92, 143, 28);
+			lblInfantes.setBounds(507, 91, 143, 28);
 		}
 		return lblInfantes;
 	}
 
 	private JSpinner getSpinnerInfantes() {
 		if (spinnerInfantes == null) {
-			spinnerInfantes = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
-			spinnerInfantes.setBounds(698, 92, 44, 28);
+			spinnerInfantes = new JSpinner(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0),
+					Limites.infantes(), Integer.valueOf(1)));
+			spinnerInfantes.setBounds(660, 91, 44, 28);
 			((DefaultEditor) (spinnerInfantes.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerInfantes;
@@ -471,15 +626,16 @@ public class Viviendas extends PrincipalPanel {
 		if (lblEmbarazadas == null) {
 			lblEmbarazadas = new JLabel("Embarazadas:");
 			lblEmbarazadas.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblEmbarazadas.setBounds(545, 138, 143, 28);
+			lblEmbarazadas.setBounds(507, 139, 143, 28);
 		}
 		return lblEmbarazadas;
 	}
 
 	private JSpinner getSpinnerEmbarazadas() {
 		if (spinnerEmbarazadas == null) {
-			spinnerEmbarazadas = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
-			spinnerEmbarazadas.setBounds(698, 138, 44, 28);
+			spinnerEmbarazadas = new JSpinner(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0),
+					Limites.embarazadas(), Integer.valueOf(1)));
+			spinnerEmbarazadas.setBounds(660, 135, 44, 28);
 			((DefaultEditor) (spinnerEmbarazadas.getEditor())).getTextField().setEditable(false);
 		}
 		return spinnerEmbarazadas;
@@ -489,28 +645,39 @@ public class Viviendas extends PrincipalPanel {
 		if (lblTotalPersonas == null) {
 			lblTotalPersonas = new JLabel("Total de Personas");
 			lblTotalPersonas.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblTotalPersonas.setBounds(545, 184, 143, 28);
+			lblTotalPersonas.setBounds(507, 180, 143, 28);
 		}
 		return lblTotalPersonas;
 	}
 
 	private JSpinner getSpinnerPersonas() {
 		if (spinnerPersonas == null) {
-			spinnerPersonas = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+			spinnerPersonas = new JSpinner(new SpinnerNumberModel(
+					Integer.valueOf(0), Integer.valueOf(((int) spinnerAncianos.getValue())
+							+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue())),
+					Limites.totalPersonal(), Integer.valueOf(1)));
 			spinnerPersonas.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					int value = (int) spinnerPersonas.getValue();
-					int total = (int) spinnerAncianos.getValue() + (int) spinnerInfantes.getValue()
-							+ (int) spinnerEmbarazadas.getValue();
-					if (value < total)
-						spinnerPersonas.setValue(total);
+					checkFieldTotalPersonas();
 				}
 			});
 			Auxiliary.linkSpinners(spinnerAncianos, spinnerPersonas, ancianosPreviuosValue);
 			Auxiliary.linkSpinners(spinnerInfantes, spinnerPersonas, infantesPreviousValue);
 			Auxiliary.linkSpinners(spinnerEmbarazadas, spinnerPersonas, embarazadasPreviousValue);
-			spinnerPersonas.setBounds(698, 184, 44, 28);
+			spinnerPersonas.setBounds(660, 180, 44, 28);
 			((DefaultEditor) (spinnerPersonas.getEditor())).getTextField().setEditable(false);
+			spinnerPersonas.addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					
+					if(((Integer)spinnerPersonas.getValue()).compareTo(Integer.valueOf(((int) spinnerAncianos.getValue())
+							+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue())))<0)
+						spinnerPersonas.setValue(((int) spinnerAncianos.getValue())
+								+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue()));
+					
+				}
+			});
 		}
 		return spinnerPersonas;
 	}
@@ -539,5 +706,37 @@ public class Viviendas extends PrincipalPanel {
 		spinnerEmbarazadas.setValue(vivienda.getTotalEmbarazadas());
 		spinnerPersonas.setValue(vivienda.getTotalPersonas());
 
+	}
+
+	private JLabel getLblDireccionError() {
+		if (lblDireccionError == null) {
+			lblDireccionError = new JLabel("");
+			lblDireccionError.setForeground(new Color(255, 0, 0));
+			lblDireccionError.setBounds(206, 34, 269, 14);
+		}
+		return lblDireccionError;
+	}
+
+	private JLabel getLblCIError() {
+		if (lblCIError == null) {
+			lblCIError = new JLabel("");
+			lblCIError.setForeground(Color.RED);
+			lblCIError.setBounds(206, 74, 269, 14);
+		}
+		return lblCIError;
+	}
+
+	private JLabel getLblErrorTotalPersonas() {
+		if (lblErrorTotalPersonas == null) {
+			lblErrorTotalPersonas = new JLabel(
+					"Error: El total de personas excede el establecido (" + Limites.totalPersonal() + ")");
+			lblErrorTotalPersonas.setHorizontalAlignment(SwingConstants.CENTER);
+			lblErrorTotalPersonas.setHorizontalTextPosition(SwingConstants.CENTER);
+			lblErrorTotalPersonas.setVisible(false);
+			lblErrorTotalPersonas.setBorder(new LineBorder(new Color(255, 0, 0)));
+			lblErrorTotalPersonas.setForeground(Color.RED);
+			lblErrorTotalPersonas.setBounds(487, 227, 320, 24);
+		}
+		return lblErrorTotalPersonas;
 	}
 }

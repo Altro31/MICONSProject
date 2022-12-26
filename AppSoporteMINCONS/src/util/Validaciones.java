@@ -1,7 +1,15 @@
 package util;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 
 import classes.Sistema;
 import classifications.TipoEvento;
@@ -166,7 +174,33 @@ public final class Validaciones {
 	 */
 	public static void infantes(int val) throws ValidationException {
 		nonNegative(val);
-		if (val > Limites.infantes()) {
+		if (Limites.infantes() != null && val > Limites.infantes()) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
+	}
+
+	/**
+	 * @Messages OUT_OF_RANGE
+	 * 
+	 * @param val
+	 * @throws ValidationException
+	 */
+	public static void ancianos(int val) throws ValidationException {
+		nonNegative(val);
+		if (Limites.ancianos() != null && val > Limites.ancianos()) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
+	}
+
+	/**
+	 * @Messages OUT_OF_RANGE
+	 * 
+	 * @param val
+	 * @throws ValidationException
+	 */
+	public static void embarazadas(int val) throws ValidationException {
+		nonNegative(val);
+		if (Limites.embarazadas() != null && val > Limites.embarazadas()) {
 			throw new ValidationException(ValidationException.OUT_OF_RANGE);
 		}
 	}
@@ -180,37 +214,51 @@ public final class Validaciones {
 	 */
 	public static void totalPresonas(int val, int min) throws ValidationException {
 		nonNegative(val);
-		if (val < min || val > Limites.totalPersonal()) {
+		if (Limites.totalPersonal() != null && (val < min || val > Limites.totalPersonal())) {
 			throw new ValidationException(ValidationException.OUT_OF_RANGE);
 		}
 	}
 
-//	public static void ciValidation(String cI) {
-//		
-//		if (cI==null) {
-//			throw new IllegalArgumentException("cI cannot be null");
-//		}
-//		if (cI.length()!=11) {
-//			throw new IllegalArgumentException("cI must to have 11 caracteres");
-//		}
-//		
-//		
-//		String date = cI.substring
-//				(4, 6);
-//		String month = cI.substring(2, 4);
-//		String century = cI.substring(7, 8);
-//		String year = cI.substring(0, 2);
-//		
-//		if (Integer.parseInt(month)<1 || Integer.parseInt(month)>12)
-//			throw new IllegalArgumentException("cI must be a value betwen 1 and 12");
-//		
-//		if(century)
-//		
-//		
-//		
-//		
-//		;
-//		
-//		
-//	}
+	/**
+	 * @Messages NULL,EMPTY,OUT_OF_RANGE,DATE_ERROR,AGE_WRONG
+	 * @param ci
+	 * @throws ValidationException
+	 */
+	public static void ci(String ci) throws ValidationException {
+
+		stringValidation(ci);
+
+		if(ci.length()!=11)
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		
+		int date = Integer.parseInt(ci.substring(4, 6));
+		int month = Integer.parseInt(ci.substring(2, 4));
+		String year = ci.substring(0, 2);
+		int century = Integer.parseInt(ci.substring(6, 7));
+
+		if (century == 9)
+			year = "18" + year;
+		else if (century > 5 && century < 9) {
+			year = "20" + year;
+
+		} else
+			year = "19" + year;
+
+		SimpleDateFormat dayFormat = new SimpleDateFormat("dd/MM/yy");
+		dayFormat.setLenient(false);
+
+		try {
+			dayFormat.parse(date + "/" + month + "/" + year);
+		} catch (ParseException e) {
+			throw new ValidationException(ValidationException.DATE_ERROR);
+		}
+
+		Period age = Period.between(LocalDate.of(Integer.parseInt(year), month, date),
+				LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
+						Calendar.getInstance().get(Calendar.DATE)));
+
+		if (age.getYears() < 18)
+			throw new ValidationException(ValidationException.AGE_WRONG);
+
+	}
 }

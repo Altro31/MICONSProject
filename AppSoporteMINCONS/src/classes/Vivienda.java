@@ -6,9 +6,11 @@ import classifications.Doc;
 import classifications.TipoConst;
 import classifications.TipoHab;
 import exceptions.ValidationException;
+import util.Limites;
 import util.Validaciones;
 
 public class Vivienda implements Serializable {
+	
 	/**
 	 * 
 	 */
@@ -25,6 +27,20 @@ public class Vivienda implements Serializable {
 	private int totalAncianos;
 	private int totalEmbarazadas;
 
+	public Vivienda() {
+		direccion = "desconocida";
+		ciJefe = "01010100000";
+		docLegal = Doc.PROPIEDAD;
+		tipoHabitacional = TipoHab.getTipoHab("Apartamento");
+		tipoConstructiva = TipoConst.I;
+		largo = Limites.dimensions();
+		ancho = Limites.dimensions();
+		totalPersonas = 0;
+		totalInfantes = 0;
+		totalAncianos = 0;
+		totalEmbarazadas = 0;
+	}
+	
 	public String getDireccion() {
 
 		return direccion;
@@ -40,12 +56,8 @@ public class Vivienda implements Serializable {
 	}
 
 	public void setCiJefe(String ciJefe) {
-		if (ciJefe.length() != 11 || ciJefe.trim().length() == 0 || !ciJefe.matches("[0-9]*")) {
-			throw new IllegalArgumentException("Se deben introducir once numeros");
-		} else {
-			this.ciJefe = ciJefe;
-		}
-
+		Validaciones.ci(ciJefe);
+		this.ciJefe = ciJefe;
 	}
 
 	public Doc getDocLegal() {
@@ -120,7 +132,7 @@ public class Vivienda implements Serializable {
 	}
 
 	public void setTotalAncianos(int totalAncianos) {
-		Validaciones.nonNegative(totalAncianos);
+		Validaciones.ancianos(totalAncianos);
 		this.totalAncianos = totalAncianos;
 	}
 
@@ -129,7 +141,7 @@ public class Vivienda implements Serializable {
 	}
 
 	public void setTotalEmbarazadas(int totalEmbarazadas) {
-		Validaciones.nonNegative(totalEmbarazadas);
+		Validaciones.embarazadas(totalEmbarazadas);
 		this.totalEmbarazadas = totalEmbarazadas;
 	}
 }

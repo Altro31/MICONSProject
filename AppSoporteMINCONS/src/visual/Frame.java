@@ -1,7 +1,6 @@
 package visual;
 
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -18,20 +17,6 @@ public class Frame extends JFrame {
 
 	private static Frame frame;
 	private static ArrayList<Object[]> ruta = new ArrayList<Object[]>();
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					getInstance();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

@@ -1,9 +1,13 @@
 package util;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,11 +18,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -47,19 +53,6 @@ public final class Auxiliary {
 		for (int i = 0; i < count; i++) {
 			tableModel.removeRow(0);
 		}
-	}
-
-	/**
-	 * Calcular Area
-	 */
-	public static float calcularArea(float largo, float ancho) {
-		if (largo <= 0) {
-			throw new IllegalArgumentException("largo debe ser mayor que 0");
-		}
-		if (largo <= 0) {
-			throw new IllegalArgumentException("ancho debe ser mayor que 0");
-		}
-		return largo * ancho;
 	}
 
 	/**
@@ -368,8 +361,10 @@ public final class Auxiliary {
 	 */
 
 	public static void linkSpinners(final JSpinner trigger, final JSpinner listener, final Value check) {
+
 		trigger.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				
 				final int value = (int) trigger.getValue();
 				if (trigger.getPreviousValue() != null) {
 					if (check.val > value)
@@ -380,6 +375,7 @@ public final class Auxiliary {
 					listener.setValue((int) listener.getValue() - 1);
 				}
 				check.val = value;
+				
 			}
 		});
 	}

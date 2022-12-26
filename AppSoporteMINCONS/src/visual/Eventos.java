@@ -33,6 +33,7 @@ import classes.Sistema;
 import classifications.TipoEvento;
 import exceptions.ValidationException;
 import util.Auxiliary;
+import util.Limites;
 import util.Manager;
 import util.Validaciones;
 import visual.util.PrincipalPanel;
@@ -365,7 +366,7 @@ public class Eventos extends PrincipalPanel {
 		if (textNombre == null) {
 			textNombre = new JTextField();
 			Auxiliary.onlyLetters(textNombre, true);
-			Auxiliary.limite(textNombre, 30);
+			Auxiliary.limite(textNombre, Limites.nombreEvento());
 			textNombre.setColumns(10);
 			textNombre.addKeyListener(new KeyAdapter() {
 				@Override
