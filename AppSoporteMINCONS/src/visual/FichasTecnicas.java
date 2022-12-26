@@ -19,17 +19,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import classes.Afectacion;
+import classes.Cubicacion;
+import classes.Evento;
+import classes.FichaTecnica;
+import classes.Sistema;
+import classes.Vivienda;
 import util.Auxiliary;
 import util.FichaTableModel;
 import util.Manager;
 import visual.util.CustomTable;
 import visual.util.PrincipalPanel;
-import clases.Afectacion;
-import clases.Cubicacion;
-import clases.Evento;
-import clases.FichaTecnica;
-import clases.Sistema;
-import clases.Vivienda;
 
 public class FichasTecnicas extends PrincipalPanel {
 

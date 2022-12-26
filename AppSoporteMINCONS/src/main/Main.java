@@ -1,6 +1,10 @@
 package main;
 
-import visual.Login;
+import java.awt.Container;
+
+import classes.Sistema;
+import visual.Frame;
+import visual.Principal;
 
 public class Main {
 
@@ -8,6 +12,11 @@ public class Main {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		Login.run();
+		
+		Sistema sistema = Sistema.getInstance();
+		Frame.addRuta(new Principal(), null);
+		Frame.setContentPanes((Container)Frame.getPosicionActual()[0]);
+		Frame.setVisibles();
+		
 	}
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.FichaTecnica;
-import clases.Techo;
+import classes.FichaTecnica;
+import classes.Techo;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -23,18 +23,17 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import classes.FichaTecnica;
+import classes.Vivienda;
+import classifications.Doc;
+import classifications.TipoConst;
+import classifications.TipoHab;
 import util.Auxiliary;
 import util.Manager;
-import util.Validaciones;
 import util.Value;
 import visual.util.PrincipalPanel;
-import clases.FichaTecnica;
-import clases.Vivienda;
-import enums.Doc;
-import enums.TipoConst;
-import enums.TipoHab;
 
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class Viviendas extends PrincipalPanel {
 
 	/**
@@ -137,25 +136,14 @@ public class Viviendas extends PrincipalPanel {
 							&& !getTxtLargo().getText().isEmpty() && !getTxtAncho().getText().isEmpty()
 							&& !getTxtArea().getText().isEmpty() && combDocLegal.getSelectedItem() != null
 							&& combTipoCons.getSelectedItem() != null && combTipoHab.getSelectedItem() != null) {
-						FichaTecnica ficha = (FichaTecnica)Frame.getPosicionActual()[1];
-						
-//						ficha.setVivienda(new Vivienda(getTxtDireccion().getText(), getTxtCI().getText(),
-//								Doc.getValue(getCombDocLegal().getSelectedItem().toString()),
-//								TipoHab.getValue(getCombTipoHab().getSelectedItem().toString()),
-//								TipoConst.getValue(getCombTipoCons().getSelectedItem().toString()),
-//								Double.parseDouble(getTxtLargo().getText()),
-//								Double.parseDouble(getTxtAncho().getText()), Double.parseDouble(getTxtArea().getText()),
-//								Integer.parseInt(getSpinnerPersonas().getValue().toString()),
-//								Integer.parseInt(getSpinnerInfantes().getValue().toString()),
-//								Integer.parseInt(getSpinnerAncianos().getValue().toString()),
-//								Integer.parseInt(getSpinnerEmbarazadas().getValue().toString())));
+						FichaTecnica ficha = (FichaTecnica) Frame.getPosicionActual()[1];
 
 						Vivienda vivienda = ficha.getVivienda();
 						vivienda.setDireccion(txtDireccion.getText());
 						vivienda.setCiJefe(txtCI.getText());
-						vivienda.setDocLegal(Doc.getValue(combDocLegal.getSelectedItem().toString()));
-						vivienda.setTipoHabitacional(TipoHab.getValue(combTipoHab.getSelectedItem().toString()));
-						vivienda.setTipoConstructiva(TipoConst.getValue(combTipoCons.getSelectedItem().toString()));
+						vivienda.setDocLegal(Doc.value(combDocLegal.getSelectedItem().toString()));
+						vivienda.setTipoHabitacional(TipoHab.getTipoHab(combTipoHab.getSelectedItem().toString()));
+						vivienda.setTipoConstructiva(TipoConst.valueOf(combTipoCons.getSelectedItem().toString()));
 						vivienda.setLargo(Float.parseFloat(getTxtLargo().getText()));
 						vivienda.setAncho(Float.parseFloat(getTxtAncho().getText()));
 						vivienda.setTotalPersonas(Integer.parseInt(getSpinnerPersonas().getValue().toString()));
@@ -262,7 +250,7 @@ public class Viviendas extends PrincipalPanel {
 			txtDireccion = new JTextField();
 			txtDireccion.setColumns(10);
 			txtDireccion.setBounds(206, 13, 226, 21);
-			
+
 		}
 		return txtDireccion;
 	}
@@ -279,8 +267,8 @@ public class Viviendas extends PrincipalPanel {
 	private JTextField getTxtCI() {
 		if (txtCI == null) {
 			txtCI = new JTextField();
-			Validaciones.onlyNumbers(txtCI, false);
-			Validaciones.limite(txtCI, 11);
+			Auxiliary.onlyNumbers(txtCI, false);
+			Auxiliary.limite(txtCI, 11);
 			txtCI.setColumns(10);
 			txtCI.setBounds(205, 53, 226, 21);
 		}
@@ -369,26 +357,26 @@ public class Viviendas extends PrincipalPanel {
 			txtLargo.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					 {
+					{
 						txtArea.setText(calcularArea(txtAncho.getText(), txtLargo.getText()) + "");
 					}
 				}
 			});
-			Validaciones.onlyNumbers(txtLargo, true);
+			Auxiliary.onlyNumbers(txtLargo, true);
 			txtLargo.setColumns(10);
 			txtLargo.setBounds(116, 252, 95, 23);
 		}
 		return txtLargo;
 	}
-	
+
 	private float calcularArea(String ancho, String largo) {
 		float result = 0;
 		if (!ancho.isEmpty() && !largo.isEmpty()) {
-			result = Auxiliary.calcularArea(Float.parseFloat(txtLargo.getText()),
-					Float.parseFloat(txtAncho.getText()));
+			result = Auxiliary.calcularArea(Float.parseFloat(txtLargo.getText()), Float.parseFloat(txtAncho.getText()));
 		}
 		return result;
 	}
+
 	private JTextField getTxtAncho() {
 		if (txtAncho == null) {
 			txtAncho = new JTextField();
@@ -399,7 +387,7 @@ public class Viviendas extends PrincipalPanel {
 				}
 			});
 			txtAncho.setColumns(10);
-			Validaciones.onlyNumbers(txtAncho, true);
+			Auxiliary.onlyNumbers(txtAncho, true);
 			txtAncho.setBounds(114, 300, 95, 23);
 		}
 		return txtAncho;
@@ -428,7 +416,7 @@ public class Viviendas extends PrincipalPanel {
 			txtArea = new JTextField();
 			txtArea.setEditable(false);
 			txtArea.setColumns(10);
-			Validaciones.onlyNumbers(txtArea, true);
+			Auxiliary.onlyNumbers(txtArea, true);
 			txtArea.setBounds(303, 276, 95, 23);
 		}
 		return txtArea;
@@ -518,9 +506,9 @@ public class Viviendas extends PrincipalPanel {
 						spinnerPersonas.setValue(total);
 				}
 			});
-			Validaciones.linkSpinners(spinnerAncianos, spinnerPersonas, ancianosPreviuosValue);
-			Validaciones.linkSpinners(spinnerInfantes, spinnerPersonas, infantesPreviousValue);
-			Validaciones.linkSpinners(spinnerEmbarazadas, spinnerPersonas, embarazadasPreviousValue);
+			Auxiliary.linkSpinners(spinnerAncianos, spinnerPersonas, ancianosPreviuosValue);
+			Auxiliary.linkSpinners(spinnerInfantes, spinnerPersonas, infantesPreviousValue);
+			Auxiliary.linkSpinners(spinnerEmbarazadas, spinnerPersonas, embarazadasPreviousValue);
 			spinnerPersonas.setBounds(698, 184, 44, 28);
 			((DefaultEditor) (spinnerPersonas.getEditor())).getTextField().setEditable(false);
 		}
@@ -535,21 +523,21 @@ public class Viviendas extends PrincipalPanel {
 		}
 		return separador;
 	}
-	
+
 	public void actualizarCampos(Vivienda vivienda) {
-		
+
 		txtDireccion.setText(vivienda.getDireccion());
 		txtCI.setText(vivienda.getCiJefe());
 		combDocLegal.setSelectedItem(vivienda.getDocLegal().getName());
 		combTipoCons.setSelectedItem(vivienda.getTipoConstructiva().name());
 		combTipoHab.setSelectedItem(vivienda.getTipoHabitacional().getName());
-		txtLargo.setText(vivienda.getLargo()+"");
-		txtAncho.setText(vivienda.getAncho()+"");
-		txtArea.setText(vivienda.getArea()+"");
+		txtLargo.setText(vivienda.getLargo() + "");
+		txtAncho.setText(vivienda.getAncho() + "");
+		txtArea.setText(vivienda.calcularArea() + "");
 		spinnerAncianos.setValue(vivienda.getTotalAncianos());
 		spinnerInfantes.setValue(vivienda.getTotalInfantes());
 		spinnerEmbarazadas.setValue(vivienda.getTotalEmbarazadas());
 		spinnerPersonas.setValue(vivienda.getTotalPersonas());
-		
+
 	}
 }

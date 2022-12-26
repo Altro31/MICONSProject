@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.Construccion;
-import clases.Material;
+import classes.Construccion;
+import classes.Material;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ExistenteTableModel extends DefaultTableModel {

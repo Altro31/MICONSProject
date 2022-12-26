@@ -30,15 +30,14 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import clases.Construccion;
-import clases.FichaTecnica;
-import clases.Material;
-import clases.Sistema;
-import clases.Techo;
-import enums.TipoDerrumbe;
+import classes.Construccion;
+import classes.FichaTecnica;
+import classes.Material;
+import classes.Sistema;
+import classes.Techo;
+import classifications.TipoDerrumbe;
 import util.Auxiliary;
 import util.TechoTableModel;
-import util.Validaciones;
 import visual.Frame;
 import visual.util.CustomTable;
 
@@ -115,9 +114,9 @@ public class PanelTecho extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 
 					Auxiliary.borrarSeleccion(table,
-							(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos()));
+							(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos()));
 
-					techoModel.actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos());
+					techoModel.actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos());
 				}
 			});
 
@@ -219,8 +218,8 @@ public class PanelTecho extends JPanel {
 		if (txtIdentificadorTecho == null) {
 			txtIdentificadorTecho = new JTextField();
 			txtIdentificadorTecho.setColumns(10);
-			Validaciones.limite(txtIdentificadorTecho, 20);
-			Validaciones.onlyLettersAndNumbers(txtIdentificadorTecho, true);
+			Auxiliary.limite(txtIdentificadorTecho, 20);
+			Auxiliary.onlyLettersAndNumbers(txtIdentificadorTecho, true);
 		}
 		return txtIdentificadorTecho;
 	}
@@ -275,7 +274,7 @@ public class PanelTecho extends JPanel {
 							&& comboBoxTipoDerrumbeTecho.getSelectedItem() != null
 							&& !(txtIdentificadorTecho.getText()).isEmpty()) {
 
-						ArrayList<Techo> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect()
+						ArrayList<Techo> lista = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
 								.getListaTechos();
 						String nombre = txtIdentificadorTecho.getText();
 
@@ -286,13 +285,13 @@ public class PanelTecho extends JPanel {
 							}
 						}
 						if (check) {
-							((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos()
+							((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos()
 									.add(new Techo((txtIdentificadorTecho.getText()),
 											(Construccion) sistema
 													.getMaterial((String) comboBoxMatPredTecho.getSelectedItem()),
 											(TipoDerrumbe) comboBoxTipoDerrumbeTecho.getSelectedItem()));
 							techoModel.actualizar(
-									((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos());
+									((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos());
 							comboBoxMatPredTecho.setSelectedItem(null);
 							comboBoxTipoDerrumbeTecho.setSelectedItem(null);
 							txtIdentificadorTecho.setText("");
@@ -323,7 +322,7 @@ public class PanelTecho extends JPanel {
 			btnEditarTecho.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (table.getSelectedRowCount() > 0) {
-						Techo techo = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos()
+						Techo techo = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos()
 								.get(Integer.parseInt((String) techoModel.getValueAt(table.getSelectedRow(), 0)) - 1);
 
 						txtIdentificadorTecho.setText(techo.getNombre());
@@ -409,14 +408,14 @@ public class PanelTecho extends JPanel {
 					if (((String) comboBoxMatPredTecho.getSelectedItem()) != null
 							&& comboBoxTipoDerrumbeTecho.getSelectedItem() != null
 							&& !(txtIdentificadorTecho.getText()).isEmpty()) {
-						((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos().set(
+						((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos().set(
 								Integer.parseInt((String) techoModel.getValueAt(table.getSelectedRow(), 0)) - 1,
 								new Techo((txtIdentificadorTecho.getText()),
 										(Construccion) sistema
 												.getMaterial((String) comboBoxMatPredTecho.getSelectedItem()),
 										(TipoDerrumbe) comboBoxTipoDerrumbeTecho.getSelectedItem()));
-						techoModel.actualizar(
-								((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos());
+						techoModel
+								.actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos());
 
 						comboBoxMatPredTecho.setSelectedItem(null);
 						comboBoxTipoDerrumbeTecho.setSelectedItem(null);
@@ -448,7 +447,7 @@ public class PanelTecho extends JPanel {
 		}
 		return btnCancelarTecho;
 	}
-	
+
 	public void actualizarTabla(ArrayList<Techo> lista) {
 		techoModel.actualizar(lista);
 	}

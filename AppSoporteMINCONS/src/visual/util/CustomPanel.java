@@ -16,11 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import classes.Evento;
+import classes.Sistema;
 import visual.EventosRegistrados;
 import visual.FichasTecnicas;
 import visual.Frame;
-import clases.Evento;
-import clases.Sistema;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CustomPanel extends JPanel {
 
@@ -45,16 +48,29 @@ public class CustomPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	
+
 	public CustomPanel(EventosRegistrados padre, int index, Evento evento) {
 		super();
+		
+		addMouseListener(getMouseEntered());
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setBorder(new LineBorder(new Color(0, 0, 0)));
+			}
+		});
+		
+		setFocusable(false);
+		setFocusTraversalKeysEnabled(false);
+		setEnabled(false);
+		setDoubleBuffered(false);
 		this.index = index;
 		this.padre = padre;
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setBackground(Color.WHITE);
 		setSize(new Dimension(783, 58));
 		setLayout(null);
-		this.evento=evento;
+		this.evento = evento;
 		add(getLblNombreDelEvento());
 		add(getLblTipoEvento());
 		add(getLblTipo());
@@ -76,6 +92,7 @@ public class CustomPanel extends JPanel {
 		}
 		return lblNombreDelEvento;
 	}
+
 	private JLabel getLblTipoEvento() {
 		if (lblTipoEvento == null) {
 			lblTipoEvento = new JLabel("Tipo de Evento:");
@@ -87,15 +104,17 @@ public class CustomPanel extends JPanel {
 		}
 		return lblTipoEvento;
 	}
+
 	private JLabel getLblTipo() {
 		if (lblTipo == null) {
-			lblTipo = new JLabel(evento.getTipoEvento().name());
+			lblTipo = new JLabel(evento.getTipoEvento().getName());
 			lblTipo.setHorizontalTextPosition(SwingConstants.CENTER);
 			lblTipo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lblTipo.setBounds(406, 33, 109, 15);
 		}
 		return lblTipo;
 	}
+
 	private JLabel getLblFechaInicio() {
 		if (lblFechaInicio == null) {
 			lblFechaInicio = new JLabel("Inicio:");
@@ -107,57 +126,76 @@ public class CustomPanel extends JPanel {
 		}
 		return lblFechaInicio;
 	}
+
 	private JLabel getLblInicio() {
 		if (lblInicio == null) {
 			GregorianCalendar fecha = evento.getFechaInicio();
-			lblInicio = new JLabel(fecha.get(Calendar.DATE) + "/" + fecha.get(Calendar.MONTH)+1 + "/" + fecha.get(Calendar.YEAR));
+			lblInicio = new JLabel(
+					fecha.get(Calendar.DATE) + "/" + (fecha.get(Calendar.MONTH) + 1) + "/" + fecha.get(Calendar.YEAR));
 			lblInicio.setHorizontalTextPosition(SwingConstants.CENTER);
-			lblInicio.setHorizontalAlignment(SwingConstants.CENTER);
 			lblInicio.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lblInicio.setAlignmentX(0.5f);
-			lblInicio.setBounds(50, 33, 71, 15);
+			lblInicio.setBounds(50, 33, 135, 15);
 		}
 		return lblInicio;
 	}
+
 	private JLabel getLblFin() {
 		if (lblFin == null) {
 			GregorianCalendar fecha = evento.getFechaFin();
-			lblFin = new JLabel(fecha.get(Calendar.DATE) + "/" + fecha.get(Calendar.MONTH)+1 + "/" + fecha.get(Calendar.YEAR));
+			lblFin = new JLabel(
+					fecha.get(Calendar.DATE) + "/" + (fecha.get(Calendar.MONTH) + 1) + "/" + fecha.get(Calendar.YEAR));
 			lblFin.setHorizontalTextPosition(SwingConstants.CENTER);
 			lblFin.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lblFin.setAlignmentX(0.5f);
-			lblFin.setBounds(664, 33, 71, 15);
+			lblFin.setBounds(639, 33, 96, 15);
 		}
 		return lblFin;
 	}
+
 	private JLabel getLblFechaFin() {
 		if (lblFechaFin == null) {
 			lblFechaFin = new JLabel("Fin:");
 			lblFechaFin.setHorizontalTextPosition(SwingConstants.CENTER);
-			lblFechaFin.setHorizontalAlignment(SwingConstants.CENTER);
+			lblFechaFin.setHorizontalAlignment(SwingConstants.TRAILING);
 			lblFechaFin.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lblFechaFin.setAlignmentX(0.5f);
-			lblFechaFin.setBounds(627, 33, 38, 15);
+			lblFechaFin.setBounds(575, 33, 54, 15);
 		}
 		return lblFechaFin;
 	}
+
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("");
+			btnNewButton.addMouseListener(getMouseEntered());
+			btnNewButton.setBorder(null);
+			btnNewButton.setFocusable(false);
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					sistema.getListaEventos().remove(index);
 					padre.addComponents();
 				}
 			});
-			btnNewButton.setIcon(new ImageIcon(CustomPanel.class.getResource("/imagenes/Cancel.png")));
+			btnNewButton.setIcon(new ImageIcon(CustomPanel.class.getResource("/images/Cancel.png")));
 			btnNewButton.setBounds(745, 5, 28, 23);
 		}
 		return btnNewButton;
 	}
+
 	private JButton getButton() {
 		if (button == null) {
 			button = new JButton("");
+			button.addMouseListener(getMouseEntered());
+			button.setVerifyInputWhenFocusTarget(false);
+			button.setRolloverEnabled(false);
+			button.setRequestFocusEnabled(false);
+			button.setFocusPainted(false);
+			button.setFocusTraversalKeysEnabled(false);
+			button.setBorder(null);
+			button.setFocusable(false);
+			button.setContentAreaFilled(false);
+			button.setIcon(new ImageIcon(CustomPanel.class.getResource("/images/icons8_edit_file_25px.png")));
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					FichasTecnicas fichasTecnicas = new FichasTecnicas();
@@ -169,5 +207,14 @@ public class CustomPanel extends JPanel {
 			button.setBounds(745, 31, 28, 23);
 		}
 		return button;
+	}
+
+	private MouseAdapter getMouseEntered() {
+		return new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setBorder(new LineBorder(Color.BLUE.brighter(), 3));
+			}
+		};
 	}
 }

@@ -19,17 +19,17 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import classes.Construccion;
+import classes.Cubicacion;
+import classes.Evento;
+import classes.FichaTecnica;
+import classes.Material;
+import classes.Sistema;
 import util.AsignarTableModel;
 import util.ExistenteTableModel;
 import util.Manager;
 import visual.util.CustomTable;
 import visual.util.PrincipalPanel;
-import clases.Construccion;
-import clases.Cubicacion;
-import clases.Evento;
-import clases.FichaTecnica;
-import clases.Material;
-import clases.Sistema;
 
 public class AsignarMateriales extends PrincipalPanel {
 
@@ -112,7 +112,7 @@ public class AsignarMateriales extends PrincipalPanel {
 			btnRemove = new JButton("");
 			btnRemove.setEnabled(false);
 			btnRemove.setIcon(new ImageIcon(AsignarMateriales.class
-					.getResource("/imagenes/Left.png")));
+					.getResource("/images/Left.png")));
 			btnRemove.setFocusable(false);
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -142,7 +142,7 @@ public class AsignarMateriales extends PrincipalPanel {
 			btnAdd = new JButton("");
 			btnAdd.setEnabled(false);
 			btnAdd.setIcon(new ImageIcon(AsignarMateriales.class
-					.getResource("/imagenes/Right.png")));
+					.getResource("/images/Right.png")));
 			btnAdd.setFocusable(false);
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -259,7 +259,7 @@ public class AsignarMateriales extends PrincipalPanel {
 			btnOK = new JButton("");
 			btnOK.setFocusable(false);
 			btnOK.setIcon(new ImageIcon(AsignarMateriales.class
-					.getResource("/imagenes/OK.png")));
+					.getResource("/images/OK.png")));
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int index = tableExistentes.getSelectedRow();
@@ -289,7 +289,7 @@ public class AsignarMateriales extends PrincipalPanel {
 			btnCancel = new JButton("");
 			btnCancel.setFocusable(false);
 			btnCancel.setIcon(new ImageIcon(AsignarMateriales.class
-					.getResource("/imagenes/Cancel.png")));
+					.getResource("/images/Cancel.png")));
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 

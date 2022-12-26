@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.FichaTecnica;
-import clases.Inmueble;
-import clases.Material;
+import classes.FichaTecnica;
+import classes.Inmueble;
+import classes.Material;
 import visual.Frame;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })

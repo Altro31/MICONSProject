@@ -27,8 +27,8 @@ public class JTextLoginPanel extends JPanel {
 	private JPasswordField txtText;
 	boolean isPassword;
 	private JButton btnEye;
-	private final ImageIcon EYE_CLOSED = new ImageIcon(getClass().getResource("/imagenes/EyeClosed.png"));
-	private final ImageIcon EYE_OPEN = new ImageIcon(getClass().getResource("/imagenes/EyeOpen.png"));
+	private final ImageIcon EYE_CLOSED = new ImageIcon(getClass().getResource("/images/EyeClosed.png"));
+	private final ImageIcon EYE_OPEN = new ImageIcon(getClass().getResource("/images/EyeOpen.png"));
 	private boolean isHiddenPassword;
 	private char echoChar;
 
@@ -138,7 +138,7 @@ public class JTextLoginPanel extends JPanel {
 			btnEye.setFocusable(false);
 			btnEye.setContentAreaFilled(false);
 			btnEye.setBorder(null);
-			btnEye.setIcon(new ImageIcon(JTextLoginPanel.class.getResource("/imagenes/EyeClosed.png")));
+			btnEye.setIcon(new ImageIcon(JTextLoginPanel.class.getResource("/images/EyeClosed.png")));
 			btnEye.setBounds(313, 10, 31, 22);
 			isHiddenPassword = true;
 		}

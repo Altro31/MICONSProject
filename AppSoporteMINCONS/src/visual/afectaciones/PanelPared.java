@@ -30,15 +30,14 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import clases.Construccion;
-import clases.FichaTecnica;
-import clases.Material;
-import clases.Pared;
-import clases.Sistema;
-import enums.TipoDerrumbe;
+import classes.Construccion;
+import classes.FichaTecnica;
+import classes.Material;
+import classes.Pared;
+import classes.Sistema;
+import classifications.TipoDerrumbe;
 import util.Auxiliary;
 import util.ParedTableModel;
-import util.Validaciones;
 import visual.Frame;
 import visual.util.CustomTable;
 
@@ -122,10 +121,9 @@ public class PanelPared extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 
 					Auxiliary.borrarSeleccion(table,
-							(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes()));
+							(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes()));
 
-					tableModel
-							.actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes());
+					tableModel.actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes());
 				}
 			});
 
@@ -242,8 +240,8 @@ public class PanelPared extends JPanel {
 		if (txtIdentificadorPared == null) {
 			txtIdentificadorPared = new JTextField();
 			txtIdentificadorPared.setColumns(10);
-			Validaciones.onlyLettersAndNumbers(txtIdentificadorPared, true);
-			Validaciones.limite(txtIdentificadorPared, 20);
+			Auxiliary.onlyLettersAndNumbers(txtIdentificadorPared, true);
+			Auxiliary.limite(txtIdentificadorPared, 20);
 		}
 		return txtIdentificadorPared;
 	}
@@ -306,7 +304,7 @@ public class PanelPared extends JPanel {
 							&& comboBoxTipoDerrumbePared.getSelectedItem() != null
 							&& !(txtIdentificadorPared.getText()).isEmpty()) {
 
-						ArrayList<Pared> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect()
+						ArrayList<Pared> lista = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
 								.getListaParedes();
 						String nombre = txtIdentificadorPared.getText();
 
@@ -317,14 +315,14 @@ public class PanelPared extends JPanel {
 							}
 						}
 						if (check) {
-							((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes()
+							((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes()
 									.add(new Pared(txtIdentificadorPared.getText(),
 											(Construccion) sistema
 													.getMaterial((String) comboBoxMatPred.getSelectedItem()),
 											(TipoDerrumbe) comboBoxTipoDerrumbePared.getSelectedItem(),
 											cBoxParedCarga.isSelected()));
 							tableModel.actualizar(
-									((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes());
+									((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes());
 
 							comboBoxMatPred.setSelectedItem(null);
 							comboBoxTipoDerrumbePared.setSelectedItem(null);
@@ -412,14 +410,14 @@ public class PanelPared extends JPanel {
 							&& comboBoxTipoDerrumbePared.getSelectedItem() != null
 							&& !(txtIdentificadorPared.getText()).isEmpty()) {
 
-						((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes().set(
+						((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes().set(
 								Integer.parseInt((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - 1,
 								new Pared((txtIdentificadorPared.getText()),
 										(Construccion) sistema.getMaterial((String) comboBoxMatPred.getSelectedItem()),
 										(TipoDerrumbe) comboBoxTipoDerrumbePared.getSelectedItem(),
 										cBoxParedCarga.isSelected()));
-						tableModel.actualizar(
-								((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes());
+						tableModel
+								.actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes());
 
 						comboBoxMatPred.setSelectedItem(null);
 						comboBoxTipoDerrumbePared.setSelectedItem(null);
@@ -499,7 +497,7 @@ public class PanelPared extends JPanel {
 		}
 		return comboBoxTipoDerrumbe;
 	}
-	
+
 	public void actualizarTabla(ArrayList<Pared> lista) {
 		tableModel.actualizar(lista);
 	}

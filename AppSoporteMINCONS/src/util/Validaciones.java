@@ -1,179 +1,190 @@
 package util;
 
-// Validations
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import classes.Sistema;
+import classifications.TipoEvento;
+import exceptions.ValidationException;
 
-// Cannot be inherited from this class
 public final class Validaciones {
 
-	// private constructor so it can't be instantiated
+	private static final Sistema sistema = Sistema.getInstance();
+
 	private Validaciones() {
 	}
 
-	// Validations for JTextFields
-	////////////////////////////////////////////////////////////////
-
-	// unable to enter data
-	public static void noData(final JTextField c) {
-		// Oculta el cursor
-		c.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				c.getCaret().setVisible(false);
-			}
-		});
-
-		// unable to enter data manually
-		c.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				e.consume();
-			}
-		});
+	/**
+	 * @Messages OUT_OF_RANGE
+	 * 
+	 * @param val
+	 * @throws ValidationException
+	 */
+	public static void nonNegative(float val) throws ValidationException {
+		if (val < 0) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
 	}
-
-	// Only Letters
-	public static void onlyLetters(final JTextField c, final boolean espacios) {
-		c.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				Character c = e.getKeyChar();
-
-				// Sólo letras y espacios
-				if (!(Character.isLetter(c) || (espacios && c == KeyEvent.VK_SPACE))) {
-					e.consume();
-				}
-			}
-		});
-	}
-
-	// Only numbers
-	public static void onlyNumbers(final JTextField t, final boolean decimal) {
-		t.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-
-				String string = t.getText();
-				Character c = e.getKeyChar();
-
-				boolean isDigit = Character.isDigit(c);
-				boolean isDot = c == KeyEvent.VK_PERIOD;
-
-				// Check if the JTextField has a dot
-				boolean haveDot = false;
-				for (char ch : string.toCharArray()) // to find a dot
-					if (ch == KeyEvent.VK_PERIOD)
-						haveDot = true;
-
-				if (decimal) {
-					// Consumes if the first character is a dot
-					if (string.isEmpty() && isDot) {
-						e.consume();
-					}
-
-					// If the only character in the JTextField is a 0 and is inserted a number,
-					// clean the JTextField
-					if (string.length() == 1 && string.charAt(0) == KeyEvent.VK_0 && isDigit) {
-						t.setText("");
-
-					}
-				}
-
-				// Consumes if is inserted anything that is not a number or a dot
-				// In the case that is a dot, decimal must be True
-				if (!(isDigit || (decimal && isDot && !haveDot))) {
-					e.consume();
-
-				}
-			}
-
-			// Small fix, because if the text is selected, copied and overwrited imself,
-			// codes can be break
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (decimal) {
-					String string = t.getText();
-					// If overwritted imself with a dot and is the first characted, it's deleted
-					if (string.length() > 0 && string.charAt(0) == KeyEvent.VK_PERIOD) {
-						string = string.substring(1);
-						t.setText(string);
-					}
-				}
-
-			}
-		});
-	}
-
-	// Only Letters and Spaces and Numbers
-	public static void onlyLettersAndNumbers(final JTextField c, final boolean espacios) {
-		c.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				Character c = e.getKeyChar();
-
-				if (!(Character.isLetter(c) || (espacios && c == KeyEvent.VK_SPACE) || Character.isDigit(c))) {
-					e.consume();
-				}
-			}
-		});
-	}
-
-	// Set a limit to how character can be typed on this JTextField
-	public static void limite(final JTextField t, final int limit) {
-		t.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (t.getText().length() >= limit) {
-					e.consume();
-				}
-			}
-		});
-		t.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (t.getText().length() > limit)
-					t.setText(t.getText().substring(0, limit));
-			}
-		});
-	}
-
-	// Validations for JSpinners
-	////////////////////////////////////////////////////////////////
 
 	/**
-	 * The listener spinner change its value according to the triggering spinner
+	 * @Messages OUT_OF_RANGE
 	 * 
-	 * @param trigger JSpinner que desencadena la acción
-	 * @param listener   JSpinner que cambia en consecuencia de la accion
-	 * @param check      Variable que controla el último valor del JSpinner
-	 *                   accionador
+	 * @param val
+	 * @throws ValidationException
 	 */
-
-	public static void linkSpinners(final JSpinner trigger, final JSpinner listener, final Value check) {
-		trigger.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				final int value = (int) trigger.getValue();
-				if (trigger.getPreviousValue() != null) {
-					if (check.val > value)
-						listener.setValue((int) listener.getValue() - 1);
-					else
-						listener.setValue((int) listener.getValue() + 1);
-				} else {
-					listener.setValue((int) listener.getValue() - 1);
-				}
-				check.val = value;
-			}
-		});
+	public static void nonZero(float val) throws ValidationException {
+		if (val <= 0) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
 	}
-	
+
+	/**
+	 * @messages: NULL
+	 * 
+	 * @param o
+	 * @throws ValidationException
+	 */
+	public static void nullValidation(Object o) throws ValidationException {
+		if (o == null)
+			throw new ValidationException(ValidationException.NULL);
+	}
+
+	/**
+	 * @messages: NULL, EMPTY
+	 * 
+	 * @param string
+	 * @throws ValidationException
+	 */
+	public static void stringValidation(String string) throws ValidationException {
+		nullValidation(string);
+		if (string.isEmpty())
+			throw new ValidationException(ValidationException.EMPTY);
+	}
+
+	/**
+	 * 
+	 * @Messages: NULL, EMPTY, EXIST, OUT_OF_RANGE
+	 * @param name
+	 * @throws ValidationException
+	 */
+	public static void nombreEvento(String name) throws ValidationException {
+		stringValidation(name);
+		if (name.length() > Limites.nombreEvento())
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		if (sistema.getEvento(name) != null) {
+			throw new ValidationException(ValidationException.EXIST);
+		}
+	}
+
+	/**
+	 * 
+	 * @Messages: NULL, EXIST
+	 * @param evento
+	 * @throws ValidationException
+	 */
+	public static void tipoEvento(TipoEvento evento) throws ValidationException {
+		nullValidation(evento);
+		if (!TipoEvento.contains(evento.getName())) {
+			throw new ValidationException(ValidationException.EXIST);
+		}
+	}
+
+	/**
+	 * null, date is after today
+	 * 
+	 * @Messages NULL, DATE_WRONG
+	 * @param date
+	 * @throws ValidationException
+	 */
+	public static void fecha(Calendar date) throws ValidationException {
+		nullValidation(date);
+		GregorianCalendar today = new GregorianCalendar();
+		if (today.before(date)) {
+			throw new ValidationException(ValidationException.DATE_WRONG);
+		}
+	}
+
+	/**
+	 * null, date is after today
+	 * 
+	 * @Messages NULL, DATE_WRONG
+	 * @param date
+	 * @throws ValidationException
+	 */
+	public static void fechaInicio(Calendar date) throws ValidationException {
+		fecha(date);
+	}
+
+	/**
+	 * null, fechaFin are before than today, fechaInicio is before than fechaFin
+	 * 
+	 * @Messages NULL, DATE_WRONG, DATE_ERROR
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @throws ValidationException
+	 */
+	public static void fechaFin(Calendar fechaInicio, Calendar fechaFin) throws ValidationException {
+		fecha(fechaFin);
+		if (fechaInicio != null && fechaInicio.after(fechaFin)) {
+			throw new ValidationException(ValidationException.DATE_ERROR);
+		}
+	}
+
+	/**
+	 * direccion can only have 250 characters or lower
+	 * 
+	 * @Messages NULL, EMPTY, OUT_OF_RANGE
+	 * 
+	 * @param direccion
+	 * @throws ValidationException
+	 */
+	public static void direccion(String direccion) throws ValidationException {
+		stringValidation(direccion);
+		if (direccion.length() > Limites.direccion()) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
+	}
+
+	/**
+	 * @Messages OUT_OF_RANGE
+	 * 
+	 * @param val
+	 * @throws ValidationException
+	 */
+	public static void dimensions(float val) throws ValidationException {
+		nonZero(val);
+		if (val < Limites.dimensions()) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
+	}
+
+	/**
+	 * @Messages OUT_OF_RANGE
+	 * 
+	 * @param val
+	 * @throws ValidationException
+	 */
+	public static void infantes(int val) throws ValidationException {
+		nonNegative(val);
+		if (val > Limites.infantes()) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
+	}
+
+	/**
+	 * @Messages OUT_OF_RANGE
+	 * 
+	 * @param val
+	 * @param min
+	 * @throws ValidationException
+	 */
+	public static void totalPresonas(int val, int min) throws ValidationException {
+		nonNegative(val);
+		if (val < min || val > Limites.totalPersonal()) {
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+		}
+	}
+
 //	public static void ciValidation(String cI) {
 //		
 //		if (cI==null) {

@@ -6,9 +6,9 @@ import java.util.GregorianCalendar;
 
 import javax.swing.table.DefaultTableModel;
 
+import classes.Evento;
+import classes.FichaTecnica;
 import visual.Frame;
-import clases.Evento;
-import clases.FichaTecnica;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class FichaTableModel extends DefaultTableModel {

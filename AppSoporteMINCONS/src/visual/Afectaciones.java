@@ -14,9 +14,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 
-import clases.Afectacion;
-import clases.Evento;
-import clases.FichaTecnica;
+import classes.Afectacion;
+import classes.Evento;
+import classes.FichaTecnica;
 import util.Manager;
 import visual.afectaciones.PanelInmueble;
 import visual.afectaciones.PanelPared;

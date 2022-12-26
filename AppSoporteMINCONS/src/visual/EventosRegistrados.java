@@ -10,14 +10,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import classes.Evento;
+import classes.Sistema;
 import util.Manager;
 import visual.util.CustomPanel;
 import visual.util.PrincipalPanel;
-import clases.Evento;
-import clases.Sistema;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
 
 public class EventosRegistrados extends PrincipalPanel {
 
@@ -82,8 +84,6 @@ public class EventosRegistrados extends PrincipalPanel {
 
 		panel.setPreferredSize(getPreferedSizes(index));
 
-		updateUI();
-
 	}
 
 	private void limpiar() {
@@ -108,6 +108,16 @@ public class EventosRegistrados extends PrincipalPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
+			panel.addContainerListener(new ContainerAdapter() {
+				@Override
+				public void componentAdded(ContainerEvent e) {
+					updateUI();
+				}
+				@Override
+				public void componentRemoved(ContainerEvent e) {
+					updateUI();
+				}
+			});
 			panel.setLayout(null);
 			addComponents();
 		}

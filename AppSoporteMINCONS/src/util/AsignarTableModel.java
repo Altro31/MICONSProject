@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import clases.Material;
+import classes.Material;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class AsignarTableModel extends DefaultTableModel {

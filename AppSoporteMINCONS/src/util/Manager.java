@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import clases.Sistema;
+import classes.Sistema;
 
 public final class Manager {
 
@@ -27,7 +27,7 @@ public final class Manager {
 			entrada = new ObjectInputStream(ficheroEntrada);
 			sistema = (Sistema) entrada.readObject();
 		} catch (IOException | ClassNotFoundException e) {
-			
+
 		} finally {
 			if (ficheroEntrada != null) {
 				try {

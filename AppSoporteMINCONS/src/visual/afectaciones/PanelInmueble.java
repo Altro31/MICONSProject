@@ -31,10 +31,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import clases.FichaTecnica;
-import clases.Inmueble;
-import clases.Material;
-import clases.Sistema;
+import classes.FichaTecnica;
+import classes.Inmueble;
+import classes.Material;
+import classes.Sistema;
 import util.Auxiliary;
 import util.InmuebleTableModel;
 import visual.Frame;
