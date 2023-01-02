@@ -16,17 +16,17 @@ import classes.Sistema;
 
 public final class Manager {
 
-	private static final String SISTEMA = "Sistema.jar";
-	private static final String ALTERNATE_SISTEMA = "/settings/Sistema.jar";
-	private static final String SETTING = "Setting.jar";
-	private static final String ALTERNATE_SETTING = "/settings/Setting.jar";
+	private static final String SISTEMA = "Sistema.dll";
+	private static final String ALTERNATE_SISTEMA = "/settings/Sistema.dll";
+	private static final String SETTING = "Setting.config";
+	private static final String ALTERNATE_SETTING = "/settings/Setting.config";
 
 	private Manager() {
 	}
 
 	public static void cargarDatos() {
 		Object object = null;
-		String[][] sys = new String[][] { { SISTEMA, ALTERNATE_SISTEMA }, { SETTING, ALTERNATE_SETTING } };
+		String[][] sys = new String[][] { { SISTEMA, ALTERNATE_SISTEMA, ".dll" }, { SETTING, ALTERNATE_SETTING, ".config" } };
 
 		for (String[] str : sys) {
 
@@ -40,7 +40,7 @@ public final class Manager {
 				String path = null;
 				Path tmpFile = null;
 				try {
-					tmpFile = extractPayload(str[1], "temp", ".jar");
+					tmpFile = extractPayload(str[1], "temp", str[2]);
 					path = tmpFile.toAbsolutePath().toString();
 				} catch (IOException e1) {
 					path = "";
