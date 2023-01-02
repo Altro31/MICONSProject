@@ -4,6 +4,8 @@ package classes;
 import java.io.Serializable;
 
 import interfaces.Identificador;
+import util.Validaciones;
+import visual.settings.PanelMateriales;
 
 public abstract class Material implements Identificador, Serializable {
 
@@ -22,13 +24,29 @@ public abstract class Material implements Identificador, Serializable {
 	}
 
 	// Métodos
-	
+
 	public float calcularPrecioFinal() {
-		return precioUnitario*cantidad;
+		return precioUnitario * cantidad;
 	}
-	
-	public abstract Object clones() ;
-	
+
+	public abstract Object clones();
+
+	/**
+	 * Devuelve una instancia Material del tipo deseado
+	 * 
+	 * @tipos Inmueble, Construcción
+	 * @param tipo
+	 * @return
+	 */
+	public Material getMaterial(String tipo) {
+		Material mat = null;
+		if (tipo.equals(PanelMateriales.INMUEBLE)) {
+			mat = new Inmueble("desconocido", 5, 1);
+		} else if (tipo.equals(PanelMateriales.CONSTRUCCION)) {
+			mat = new Construccion("desconocido", 5, 1, "desconocida");
+		}
+		return mat;
+	}
 	// Setters y Getters
 
 	public String getNombre() {
@@ -36,11 +54,8 @@ public abstract class Material implements Identificador, Serializable {
 	}
 
 	public void setNombre(String nombre) throws IllegalArgumentException {
-		if (nombre == null || nombre.isEmpty())
-			throw new IllegalArgumentException("Nombre debe tener al menos un caracter");
-		if (nombre.length() > 40)
-			throw new IllegalArgumentException("Nombre no debe sobrepasar los 40 caracteres");
 
+		Validaciones.nombreMaterial(nombre);
 		this.nombre = nombre;
 	}
 
@@ -49,8 +64,8 @@ public abstract class Material implements Identificador, Serializable {
 	}
 
 	public void setPrecioUnitario(float precioUnitario) throws IllegalArgumentException {
-		if (precioUnitario <= 0)
-			throw new IllegalArgumentException("El precio debe ser mayor que cero");
+
+		Validaciones.nonZero(precioUnitario);
 
 		this.precioUnitario = precioUnitario;
 	}
@@ -60,10 +75,7 @@ public abstract class Material implements Identificador, Serializable {
 	}
 
 	private void setId(String id) throws IllegalArgumentException {
-		if (id.length() != 8)
-			throw new IllegalArgumentException("Identificador debe terner tamaño 8");
-		if (!id.matches("[0-9]*"))
-			throw new IllegalArgumentException("Identificador sólo puede contener numeros");
+		Validaciones.idMaterial(id);
 		this.id = id;
 	}
 
@@ -72,9 +84,7 @@ public abstract class Material implements Identificador, Serializable {
 	}
 
 	public void setCantidad(int cantidad) throws IllegalArgumentException {
-		if (cantidad <= 0) {
-			throw new IllegalArgumentException("Cantidad debe ser mayor que 0");
-		}
+		Validaciones.nonZero(cantidad);
 		this.cantidad = cantidad;
 	}
 

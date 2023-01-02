@@ -40,16 +40,17 @@ public class FichaTableModel extends DefaultTableModel {
 		actualizar(((Evento) Frame.getPosicionActual()[1]).getListaFichasTecnicas());
 	}
 
-	public void actualizar(ArrayList<?> lista) {
+	public void actualizar(ArrayList<FichaTecnica> lista) {
 
 		int index = 1;
-		GregorianCalendar fecha = new GregorianCalendar();
+		GregorianCalendar fecha = null;
 
 		limpiar();
 
-		for (Object ficha : lista) {
-			addRow(new Object[] { index + "", ((FichaTecnica) ficha).getVivienda().getDireccion(),
-					fecha.get(Calendar.DATE) + "/" + fecha.get(Calendar.MONTH)+1 + "/" + fecha.get(Calendar.YEAR) });
+		for (FichaTecnica ficha : lista) {
+			fecha = ficha.getFecha();
+			addRow(new Object[] { index + "", ficha.getVivienda().getDireccion(),
+					fecha.get(Calendar.DATE) + "/" + fecha.get(Calendar.MONTH) + 1 + "/" + fecha.get(Calendar.YEAR) });
 			index++;
 		}
 	}
@@ -64,7 +65,5 @@ public class FichaTableModel extends DefaultTableModel {
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
 	}
-	
-	
 
 }

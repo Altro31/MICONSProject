@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import settings.Manager;
+
 public class Frame extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2638223278346798429L;
-	private static final String[] PRINCIPALS = new String[] { "Principal",
-			"FichasTecnicas", "ViviendasRegistradas", "EventosRegistrados" };
+	private static final String[] PRINCIPALS = new String[] { "Principal", "FichasTecnicas", "ViviendasRegistradas",
+			"EventosRegistrados" };
 
 	private static Frame frame;
 	private static ArrayList<Object[]> ruta = new ArrayList<Object[]>();
@@ -24,9 +26,10 @@ public class Frame extends JFrame {
 	private Frame() {
 		setUndecorated(true);
 		setResizable(false);
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setSize(891, 491);
 		setLocationRelativeTo(null);
+
 	}
 
 	public static Frame getInstance() {
@@ -48,8 +51,7 @@ public class Frame extends JFrame {
 		frame.setVisible(true);
 	}
 
-	public static void addRuta(Object visual, Object data)
-			throws IllegalArgumentException {
+	public static void addRuta(Object visual, Object data) throws IllegalArgumentException {
 		getInstance();
 		if (visual == null) {
 			throw new IllegalArgumentException("Visual no puede ser null");
@@ -88,7 +90,7 @@ public class Frame extends JFrame {
 			if (o.getClass().getSimpleName().equals(clase)) {
 				check = true;
 			}
-			;
+
 		}
 		return check;
 	}
@@ -119,12 +121,17 @@ public class Frame extends JFrame {
 				count--;
 			}
 		}
-		Frame.setContentPanes((Container)getPosicionActual()[0]);
+		Frame.setContentPanes((Container) getPosicionActual()[0]);
 	}
 
 	public static void removerActual() {
 
 		ruta.remove(getPosicionActual());
-		Frame.setContentPanes((Container) Frame.getPosicionActual()[0]);
+		Frame.setContentPanes((Container) getPosicionActual()[0]);
+	}
+
+	public static void close() {
+		Manager.guardarDatos();
+		frame.dispose();
 	}
 }

@@ -25,7 +25,7 @@ import visual.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class CustomPanel extends JPanel {
+public class CustomPanelEventos extends JPanel {
 
 	/**
 	 * 
@@ -49,9 +49,9 @@ public class CustomPanel extends JPanel {
 	 * Create the panel.
 	 */
 
-	public CustomPanel(EventosRegistrados padre, int index, Evento evento) {
+	public CustomPanelEventos(EventosRegistrados padre, int index, Evento evento) {
 		super();
-		
+
 		addMouseListener(getMouseEntered());
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -59,7 +59,7 @@ public class CustomPanel extends JPanel {
 				setBorder(new LineBorder(new Color(0, 0, 0)));
 			}
 		});
-		
+
 		setFocusable(false);
 		setFocusTraversalKeysEnabled(false);
 		setEnabled(false);
@@ -177,7 +177,7 @@ public class CustomPanel extends JPanel {
 					padre.addComponents();
 				}
 			});
-			btnNewButton.setIcon(new ImageIcon(CustomPanel.class.getResource("/images/Cancel.png")));
+			btnNewButton.setIcon(new ImageIcon(CustomPanelEventos.class.getResource("/images/Cancel.png")));
 			btnNewButton.setBounds(745, 5, 28, 23);
 		}
 		return btnNewButton;
@@ -195,7 +195,7 @@ public class CustomPanel extends JPanel {
 			button.setBorder(null);
 			button.setFocusable(false);
 			button.setContentAreaFilled(false);
-			button.setIcon(new ImageIcon(CustomPanel.class.getResource("/images/icons8_edit_file_25px.png")));
+			button.setIcon(new ImageIcon(CustomPanelEventos.class.getResource("/images/icons8_edit_file_25px.png")));
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					FichasTecnicas fichasTecnicas = new FichasTecnicas();

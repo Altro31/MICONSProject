@@ -111,7 +111,7 @@ public final class TipoEvento implements Serializable {
 	 * @return a TipoEvento with that name as name
 	 */
 	public static boolean contains(String name) {
-		
+
 		Validaciones.nullValidation(name);
 		boolean check = false;
 		for (String string : values) {
@@ -121,24 +121,26 @@ public final class TipoEvento implements Serializable {
 		}
 		return check;
 	}
-	
+
 	public static TipoEvento getTipoEvento(String name) {
-		
+
 		TipoEvento evento = null;
-		
+
 		try {
 			evento = new TipoEvento(name);
 		} catch (ValidationException e) {
 			evento = null;
 		}
-		
+
 		return evento;
 	}
 
 	/**
 	 * Setter
+	 * 
 	 * @param name
-	 * @throws IllegalArgumentException If name not exist in the list of events, is null or is empty
+	 * @throws IllegalArgumentException If name not exist in the list of events, is
+	 *                                  null or is empty
 	 */
 	private void setName(String name) throws IllegalArgumentException {
 		if (name == null) {
@@ -156,6 +158,7 @@ public final class TipoEvento implements Serializable {
 
 	/**
 	 * Getter
+	 * 
 	 * @return A copy of name
 	 */
 	public String getName() {

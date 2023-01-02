@@ -8,9 +8,9 @@ public class DocNamesTestCase {
 
 	@Test
 	public void test() {
-		
+
 		Doc.names();
-		
+
 	}
 
 }

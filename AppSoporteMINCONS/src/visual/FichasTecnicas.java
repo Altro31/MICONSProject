@@ -1,6 +1,5 @@
 package visual;
 
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,9 +24,9 @@ import classes.Evento;
 import classes.FichaTecnica;
 import classes.Sistema;
 import classes.Vivienda;
+import settings.Manager;
 import util.Auxiliary;
 import util.FichaTableModel;
-import util.Manager;
 import visual.util.CustomTable;
 import visual.util.PrincipalPanel;
 
@@ -85,6 +84,8 @@ public class FichasTecnicas extends PrincipalPanel {
 			cTable.getTable().getColumnModel().getColumn(0).setResizable(false);
 			cTable.getTable().getColumnModel().getColumn(0).setPreferredWidth(40);
 			cTable.getTable().getColumnModel().getColumn(0).setMinWidth(40);
+			cTable.getTable().getColumnModel().getColumn(1).setResizable(false);
+			cTable.getTable().getColumnModel().getColumn(2).setResizable(false);
 			cTable.setBounds(20, 115, 742, 311);
 			table = cTable.getTable();
 		}
@@ -142,7 +143,7 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnAceptar.setFocusable(false);
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Sistema.getInstance().addEvento((Evento)Frame.getPosicionActual()[1]);
+					Sistema.getInstance().addEvento((Evento) Frame.getPosicionActual()[1]);
 					Frame.anteriorPrincipal(1);
 				}
 			});
@@ -157,28 +158,21 @@ public class FichasTecnicas extends PrincipalPanel {
 			panelButton.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelButton.setBounds(772, 92, 100, 334);
 			GroupLayout glPanelButton = new GroupLayout(panelButton);
-			glPanelButton.setHorizontalGroup(
-				glPanelButton.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelButton.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(glPanelButton.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(getBtnInsertar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnEditar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(getBtnBorrar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addContainerGap(15, Short.MAX_VALUE))
-			);
-			glPanelButton.setVerticalGroup(
-				glPanelButton.createParallelGroup(Alignment.LEADING)
-					.addGroup(glPanelButton.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(getBtnInsertar())
-						.addGap(18)
-						.addComponent(getBtnEditar())
-						.addGap(18)
-						.addComponent(getBtnBorrar())
-						.addContainerGap(214, Short.MAX_VALUE))
-			);
-			glPanelButton.linkSize(SwingConstants.HORIZONTAL, new Component[] {getBtnInsertar(), getBtnEditar(), getBtnBorrar()});
+			glPanelButton.setHorizontalGroup(glPanelButton.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelButton.createSequentialGroup().addContainerGap()
+							.addGroup(glPanelButton.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(getBtnInsertar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+											GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(getBtnEditar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+											GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(getBtnBorrar(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+											GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addContainerGap(15, Short.MAX_VALUE)));
+			glPanelButton.setVerticalGroup(glPanelButton.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelButton.createSequentialGroup().addContainerGap().addComponent(getBtnInsertar())
+							.addGap(18).addComponent(getBtnEditar()).addGap(18).addComponent(getBtnBorrar())
+							.addContainerGap(214, Short.MAX_VALUE)));
+			glPanelButton.linkSize(SwingConstants.HORIZONTAL, getBtnInsertar(), getBtnEditar(), getBtnBorrar());
 			panelButton.setLayout(glPanelButton);
 		}
 		return panelButton;
@@ -194,8 +188,7 @@ public class FichasTecnicas extends PrincipalPanel {
 					Viviendas viviendas = new Viviendas();
 					Afectaciones afectaciones = new Afectaciones();
 					AsignarMateriales asignarMateriales = new AsignarMateriales();
-					Frame.addRuta(new Object[] { viviendas, afectaciones, asignarMateriales },
-							new FichaTecnica());
+					Frame.addRuta(new Object[] { viviendas, afectaciones, asignarMateriales }, new FichaTecnica());
 					Frame.setContentPanes(viviendas);
 				}
 			});
@@ -210,9 +203,10 @@ public class FichasTecnicas extends PrincipalPanel {
 			btnEditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
-					Evento evento = ((Evento)Frame.getPosicionActual()[1]);
-					FichaTecnica ficha = evento.getListaFichasTecnicas().get(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())-1 );
-					
+					Evento evento = ((Evento) Frame.getPosicionActual()[1]);
+					FichaTecnica ficha = evento.getListaFichasTecnicas()
+							.get(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()) - 1);
+
 					Viviendas viviendas = new Viviendas();
 					Afectaciones afectaciones = new Afectaciones();
 					AsignarMateriales asignar = new AsignarMateriales();
@@ -221,8 +215,7 @@ public class FichasTecnicas extends PrincipalPanel {
 					Afectacion afectacion = ficha.getAfect();
 					Cubicacion cubicacion = ficha.getCubicacion();
 
-					Frame.addRuta(new Object[] { viviendas, afectaciones, asignar },
-							ficha);
+					Frame.addRuta(new Object[] { viviendas, afectaciones, asignar }, ficha);
 
 					viviendas.actualizarCampos(vivienda);
 					afectaciones.actualizarCampos(afectacion);
@@ -304,6 +297,7 @@ public class FichasTecnicas extends PrincipalPanel {
 	public FichaTableModel getTableModel() {
 		return tableModel;
 	}
+
 	public void actualizarTabla(ArrayList<FichaTecnica> lista) {
 		tableModel.actualizar(lista);
 	}

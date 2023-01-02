@@ -2,56 +2,39 @@ package visual;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
-
-import classes.Evento;
-import classes.Sistema;
-import classifications.TipoEvento;
-import exceptions.ValidationException;
-import util.Auxiliary;
-import util.Limites;
-import util.Manager;
-import util.Validaciones;
-import visual.util.PrincipalPanel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.Component;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.ContainerAdapter;
-import java.awt.event.ContainerEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.CaretEvent;
+
+import com.toedter.calendar.JDateChooser;
+
+import classes.Evento;
+import classifications.TipoEvento;
+import exceptions.ValidationException;
+import settings.Limites;
+import settings.Manager;
+import util.Auxiliary;
+import util.Validaciones;
+import visual.util.PrincipalPanel;
 
 public class Eventos extends PrincipalPanel {
 
@@ -72,7 +55,6 @@ public class Eventos extends PrincipalPanel {
 	private JLabel lblFechaFin;
 	private JDateChooser dChFechaFin;
 	private JLabel lblFechaFinError;
-	private Sistema sistema = Sistema.getInstance();
 	private JLabel lblFechaInicioError;
 	private JLabel lblNombreError;
 	private JLabel lblTipoEvento;
@@ -215,10 +197,10 @@ public class Eventos extends PrincipalPanel {
 			panelDatos.setBackground(new Color(255, 255, 255));
 			panelDatos.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelDatos.setBounds(27, 78, 839, 330);
-			GroupLayout gl_panelDatos = new GroupLayout(panelDatos);
-			gl_panelDatos.setHorizontalGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING).addGroup(gl_panelDatos
+			GroupLayout glPanelDatos = new GroupLayout(panelDatos);
+			glPanelDatos.setHorizontalGroup(glPanelDatos.createParallelGroup(Alignment.LEADING).addGroup(glPanelDatos
 					.createSequentialGroup().addGap(130)
-					.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
 							.addComponent(getLblTipoEvento(), GroupLayout.PREFERRED_SIZE, 237,
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(getLblNombre(), GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
@@ -226,7 +208,7 @@ public class Eventos extends PrincipalPanel {
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(getLblFechaFin(), GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
 					.addGap(32)
-					.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
 							.addComponent(getLblFechaFinError(), GroupLayout.PREFERRED_SIZE, 40,
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(getCBoxTipoEvento(), GroupLayout.PREFERRED_SIZE, 191,
@@ -240,53 +222,51 @@ public class Eventos extends PrincipalPanel {
 							.addComponent(getLblFechaInicioError(), GroupLayout.PREFERRED_SIZE, 382,
 									GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(54, Short.MAX_VALUE)));
-			gl_panelDatos.setVerticalGroup(gl_panelDatos.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelDatos.createSequentialGroup()
-							.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_panelDatos.createSequentialGroup().addGap(37)
-											.addGroup(gl_panelDatos.createParallelGroup(Alignment.BASELINE)
+			glPanelDatos.setVerticalGroup(glPanelDatos.createParallelGroup(Alignment.TRAILING)
+					.addGroup(glPanelDatos.createSequentialGroup()
+							.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
+									.addGroup(glPanelDatos.createSequentialGroup().addGap(37)
+											.addGroup(glPanelDatos.createParallelGroup(Alignment.BASELINE)
 													.addComponent(getLblTipoEvento(), GroupLayout.PREFERRED_SIZE, 21,
 															GroupLayout.PREFERRED_SIZE)
 													.addComponent(getCBoxTipoEvento(), GroupLayout.PREFERRED_SIZE,
 															GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 											.addGap(31)
-											.addGroup(gl_panelDatos.createParallelGroup(Alignment.BASELINE)
+											.addGroup(glPanelDatos.createParallelGroup(Alignment.BASELINE)
 													.addComponent(getLblNombre())
 													.addComponent(getTextNombre(), GroupLayout.PREFERRED_SIZE,
 															GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 											.addGap(33)
-											.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
+											.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
 													.addComponent(getLblFechaInicio()).addComponent(getDChFechaInicio(),
 															GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE))
 											.addGap(33)
-											.addGroup(gl_panelDatos.createParallelGroup(Alignment.LEADING)
+											.addGroup(glPanelDatos.createParallelGroup(Alignment.LEADING)
 													.addComponent(getLblFechaFin())
 													.addComponent(getDChFechaFin(), GroupLayout.PREFERRED_SIZE, 12,
 															GroupLayout.PREFERRED_SIZE)))
-									.addGroup(
-											gl_panelDatos.createSequentialGroup().addContainerGap(109, Short.MAX_VALUE)
-													.addComponent(getLblNombreError(), GroupLayout.PREFERRED_SIZE, 16,
-															GroupLayout.PREFERRED_SIZE)
-													.addGap(38)
-													.addComponent(getLblFechaInicioError(), GroupLayout.PREFERRED_SIZE,
-															10, GroupLayout.PREFERRED_SIZE)
-													.addGap(44)))
+									.addGroup(glPanelDatos.createSequentialGroup().addContainerGap(109, Short.MAX_VALUE)
+											.addComponent(getLblNombreError(), GroupLayout.PREFERRED_SIZE, 16,
+													GroupLayout.PREFERRED_SIZE)
+											.addGap(38)
+											.addComponent(getLblFechaInicioError(), GroupLayout.PREFERRED_SIZE, 10,
+													GroupLayout.PREFERRED_SIZE)
+											.addGap(44)))
 							.addPreferredGap(ComponentPlacement.RELATED).addComponent(getLblFechaFinError(),
 									GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
 							.addGap(89)));
-			gl_panelDatos.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblTipoEvento(), getLblNombre(), getLblFechaInicio(), getLblFechaFin() });
-			gl_panelDatos.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getCBoxTipoEvento(), getTextNombre(), getDChFechaInicio(), getDChFechaFin() });
-			gl_panelDatos.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblFechaInicioError(), getLblNombreError() });
-			gl_panelDatos.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getLblFechaFinError(), getLblFechaInicioError(), getLblNombreError() });
-			gl_panelDatos.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getLblTipoEvento(), getLblNombre(), getLblFechaInicio(), getLblFechaFin() });
-			gl_panelDatos.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getCBoxTipoEvento(), getTextNombre(), getDChFechaInicio(), getDChFechaFin() });
-			panelDatos.setLayout(gl_panelDatos);
+			glPanelDatos.linkSize(SwingConstants.VERTICAL, getLblTipoEvento(), getLblNombre(), getLblFechaInicio(),
+					getLblFechaFin());
+			glPanelDatos.linkSize(SwingConstants.VERTICAL, getCBoxTipoEvento(), getTextNombre(), getDChFechaInicio(),
+					getDChFechaFin());
+			glPanelDatos.linkSize(SwingConstants.VERTICAL, getLblFechaInicioError(), getLblNombreError());
+			glPanelDatos.linkSize(SwingConstants.HORIZONTAL, getLblFechaFinError(), getLblFechaInicioError(),
+					getLblNombreError());
+			glPanelDatos.linkSize(SwingConstants.HORIZONTAL, getLblTipoEvento(), getLblNombre(), getLblFechaInicio(),
+					getLblFechaFin());
+			glPanelDatos.linkSize(SwingConstants.HORIZONTAL, getCBoxTipoEvento(), getTextNombre(), getDChFechaInicio(),
+					getDChFechaFin());
+			panelDatos.setLayout(glPanelDatos);
 		}
 		return panelDatos;
 	}
@@ -394,6 +374,7 @@ public class Eventos extends PrincipalPanel {
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
+					// Unnecessary
 				}
 
 				@Override
@@ -406,6 +387,7 @@ public class Eventos extends PrincipalPanel {
 
 				@Override
 				public void changedUpdate(DocumentEvent e) {
+					// Unnecessary
 				}
 			});
 
@@ -431,6 +413,7 @@ public class Eventos extends PrincipalPanel {
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
+					// Unnecessary
 				}
 
 				@Override
@@ -440,6 +423,7 @@ public class Eventos extends PrincipalPanel {
 
 				@Override
 				public void changedUpdate(DocumentEvent e) {
+					// Unnecessary
 				}
 			});
 

@@ -1,6 +1,5 @@
 package util;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -8,12 +7,10 @@ import java.time.Period;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
-
 import classes.Sistema;
 import classifications.TipoEvento;
 import exceptions.ValidationException;
+import settings.Limites;
 
 public final class Validaciones {
 
@@ -23,6 +20,8 @@ public final class Validaciones {
 	}
 
 	/**
+	 * nonNegative
+	 * 
 	 * @Messages OUT_OF_RANGE
 	 * 
 	 * @param val
@@ -35,6 +34,8 @@ public final class Validaciones {
 	}
 
 	/**
+	 * nonNegative, nonZero
+	 * 
 	 * @Messages OUT_OF_RANGE
 	 * 
 	 * @param val
@@ -47,6 +48,8 @@ public final class Validaciones {
 	}
 
 	/**
+	 * noNull
+	 * 
 	 * @messages: NULL
 	 * 
 	 * @param o
@@ -58,6 +61,8 @@ public final class Validaciones {
 	}
 
 	/**
+	 * noNull, noEmpty
+	 * 
 	 * @messages: NULL, EMPTY
 	 * 
 	 * @param string
@@ -77,7 +82,7 @@ public final class Validaciones {
 	 */
 	public static void nombreEvento(String name) throws ValidationException {
 		stringValidation(name);
-		if (name.length() > Limites.nombreEvento())
+		if (Limites.nombreEvento() != null && name.length() > Limites.nombreEvento())
 			throw new ValidationException(ValidationException.OUT_OF_RANGE);
 		if (sistema.getEvento(name) != null) {
 			throw new ValidationException(ValidationException.EXIST);
@@ -148,7 +153,7 @@ public final class Validaciones {
 	 */
 	public static void direccion(String direccion) throws ValidationException {
 		stringValidation(direccion);
-		if (direccion.length() > Limites.direccion()) {
+		if (Limites.direccion() != null && direccion.length() > Limites.direccion()) {
 			throw new ValidationException(ValidationException.OUT_OF_RANGE);
 		}
 	}
@@ -161,7 +166,7 @@ public final class Validaciones {
 	 */
 	public static void dimensions(float val) throws ValidationException {
 		nonZero(val);
-		if (val < Limites.dimensions()) {
+		if (Limites.dimensions() != null && val < Limites.dimensions()) {
 			throw new ValidationException(ValidationException.OUT_OF_RANGE);
 		}
 	}
@@ -228,9 +233,13 @@ public final class Validaciones {
 
 		stringValidation(ci);
 
-		if(ci.length()!=11)
-			throw new ValidationException(ValidationException.OUT_OF_RANGE);
-		
+		ValidationException ex = new ValidationException(ValidationException.OUT_OF_RANGE);
+		if (ci.length() != 11) {
+			if (ci.length() > 11)
+				ex = new ValidationException(ValidationException.OUT_OF_RANGE, ValidationException.ABOVE_RANGE);
+			throw ex;
+		}
+
 		int date = Integer.parseInt(ci.substring(4, 6));
 		int month = Integer.parseInt(ci.substring(2, 4));
 		String year = ci.substring(0, 2);
@@ -254,11 +263,27 @@ public final class Validaciones {
 		}
 
 		Period age = Period.between(LocalDate.of(Integer.parseInt(year), month, date),
-				LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
+				LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH) + 1,
 						Calendar.getInstance().get(Calendar.DATE)));
 
 		if (age.getYears() < 18)
 			throw new ValidationException(ValidationException.AGE_WRONG);
 
+	}
+
+	public static void nombreMaterial(String nombre) throws ValidationException {
+
+		stringValidation(nombre);
+
+		if (Limites.nombreMaterial() != null && nombre.length() > Limites.nombreMaterial())
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
+	}
+
+	public static void idMaterial(String id) throws ValidationException {
+
+		stringValidation(id);
+
+		if (id.length() != 8)
+			throw new ValidationException(ValidationException.OUT_OF_RANGE);
 	}
 }

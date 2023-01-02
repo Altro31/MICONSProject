@@ -34,7 +34,7 @@ public class ParedTableModel extends DefaultTableModel {
 	}
 
 	public void actualizar() {
-		actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes());
+		actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes());
 	}
 
 	public void actualizar(ArrayList<?> lista) {
@@ -52,7 +52,7 @@ public class ParedTableModel extends DefaultTableModel {
 	}
 
 	public void filtrar(String textFilter, int column) {
-		ArrayList<Pared> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaParedes();
+		ArrayList<Pared> lista = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaParedes();
 		actualizar();
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 

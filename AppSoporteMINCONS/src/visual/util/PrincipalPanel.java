@@ -10,6 +10,8 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import settings.Manager;
+import visual.Frame;
 import visual.Principal;
 
 public class PrincipalPanel extends JImagen {
@@ -27,12 +29,12 @@ public class PrincipalPanel extends JImagen {
 	 * Create the panel.
 	 */
 	public PrincipalPanel() {
-		
+
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				Point p = getTopLevelAncestor().getLocation();
-				getTopLevelAncestor().setLocation(p.x+e.getX()-pX, p.y+e.getY()-pY);
+				getTopLevelAncestor().setLocation(p.x + e.getX() - pX, p.y + e.getY() - pY);
 			}
 		});
 		addMouseListener(new MouseAdapter() {
@@ -42,7 +44,7 @@ public class PrincipalPanel extends JImagen {
 				pY = e.getY();
 			}
 		});
-		
+
 		setBounds(0, 0, 891, 491);
 		add(getBtnCerrar());
 		add(getBtnAtras());
@@ -52,10 +54,12 @@ public class PrincipalPanel extends JImagen {
 		if (btnCerrar == null) {
 			btnCerrar = new JButton("");
 			btnCerrar.setIcon(new ImageIcon(PrincipalPanel.class.getResource("/images/icons8_multiply_50px_1.png")));
-			btnCerrar.setPressedIcon(new ImageIcon(PrincipalPanel.class.getResource("/images/icons8_multiply_50px_3.png")));
+			btnCerrar.setPressedIcon(
+					new ImageIcon(PrincipalPanel.class.getResource("/images/icons8_multiply_50px_3.png")));
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
+					Manager.guardarDatos();
+					Frame.close();
 				}
 			});
 			btnCerrar.setBorder(null);

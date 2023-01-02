@@ -32,12 +32,14 @@ import classifications.Doc;
 import classifications.TipoConst;
 import classifications.TipoHab;
 import exceptions.ValidationException;
+import settings.Limites;
+import settings.Manager;
 import util.Auxiliary;
-import util.Limites;
-import util.Manager;
 import util.Validaciones;
 import util.Value;
 import visual.util.PrincipalPanel;
+import javax.swing.JTextPane;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Viviendas extends PrincipalPanel {
@@ -60,7 +62,7 @@ public class Viviendas extends PrincipalPanel {
 	private JLabel lblTipoHab;
 	private JComboBox<String> combTipoHab;
 	private JLabel lblTipoCons;
-	private JComboBox<String> combTipoCons;
+	private JComboBox<TipoConst> combTipoCons;
 	private JLabel lblDimensiones;
 	private JLabel lblLargo;
 	private JTextField txtLargo;
@@ -87,6 +89,13 @@ public class Viviendas extends PrincipalPanel {
 	private boolean checkDireccion;
 	private boolean checkCI;
 	private boolean checkPersonas;
+	private boolean checkDocLegal;
+	private boolean checkTipoHab;
+	private boolean checkTipoCons;
+	private boolean checkAncho;
+	private boolean checkLargo;
+	private JTextPane lblFacilidadTemp;
+	private JCheckBox cBoxFacilidadTemp;
 
 	/**
 	 * Create the panel.
@@ -139,10 +148,67 @@ public class Viviendas extends PrincipalPanel {
 		} catch (ValidationException e) {
 			lblCI.setForeground(Color.RED);
 			checkCI = false;
+			if (e.getInfo().equals(ValidationException.ABOVE_RANGE))
+				lblCIError.setText("El Carnet no sólo puede contener 11 dígitos");
 			if (e.getMessage().equals(ValidationException.DATE_ERROR))
 				lblCIError.setText("Carnet no válido");
 			if (e.getMessage().equals(ValidationException.AGE_WRONG))
 				lblCIError.setText("La edad debe estar entre 18 y 100 años");
+		}
+	}
+
+	private void checkFieldDocLegal() {
+		try {
+			Validaciones.nullValidation(combDocLegal.getSelectedItem());
+			lblDocLegal.setForeground(Color.BLACK);
+			checkDocLegal = true;
+		} catch (ValidationException e) {
+			lblDocLegal.setForeground(Color.RED);
+			checkDocLegal = false;
+		}
+	}
+
+	private void checkFieldTipoHab() {
+		try {
+			Validaciones.nullValidation(combTipoHab.getSelectedItem());
+			lblTipoHab.setForeground(Color.BLACK);
+			checkTipoHab = true;
+		} catch (ValidationException e) {
+			lblTipoHab.setForeground(Color.RED);
+			checkTipoHab = false;
+		}
+	}
+
+	private void checkFieldTipoCons() {
+		try {
+			Validaciones.nullValidation(combTipoCons.getSelectedItem());
+			lblTipoCons.setForeground(Color.BLACK);
+			checkTipoCons = true;
+		} catch (ValidationException e) {
+			lblTipoCons.setForeground(Color.RED);
+			checkTipoCons = false;
+		}
+	}
+
+	private void checkFieldLargo() {
+		try {
+			Validaciones.dimensions(Float.parseFloat(txtLargo.getText()));
+			lblLargo.setForeground(Color.BLACK);
+			checkLargo = true;
+		} catch (NumberFormatException | ValidationException e) {
+			lblLargo.setForeground(Color.RED);
+			checkLargo = false;
+		}
+	}
+
+	private void checkFieldAncho() {
+		try {
+			Validaciones.dimensions(Float.parseFloat(txtAncho.getText()));
+			lblAncho.setForeground(Color.BLACK);
+			checkAncho = true;
+		} catch (NumberFormatException | ValidationException e) {
+			lblAncho.setForeground(Color.RED);
+			checkAncho = false;
 		}
 	}
 
@@ -162,6 +228,60 @@ public class Viviendas extends PrincipalPanel {
 				lblErrorTotalPersonas.setVisible(true);
 		}
 	}
+
+	private void crearVivienda() {
+
+		checkFieldDireccion();
+		checkFieldCI();
+		checkFieldDocLegal();
+		checkFieldTipoHab();
+		checkFieldTipoCons();
+		checkFieldLargo();
+		checkFieldAncho();
+		checkFieldTotalPersonas();
+		if (checkDireccion && checkCI && checkDocLegal && checkTipoHab && checkTipoCons && checkLargo && checkAncho
+				&& checkPersonas) {
+
+			FichaTecnica ficha = (FichaTecnica) Frame.getPosicionActual()[1];
+
+			Vivienda vivienda = ficha.getVivienda();
+			vivienda.setDireccion(txtDireccion.getText());
+			vivienda.setCiJefe(txtCI.getText());
+			vivienda.setDocLegal(Doc.value(combDocLegal.getSelectedItem().toString()));
+			vivienda.setTipoHabitacional(TipoHab.getTipoHab(combTipoHab.getSelectedItem().toString()));
+			vivienda.setTipoConstructiva(TipoConst.valueOf(combTipoCons.getSelectedItem().toString()));
+			vivienda.setLargo(Float.parseFloat(getTxtLargo().getText()));
+			vivienda.setAncho(Float.parseFloat(getTxtAncho().getText()));
+			vivienda.setTotalPersonas(Integer.parseInt(getSpinnerPersonas().getValue().toString()));
+			vivienda.setTotalInfantes(Integer.parseInt(getSpinnerInfantes().getValue().toString()));
+			vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
+			vivienda.setTotalEmbarazadas(Integer.parseInt(getSpinnerEmbarazadas().getValue().toString()));
+			vivienda.setFacilidadTemporal(cBoxFacilidadTemp.isSelected());
+
+			Frame.setContentPanes((Afectaciones) ((Object[]) Frame.getPosicionActual()[0])[1]);
+		}
+	}
+
+	public void actualizarCampos(Vivienda vivienda) {
+
+		txtDireccion.setText(vivienda.getDireccion());
+		txtCI.setText(vivienda.getCiJefe());
+		combDocLegal.setSelectedItem(vivienda.getDocLegal().getName());
+		combTipoCons.setSelectedItem(vivienda.getTipoConstructiva());
+		combTipoHab.setSelectedItem(vivienda.getTipoHabitacional().getName());
+		txtLargo.setText(vivienda.getLargo() + "");
+		txtAncho.setText(vivienda.getAncho() + "");
+		txtArea.setText(vivienda.calcularArea() + "");
+		spinnerAncianos.setValue(vivienda.getTotalAncianos());
+		spinnerInfantes.setValue(vivienda.getTotalInfantes());
+		spinnerEmbarazadas.setValue(vivienda.getTotalEmbarazadas());
+		spinnerPersonas.setValue(vivienda.getTotalPersonas());
+		cBoxFacilidadTemp.setSelected(vivienda.isFacilidadTemporal());
+
+	}
+
+	// Components
+	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private JPanel getPanelButton2() {
 		if (panelButton2 == null) {
@@ -191,37 +311,11 @@ public class Viviendas extends PrincipalPanel {
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
-			btnSiguiente.setFocusable(false);
+			btnSiguiente.setFocusPainted(false);
+			btnSiguiente.setFocusTraversalKeysEnabled(false);
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
-					if (!getTxtDireccion().getText().isEmpty()
-							&& !(getTxtCI().getText().isEmpty() || getTxtCI().getText().length() != 11)
-							&& !getTxtLargo().getText().isEmpty() && !getTxtAncho().getText().isEmpty()
-							&& !getTxtArea().getText().isEmpty() && combDocLegal.getSelectedItem() != null
-							&& combTipoCons.getSelectedItem() != null && combTipoHab.getSelectedItem() != null) {
-						FichaTecnica ficha = (FichaTecnica) Frame.getPosicionActual()[1];
-
-						Vivienda vivienda = ficha.getVivienda();
-						vivienda.setDireccion(txtDireccion.getText());
-						vivienda.setCiJefe(txtCI.getText());
-						vivienda.setDocLegal(Doc.value(combDocLegal.getSelectedItem().toString()));
-						vivienda.setTipoHabitacional(TipoHab.getTipoHab(combTipoHab.getSelectedItem().toString()));
-						vivienda.setTipoConstructiva(TipoConst.valueOf(combTipoCons.getSelectedItem().toString()));
-						vivienda.setLargo(Float.parseFloat(getTxtLargo().getText()));
-						vivienda.setAncho(Float.parseFloat(getTxtAncho().getText()));
-						vivienda.setTotalPersonas(Integer.parseInt(getSpinnerPersonas().getValue().toString()));
-						vivienda.setTotalInfantes(Integer.parseInt(getSpinnerInfantes().getValue().toString()));
-						vivienda.setTotalAncianos(Integer.parseInt(getSpinnerAncianos().getValue().toString()));
-						vivienda.setTotalEmbarazadas(Integer.parseInt(getSpinnerEmbarazadas().getValue().toString()));
-
-						Frame.setContentPanes((Afectaciones) ((Object[]) Frame.getPosicionActual()[0])[1]);
-
-					} else {
-
-						validarCampos();
-
-					}
+					crearVivienda();
 				}
 			});
 			btnSiguiente.setBounds(224, 11, 89, 23);
@@ -229,31 +323,11 @@ public class Viviendas extends PrincipalPanel {
 		return btnSiguiente;
 	}
 
-	private void validarCampos() {
-
-		lblDireccion.setForeground(getTxtDireccion().getText().isEmpty() ? Color.RED : Color.BLACK);
-
-		lblCI.setForeground(
-				(getTxtCI().getText().isEmpty() || getTxtCI().getText().length() != 11) ? Color.RED : Color.BLACK);
-
-		lblLargo.setForeground(getTxtLargo().getText().isEmpty() ? Color.RED : Color.BLACK);
-
-		lblAncho.setForeground(getTxtAncho().getText().isEmpty() ? Color.RED : Color.BLACK);
-
-		lblArea.setForeground(getTxtArea().getText().isEmpty() ? Color.RED : Color.BLACK);
-
-		lblDocLegal.setForeground(combDocLegal.getSelectedItem() == null ? Color.RED : Color.BLACK);
-
-		lblTipoHab.setForeground(combTipoHab.getSelectedItem() == null ? Color.RED : Color.BLACK);
-
-		lblTipoCons.setForeground(combTipoCons.getSelectedItem() == null ? Color.RED : Color.BLACK);
-
-	}
-
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
-			btnCancelar.setFocusable(false);
+			btnCancelar.setFocusPainted(false);
+			btnCancelar.setFocusTraversalKeysEnabled(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Frame.anteriorPrincipal(1);
@@ -269,6 +343,7 @@ public class Viviendas extends PrincipalPanel {
 			panelProp = new JPanel();
 			panelProp.setBounds(37, 70, 817, 356);
 			panelProp.setLayout(null);
+			panelProp.add(getCBoxFacilidadTemp());
 			panelProp.add(getLblDireccion());
 			panelProp.add(getTxtDireccion());
 			panelProp.add(getLblCI());
@@ -298,6 +373,7 @@ public class Viviendas extends PrincipalPanel {
 			panelProp.add(getSeparador());
 			panelProp.add(getLblDireccionError());
 			panelProp.add(getLblCIError());
+			panelProp.add(getLblFacilidadTemp());
 			panelProp.add(getLblErrorTotalPersonas());
 		}
 		return panelProp;
@@ -426,7 +502,7 @@ public class Viviendas extends PrincipalPanel {
 		return lblTipoCons;
 	}
 
-	private JComboBox<String> getCombTipoCons() {
+	private JComboBox<TipoConst> getCombTipoCons() {
 		if (combTipoCons == null) {
 			combTipoCons = new JComboBox(TipoConst.values());
 			combTipoCons.setSelectedItem(null);
@@ -467,19 +543,20 @@ public class Viviendas extends PrincipalPanel {
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
+					checkFieldLargo();
 					calcularArea();
 
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					calcularArea();
+					removeUpdate(e);
 
 				}
 
 				@Override
 				public void changedUpdate(DocumentEvent e) {
-					// Innesesario
+					// Unnecessary
 				}
 			});
 
@@ -513,13 +590,14 @@ public class Viviendas extends PrincipalPanel {
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
+					checkFieldAncho();
 					calcularArea();
 
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					calcularArea();
+					removeUpdate(e);
 
 				}
 
@@ -667,15 +745,16 @@ public class Viviendas extends PrincipalPanel {
 			spinnerPersonas.setBounds(660, 180, 44, 28);
 			((DefaultEditor) (spinnerPersonas.getEditor())).getTextField().setEditable(false);
 			spinnerPersonas.addChangeListener(new ChangeListener() {
-				
+
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					
-					if(((Integer)spinnerPersonas.getValue()).compareTo(Integer.valueOf(((int) spinnerAncianos.getValue())
-							+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue())))<0)
-						spinnerPersonas.setValue(((int) spinnerAncianos.getValue())
-								+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue()));
-					
+
+					if (((Integer) spinnerPersonas.getValue())
+							.compareTo(Integer.valueOf(((int) spinnerAncianos.getValue())
+									+ ((int) spinnerInfantes.getValue()) + ((int) spinnerEmbarazadas.getValue()))) < 0)
+						spinnerPersonas.setValue(((int) spinnerAncianos.getValue()) + ((int) spinnerInfantes.getValue())
+								+ ((int) spinnerEmbarazadas.getValue()));
+
 				}
 			});
 		}
@@ -689,23 +768,6 @@ public class Viviendas extends PrincipalPanel {
 			separador.setBounds(476, 11, 21, 316);
 		}
 		return separador;
-	}
-
-	public void actualizarCampos(Vivienda vivienda) {
-
-		txtDireccion.setText(vivienda.getDireccion());
-		txtCI.setText(vivienda.getCiJefe());
-		combDocLegal.setSelectedItem(vivienda.getDocLegal().getName());
-		combTipoCons.setSelectedItem(vivienda.getTipoConstructiva().name());
-		combTipoHab.setSelectedItem(vivienda.getTipoHabitacional().getName());
-		txtLargo.setText(vivienda.getLargo() + "");
-		txtAncho.setText(vivienda.getAncho() + "");
-		txtArea.setText(vivienda.calcularArea() + "");
-		spinnerAncianos.setValue(vivienda.getTotalAncianos());
-		spinnerInfantes.setValue(vivienda.getTotalInfantes());
-		spinnerEmbarazadas.setValue(vivienda.getTotalEmbarazadas());
-		spinnerPersonas.setValue(vivienda.getTotalPersonas());
-
 	}
 
 	private JLabel getLblDireccionError() {
@@ -735,8 +797,28 @@ public class Viviendas extends PrincipalPanel {
 			lblErrorTotalPersonas.setVisible(false);
 			lblErrorTotalPersonas.setBorder(new LineBorder(new Color(255, 0, 0)));
 			lblErrorTotalPersonas.setForeground(Color.RED);
-			lblErrorTotalPersonas.setBounds(487, 227, 320, 24);
+			lblErrorTotalPersonas.setBounds(487, 212, 320, 24);
 		}
 		return lblErrorTotalPersonas;
+	}
+
+	private JTextPane getLblFacilidadTemp() {
+		if (lblFacilidadTemp == null) {
+			lblFacilidadTemp = new JTextPane();
+			lblFacilidadTemp.setEditable(false);
+			lblFacilidadTemp.setText(
+					"En caso de haber sido afectada la vivenda por un evento anterior, si a ésta se le fue asignada una facilidad temporal, marcar la siguiente casilla :");
+			lblFacilidadTemp.setBounds(507, 252, 258, 74);
+		}
+		return lblFacilidadTemp;
+	}
+
+	private JCheckBox getCBoxFacilidadTemp() {
+		if (cBoxFacilidadTemp == null) {
+			cBoxFacilidadTemp = new JCheckBox("Facilidad Temporal");
+			cBoxFacilidadTemp.setBackground(new Color(255, 255, 255));
+			cBoxFacilidadTemp.setBounds(607, 300, 146, 23);
+		}
+		return cBoxFacilidadTemp;
 	}
 }

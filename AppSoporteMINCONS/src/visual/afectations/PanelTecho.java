@@ -1,7 +1,6 @@
-package visual.afectaciones;
+package visual.afectations;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -179,12 +178,11 @@ public class PanelTecho extends JPanel {
 									.addComponent(getBtnOKTecho())
 									.addComponent(getBtnCancelarTecho(), GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
 							.addGap(32)));
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL, new Component[] { getTxtIdentificadorTecho(),
-					getComboBoxMatPredTecho(), getComboBoxTipoDerrumbeTecho() });
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblIdentificadorTecho(), getLblMatPredTecho(), getLblTipoDerrumbeTecho() });
-			glPanelInsertar.linkSize(SwingConstants.HORIZONTAL,
-					new Component[] { getBtnOKTecho(), getBtnCancelarTecho() });
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, getTxtIdentificadorTecho(), getComboBoxMatPredTecho(),
+					getComboBoxTipoDerrumbeTecho());
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, getLblIdentificadorTecho(), getLblMatPredTecho(),
+					getLblTipoDerrumbeTecho());
+			glPanelInsertar.linkSize(SwingConstants.HORIZONTAL, getBtnOKTecho(), getBtnCancelarTecho());
 			panelInsertar.setLayout(glPanelInsertar);
 		}
 		return panelInsertar;

@@ -11,42 +11,40 @@ import classes.Vivienda;
 public class GetterTestCase {
 
 	private Vivienda vivienda;
-	
+
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		vivienda = new Vivienda();
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		vivienda = null;
 	}
 
 	@Test
 	public void testInt() {
-		
-		@SuppressWarnings("unused")
+
 		int a = vivienda.getTotalPersonas();
-		
+
 		a++;
-		
+
 		int b = vivienda.getTotalPersonas();
-		
-		
+
+		assertEquals(1, a);
 		assertEquals(0, b);
 	}
-	
+
 	@Test
 	public void testString() {
-		
-		@SuppressWarnings("unused")
+
 		String a = vivienda.getDireccion();
-		
-		a="a";
-		
+
+		a = "a";
+
 		String b = vivienda.getDireccion();
-		
-		
+
+		assertEquals("a", a);
 		assertEquals(null, b);
 	}
 

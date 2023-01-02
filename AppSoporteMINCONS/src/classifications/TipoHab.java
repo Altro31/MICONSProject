@@ -32,14 +32,14 @@ public final class TipoHab implements Serializable {
 		ArrayList<String> values = new ArrayList<String>();
 
 		if (TipoHab.values == null) {
-			values.add("Uni planta");
-			values.add("Bi planta");
+			values.add("Casa");
+			values.add("Bi-Planta");
 			values.add("Duplex");
 			values.add("Apartamento");
 			values.add("Habitación en edificio");
 			values.add("Bohío");
 			values.add("Improvisado");
-			
+
 		} else {
 			values = TipoHab.values;
 		}
@@ -107,7 +107,7 @@ public final class TipoHab implements Serializable {
 	 * @return a TipoEvento with that name as name
 	 */
 	public static boolean contains(String name) {
-		
+
 		Validaciones.nullValidation(name);
 		boolean check = false;
 		for (String string : values) {
@@ -117,24 +117,26 @@ public final class TipoHab implements Serializable {
 		}
 		return check;
 	}
-	
+
 	public static TipoHab getTipoHab(String name) {
-		
+
 		TipoHab typo = null;
-		
+
 		try {
 			typo = new TipoHab(name);
 		} catch (ValidationException e) {
 			typo = null;
 		}
-		
+
 		return typo;
 	}
 
 	/**
 	 * Setter
+	 * 
 	 * @param name
-	 * @throws IllegalArgumentException If name not exist in the list of events, is null or is empty
+	 * @throws IllegalArgumentException If name not exist in the list of events, is
+	 *                                  null or is empty
 	 */
 	private void setName(String name) throws IllegalArgumentException, ValidationException {
 		Validaciones.stringValidation(name);
@@ -147,6 +149,7 @@ public final class TipoHab implements Serializable {
 
 	/**
 	 * Getter
+	 * 
 	 * @return A copy of name
 	 */
 	public String getName() {

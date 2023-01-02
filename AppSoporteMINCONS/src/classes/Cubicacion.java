@@ -9,7 +9,7 @@ public class Cubicacion implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2620032420950104908L;
-	
+
 	private ArrayList<Material> materialesVenta;
 
 	public Cubicacion() {
@@ -19,11 +19,11 @@ public class Cubicacion implements Serializable {
 	public ArrayList<Material> getListaMateriales() {
 		return materialesVenta;
 	}
-	
+
 	public float calcularPrecioTotalReparacion() {
 		float total = 0;
 		for (Material material : materialesVenta) {
-			total+=material.calcularPrecioFinal();
+			total += material.calcularPrecioFinal();
 		}
 		return total;
 	}

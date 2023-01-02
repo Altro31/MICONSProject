@@ -1,7 +1,6 @@
-package visual.afectaciones;
+package visual.afectations;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -227,59 +226,58 @@ public class PanelInmueble extends JPanel {
 					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 					"Insertar Inmueble", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			panelInsertar.setBounds(437, 25, 342, 263);
-			GroupLayout gl_panelInsertar = new GroupLayout(panelInsertar);
-			gl_panelInsertar.setHorizontalGroup(gl_panelInsertar.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelInsertar.createSequentialGroup().addContainerGap()
-							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_panelInsertar.createSequentialGroup()
+			GroupLayout glPanelInsertar = new GroupLayout(panelInsertar);
+			glPanelInsertar.setHorizontalGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelInsertar.createSequentialGroup().addContainerGap()
+							.addGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+									.addGroup(glPanelInsertar.createSequentialGroup()
 											.addComponent(getLblID(), GroupLayout.PREFERRED_SIZE, 82,
 													GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED).addComponent(getTxtID(),
 													GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
-									.addGroup(gl_panelInsertar.createSequentialGroup()
+									.addGroup(glPanelInsertar.createSequentialGroup()
 											.addComponent(getLblInmueble(), GroupLayout.PREFERRED_SIZE, 82,
 													GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addComponent(getComboBoxInmueble(), GroupLayout.PREFERRED_SIZE, 200,
 													GroupLayout.PREFERRED_SIZE))
-									.addGroup(gl_panelInsertar.createSequentialGroup()
+									.addGroup(glPanelInsertar.createSequentialGroup()
 											.addComponent(getLblCantidad(), GroupLayout.PREFERRED_SIZE, 82,
 													GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED).addComponent(
 													getSpinnerCantidad(), GroupLayout.PREFERRED_SIZE, 55,
 													GroupLayout.PREFERRED_SIZE))
-									.addGroup(gl_panelInsertar.createSequentialGroup().addComponent(getBtnOK())
+									.addGroup(glPanelInsertar.createSequentialGroup().addComponent(getBtnOK())
 											.addPreferredGap(ComponentPlacement.UNRELATED)
 											.addComponent(getBtnCancelar())))
 							.addContainerGap(24, Short.MAX_VALUE)));
-			gl_panelInsertar.setVerticalGroup(gl_panelInsertar.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelInsertar.createSequentialGroup().addGap(19)
-							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE)
+			glPanelInsertar.setVerticalGroup(glPanelInsertar.createParallelGroup(Alignment.LEADING)
+					.addGroup(glPanelInsertar.createSequentialGroup().addGap(19)
+							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblID(), GroupLayout.PREFERRED_SIZE, 27,
 											GroupLayout.PREFERRED_SIZE)
 									.addComponent(getTxtID(), GroupLayout.PREFERRED_SIZE, 22,
 											GroupLayout.PREFERRED_SIZE))
 							.addGap(20)
-							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblInmueble(), GroupLayout.PREFERRED_SIZE, 27,
 											GroupLayout.PREFERRED_SIZE)
 									.addComponent(getComboBoxInmueble(), GroupLayout.PREFERRED_SIZE, 23,
 											GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
-							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE)
+							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
 									.addComponent(getLblCantidad(), GroupLayout.PREFERRED_SIZE, 27,
 											GroupLayout.PREFERRED_SIZE)
 									.addComponent(getSpinnerCantidad(), GroupLayout.PREFERRED_SIZE, 24,
 											GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-							.addGroup(gl_panelInsertar.createParallelGroup(Alignment.BASELINE).addComponent(getBtnOK())
+							.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE).addComponent(getBtnOK())
 									.addComponent(getBtnCancelar()))
 							.addContainerGap()));
-			gl_panelInsertar.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getTxtID(), getComboBoxInmueble(), getSpinnerCantidad() });
-			gl_panelInsertar.linkSize(SwingConstants.HORIZONTAL, new Component[] { getTxtID(), getComboBoxInmueble() });
-			gl_panelInsertar.linkSize(SwingConstants.HORIZONTAL, new Component[] { getBtnOK(), getBtnCancelar() });
-			panelInsertar.setLayout(gl_panelInsertar);
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, getTxtID(), getComboBoxInmueble(), getSpinnerCantidad());
+			glPanelInsertar.linkSize(SwingConstants.HORIZONTAL, getTxtID(), getComboBoxInmueble());
+			glPanelInsertar.linkSize(SwingConstants.HORIZONTAL, getBtnOK(), getBtnCancelar());
+			panelInsertar.setLayout(glPanelInsertar);
 		}
 		return panelInsertar;
 	}
@@ -441,7 +439,7 @@ public class PanelInmueble extends JPanel {
 			cTable.setBounds(10, 52, 417, 289);
 			table = cTable.getTable();
 			btnBorrarInmueble.addActionListener(new ActionListener() {
-				
+
 				public void actionPerformed(ActionEvent e) {
 					final ArrayList<Inmueble> listaInmuebles = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect()
 							.getListaInmuebles();

@@ -33,10 +33,12 @@ public class User implements Serializable {
 	}
 
 	/**
-	 * Verify if username and password is the same to this instance's username and password
+	 * Verify if username and password is the same to this instance's username and
+	 * password
+	 * 
 	 * @return True if it's correct or False if it's not
 	 */
-	
+
 	public boolean checkUser(String username, String password) {
 
 		boolean check = false;

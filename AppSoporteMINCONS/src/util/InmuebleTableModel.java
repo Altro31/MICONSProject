@@ -38,14 +38,14 @@ public class InmuebleTableModel extends DefaultTableModel {
 	}
 
 	public void filtrar(String textFilter, int column) {
-		ArrayList<Inmueble> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaInmuebles();
+		ArrayList<Inmueble> lista = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaInmuebles();
 		actualizar(lista);
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 
 	}
 
 	public void actualizar() {
-		actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaInmuebles());
+		actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaInmuebles());
 	}
 
 	public void actualizar(ArrayList<?> lista) {

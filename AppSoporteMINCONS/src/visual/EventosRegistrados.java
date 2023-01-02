@@ -12,8 +12,8 @@ import javax.swing.SwingConstants;
 
 import classes.Evento;
 import classes.Sistema;
-import util.Manager;
-import visual.util.CustomPanel;
+import settings.Manager;
+import visual.util.CustomPanelEventos;
 import visual.util.PrincipalPanel;
 
 import java.awt.event.ActionListener;
@@ -54,6 +54,7 @@ public class EventosRegistrados extends PrincipalPanel {
 				System.exit(0);
 			}
 		});
+
 		setFont(new Font("Tahoma", Font.PLAIN, 29));
 		add(getLblNewLabel());
 		add(getScrollPane());
@@ -75,7 +76,7 @@ public class EventosRegistrados extends PrincipalPanel {
 		int index = 1;
 
 		for (Evento evento : eventos) {
-			CustomPanel p = new CustomPanel(this, index - 1, evento);
+			CustomPanelEventos p = new CustomPanelEventos(this, index - 1, evento);
 			p.setLocation(X, y);
 			panel.add(p);
 			y = y + p.getHeight() + SPACE;
@@ -113,6 +114,7 @@ public class EventosRegistrados extends PrincipalPanel {
 				public void componentAdded(ContainerEvent e) {
 					updateUI();
 				}
+
 				@Override
 				public void componentRemoved(ContainerEvent e) {
 					updateUI();

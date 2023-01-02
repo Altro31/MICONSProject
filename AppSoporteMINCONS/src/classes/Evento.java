@@ -32,15 +32,15 @@ public class Evento implements Serializable {
 		setTipoEvento(tipoEvento);
 	}
 
-	public void addFichaTecnica(FichaTecnica ficha){
+	public void addFichaTecnica(FichaTecnica ficha) {
 		FichaTecnica fichaTecnica = getFicha(ficha.getID());
-		if (fichaTecnica!=null) {
+		if (fichaTecnica != null) {
 			listaFichasTecnicas.set(listaFichasTecnicas.indexOf(fichaTecnica), ficha);
 		} else {
 			listaFichasTecnicas.add(ficha);
 		}
 	}
-	
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -85,15 +85,15 @@ public class Evento implements Serializable {
 			throw new IllegalArgumentException("Pos debe tener valor negativo");
 		listaFichasTecnicas.remove(pos);
 	}
-	
+
 	public FichaTecnica getFicha(String id) {
 		FichaTecnica ficha = null;
 		for (FichaTecnica fichaTecnica : listaFichasTecnicas) {
 			if (fichaTecnica.getID().equals(id)) {
-				ficha=fichaTecnica;
+				ficha = fichaTecnica;
 			}
 		}
-		
+
 		return ficha;
 	}
 

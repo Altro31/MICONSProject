@@ -34,7 +34,7 @@ public class TechoTableModel extends DefaultTableModel {
 	}
 
 	public void actualizar() {
-		actualizar(((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos());
+		actualizar(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos());
 	}
 
 	public void actualizar(ArrayList<?> lista) {
@@ -51,7 +51,7 @@ public class TechoTableModel extends DefaultTableModel {
 	}
 
 	public void filtrar(String textFilter, int column) {
-		ArrayList<Techo> lista = ((FichaTecnica)Frame.getPosicionActual()[1]).getAfect().getListaTechos();
+		ArrayList<Techo> lista = ((FichaTecnica) Frame.getPosicionActual()[1]).getAfect().getListaTechos();
 		actualizar();
 		Auxiliary.filtro(textFilter, this, column, lista.size());
 

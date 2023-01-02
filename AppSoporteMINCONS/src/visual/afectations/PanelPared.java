@@ -1,7 +1,6 @@
-package visual.afectaciones;
+package visual.afectations;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -195,10 +194,10 @@ public class PanelPared extends JPanel {
 											.addGroup(glPanelInsertar.createParallelGroup(Alignment.BASELINE)
 													.addComponent(getBtnOK()).addComponent(getBtnCancelar()))
 											.addGap(23)));
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getLblIdentificador(), getLblMatPred(), getLblTipoDerrumbe() });
-			glPanelInsertar.linkSize(SwingConstants.VERTICAL,
-					new Component[] { getComboBoxTipoDerrumbePared(), getComboBoxMatPred(), getTxtIdentificador() });
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, getLblIdentificador(), getLblMatPred(),
+					getLblTipoDerrumbe());
+			glPanelInsertar.linkSize(SwingConstants.VERTICAL, getComboBoxTipoDerrumbePared(), getComboBoxMatPred(),
+					getTxtIdentificador());
 			panelInsertar.setLayout(glPanelInsertar);
 		}
 		return panelInsertar;

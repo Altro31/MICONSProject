@@ -1,14 +1,11 @@
 package util;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
@@ -18,15 +15,15 @@ import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import classes.Evento;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class Auxiliary {
@@ -94,36 +91,6 @@ public final class Auxiliary {
 	}
 
 	/**
-	 * Comprueba si un checkbox de una tabla está seleccionado
-	 * 
-	 * @param tableModel TableModel de la Tabla
-	 */
-	public static boolean isSelected(int fila, int columna, DefaultTableModel tableModel) {
-		return tableModel.getValueAt(fila, columna) != null
-				&& ((Boolean) tableModel.getValueAt(fila, columna)).booleanValue();
-	}
-
-	/**
-	 * 
-	 * @param tableModel TableModel de la Tabla
-	 * @param column     columna que contiene los checkboxs
-	 * @return Las filas marcadas
-	 */
-	public static ArrayList<Object> getSelected(DefaultTableModel tableModel, int column) {
-		ArrayList<Object> lista = new ArrayList<Object>();
-		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			if (isSelected(i, column, tableModel)) {
-				Object[] lista2 = new Object[tableModel.getColumnCount()];
-				for (int j = 0; j < tableModel.getColumnCount(); j++) {
-					lista2[j] = tableModel.getValueAt(i, j);
-				}
-				lista.add(lista2);
-			}
-		}
-		return lista;
-	}
-
-	/**
 	 * Selecciona todos los checkBox de una tabla
 	 * 
 	 * @param tableModel TableModel de la Tabla
@@ -144,6 +111,17 @@ public final class Auxiliary {
 		if (table != null && lista != null) {
 			for (int i : table.getSelectedRows()) {
 				lista2.add(lista.get(Integer.parseInt(table.getValueAt(i, 0).toString()) - 1));
+			}
+			lista.removeAll(lista2);
+		}
+	}
+
+	public static void borrarSeleccionSimple(JTable table, ArrayList<?> lista) {
+
+		ArrayList<Object> lista2 = new ArrayList<Object>();
+		if (table != null && lista != null) {
+			for (int i : table.getSelectedRows()) {
+				lista2.add(lista.get(i));
 			}
 			lista.removeAll(lista2);
 		}
@@ -259,13 +237,19 @@ public final class Auxiliary {
 		});
 	}
 
-	// Only numbers
-	public static void onlyNumbers(final JTextField t, final boolean decimal) {
-		t.addKeyListener(new KeyAdapter() {
+	/**
+	 * Valida un JTextField para que sólo se puedan introducir números enteros o
+	 * decimales
+	 * 
+	 * @param textField JTextField
+	 * @param decimal   Si es False sólo se podran introducir números enteros
+	 */
+	public static void onlyNumbers(final JTextField textField, final boolean decimal) {
+		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 
-				String string = t.getText();
+				String string = textField.getText();
 				Character c = e.getKeyChar();
 
 				boolean isDigit = Character.isDigit(c);
@@ -286,7 +270,7 @@ public final class Auxiliary {
 					// If the only character in the JTextField is a 0 and is inserted a number,
 					// clean the JTextField
 					if (string.length() == 1 && string.charAt(0) == KeyEvent.VK_0 && isDigit) {
-						t.setText("");
+						textField.setText("");
 
 					}
 				}
@@ -304,11 +288,11 @@ public final class Auxiliary {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (decimal) {
-					String string = t.getText();
+					String string = textField.getText();
 					// If overwritted imself with a dot and is the first characted, it's deleted
 					if (string.length() > 0 && string.charAt(0) == KeyEvent.VK_PERIOD) {
 						string = string.substring(1);
-						t.setText(string);
+						textField.setText(string);
 					}
 				}
 
@@ -364,7 +348,7 @@ public final class Auxiliary {
 
 		trigger.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				
+
 				final int value = (int) trigger.getValue();
 				if (trigger.getPreviousValue() != null) {
 					if (check.val > value)
@@ -375,8 +359,26 @@ public final class Auxiliary {
 					listener.setValue((int) listener.getValue() - 1);
 				}
 				check.val = value;
-				
+
 			}
 		});
+	}
+
+	/**
+	 * Ordena la lista de eventos por su fecha de incicio de más antiguo a más
+	 * reciente
+	 * 
+	 * @param lista
+	 */
+	public static void sortEventos(ArrayList<Evento> lista) {
+
+		lista.sort(new Comparator<Evento>() {
+
+			@Override
+			public int compare(Evento o1, Evento o2) {
+				return o1.getFechaInicio().compareTo(o2.getFechaInicio());
+			}
+		});
+
 	}
 }

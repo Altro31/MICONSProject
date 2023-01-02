@@ -6,11 +6,11 @@ import classifications.Doc;
 import classifications.TipoConst;
 import classifications.TipoHab;
 import exceptions.ValidationException;
-import util.Limites;
+import settings.Limites;
 import util.Validaciones;
 
 public class Vivienda implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -26,6 +26,7 @@ public class Vivienda implements Serializable {
 	private int totalInfantes;
 	private int totalAncianos;
 	private int totalEmbarazadas;
+	private boolean facilidadTemporal;
 
 	public Vivienda() {
 		direccion = "desconocida";
@@ -39,8 +40,9 @@ public class Vivienda implements Serializable {
 		totalInfantes = 0;
 		totalAncianos = 0;
 		totalEmbarazadas = 0;
+		facilidadTemporal = false;
 	}
-	
+
 	public String getDireccion() {
 
 		return direccion;
@@ -143,5 +145,13 @@ public class Vivienda implements Serializable {
 	public void setTotalEmbarazadas(int totalEmbarazadas) {
 		Validaciones.embarazadas(totalEmbarazadas);
 		this.totalEmbarazadas = totalEmbarazadas;
+	}
+
+	public boolean isFacilidadTemporal() {
+		return facilidadTemporal;
+	}
+
+	public void setFacilidadTemporal(boolean facilidadTemporal) {
+		this.facilidadTemporal = facilidadTemporal;
 	}
 }

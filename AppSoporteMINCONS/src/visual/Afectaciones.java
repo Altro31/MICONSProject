@@ -17,10 +17,9 @@ import javax.swing.border.CompoundBorder;
 import classes.Afectacion;
 import classes.Evento;
 import classes.FichaTecnica;
-import util.Manager;
-import visual.afectaciones.PanelInmueble;
-import visual.afectaciones.PanelPared;
-import visual.afectaciones.PanelTecho;
+import visual.afectations.PanelInmueble;
+import visual.afectations.PanelPared;
+import visual.afectations.PanelTecho;
 import visual.util.PrincipalPanel;
 
 public class Afectaciones extends PrincipalPanel {
@@ -45,12 +44,6 @@ public class Afectaciones extends PrincipalPanel {
 	 * Create the panel.
 	 */
 	public Afectaciones() {
-		btnCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Manager.guardarDatos();
-				System.exit(0);
-			}
-		});
 		btnCerrar.setLocation(851, 0);
 		btnAtras.setLocation(0, 0);
 		btnCerrar.setSize(40, 29);
@@ -129,7 +122,7 @@ public class Afectaciones extends PrincipalPanel {
 						Frame.setContentPanes((AsignarMateriales) ((Object[]) Frame.getPosicionActual()[0])[2]);
 						break;
 					case 1:
-						FichaTecnica ficha = (FichaTecnica)Frame.getPosicionActual()[1];
+						FichaTecnica ficha = (FichaTecnica) Frame.getPosicionActual()[1];
 						ficha.setVivienda(((FichaTecnica) Frame.getPosicionActual()[1]).getVivienda());
 						ficha.setAfect(((FichaTecnica) Frame.getPosicionActual()[1]).getAfect());
 						Evento evento = (Evento) Frame.get(1)[1];
@@ -168,12 +161,12 @@ public class Afectaciones extends PrincipalPanel {
 		}
 		return panelTecho;
 	}
-	
+
 	public void actualizarCampos(Afectacion afectacion) {
-		
+
 		panelInmueble.actualizarTabla(afectacion.getListaInmuebles());
 		panelPared.actualizarTabla(afectacion.getListaParedes());
 		panelTecho.actualizarTabla(afectacion.getListaTechos());
-		
+
 	}
 }

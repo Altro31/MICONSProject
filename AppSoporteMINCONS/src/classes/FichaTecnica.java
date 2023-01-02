@@ -1,6 +1,7 @@
 package classes;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 
 import interfaces.Identificador;
 import util.Auxiliary;
@@ -15,12 +16,14 @@ public class FichaTecnica implements Serializable, Identificador {
 	private Vivienda vivienda;
 	private Afectacion afect;
 	private Cubicacion cubicacion;
+	private GregorianCalendar fecha;
 
 	public FichaTecnica() {
 		id = Auxiliary.random(8);
 		vivienda = new Vivienda();
 		afect = new Afectacion();
 		cubicacion = new Cubicacion();
+		fecha = new GregorianCalendar();
 	}
 
 	public Vivienda getVivienda() {
@@ -58,6 +61,10 @@ public class FichaTecnica implements Serializable, Identificador {
 	@Override
 	public String getID() {
 		return id.intern();
+	}
+
+	public GregorianCalendar getFecha() {
+		return fecha;
 	}
 
 }
